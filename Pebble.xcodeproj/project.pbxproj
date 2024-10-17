@@ -107,6 +107,9 @@
 			);
 			mainGroup = A43C55972CBDA5830032B56E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A43B9B1F2CC0CA1C00E214FB /* XCLocalSwiftPackageReference "firebase-ios-sdk-main" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A43C55A12CBDA5830032B56E /* Products */;
 			projectDirPath = "";
@@ -335,6 +338,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		A43B9B1F2CC0CA1C00E214FB /* XCLocalSwiftPackageReference "firebase-ios-sdk-main" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "firebase-ios-sdk-main";
+		};
+/* End XCLocalSwiftPackageReference section */
 	};
 	rootObject = A43C55982CBDA5830032B56E /* Project object */;
 }
