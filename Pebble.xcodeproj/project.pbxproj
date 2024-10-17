@@ -10,9 +10,11 @@
 		5B5E766E2CC0D70F00B3194C /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5B5E766D2CC0D70F00B3194C /* FirebaseAuth */; };
 		5B5E76702CC0D70F00B3194C /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 5B5E766F2CC0D70F00B3194C /* FirebaseAuthCombine-Community */; };
 		5B5E76722CC0D70F00B3194C /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5B5E76712CC0D70F00B3194C /* FirebaseCore */; };
+		8E42891E2CC19E2A003EA8EE /* ProfilePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E42891D2CC19E2A003EA8EE /* ProfilePage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8E42891D2CC19E2A003EA8EE /* ProfilePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProfilePage.swift; path = Pebble/ProfilePage.swift; sourceTree = "<group>"; };
 		A43C55A02CBDA5830032B56E /* Pebble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pebble.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -54,6 +56,7 @@
 		A43C55972CBDA5830032B56E = {
 			isa = PBXGroup;
 			children = (
+				8E42891D2CC19E2A003EA8EE /* ProfilePage.swift */,
 				A43C55A22CBDA5830032B56E /* Pebble */,
 				A43C55A12CBDA5830032B56E /* Products */,
 			);
@@ -147,6 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E42891E2CC19E2A003EA8EE /* ProfilePage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
