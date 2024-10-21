@@ -10,21 +10,22 @@ import UIKit
 class ProfilePage: UIViewController {
     
     var delegate: ViewController!
-
+    @IBOutlet weak var profilePic: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        setupProfilePic()
+    }
+    
+    func setupUI() {
+        view.backgroundColor = .systemGray6
+    }
 
-        // Get screen dimensions
-                let screenSize = UIScreen.main.bounds
-                
-                // Create a UIView for the bottom half
-                let bottomHalfView = UIView()
-                bottomHalfView.frame = CGRect(x: 0, y: screenSize.height / 2, width: screenSize.width, height: screenSize.height / 2)
-                
-                // Set the background color
-                bottomHalfView.backgroundColor = UIColor.gray
-                
-                // Add the view to the main view
-                self.view.addSubview(bottomHalfView)
+    func setupProfilePic() {
+        profilePic.frame.size.width = profilePic.frame.size.height
+        profilePic.layer.cornerRadius = profilePic.frame.size.width / 2
+        profilePic.clipsToBounds = true
+        view.addSubview(profilePic)
     }
 }
