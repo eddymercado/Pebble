@@ -37,7 +37,7 @@ class SignUpInfoVC: UIViewController {
     
 
     @IBAction func signUpNextButton(_ sender: Any) {
-        Auth.auth().createUser(withEmail: usernameField.text!, password: passwordField.text!) {
+        Auth.auth().createUser(withEmail: emailAddressField.text!, password: passwordField.text!) {
             (authResult,error) in
             if let error = error as NSError? {
                 self.errorMessage.text = "\(error.localizedDescription)"
@@ -46,20 +46,5 @@ class SignUpInfoVC: UIViewController {
                 self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
             }
         }
-    /*
-        // create a new user
-        Auth.auth().createUser(withEmail: emailField.text!, password: passwordField.text!) {
-            (authResult,error) in
-            if let error = error as NSError? {
-                self.errorMessage.text = "\(error.localizedDescription)"
-            } else {
-                self.errorMessage.text = ""
-            }
-        }
-     */
-        
-        
     }
-
-
 }

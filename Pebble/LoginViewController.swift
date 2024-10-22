@@ -12,45 +12,36 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    @IBOutlet weak var errorMessage: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        errorMessage.text = ""
+        
     }
     
     @IBAction func loginButton(_ sender: Any) {
         // if username is valid login/ segue to browse events
         guard let email = usernameField.text, !email.isEmpty,
               let password = passwordField.text, !password.isEmpty else {
-            self.errorMessage.text = "Please enter both email and password."
+            showAlert(title: "Please enter both email and password", message: "")
             return
         }
         
         Auth.auth().signIn(withEmail: usernameField.text!, password: passwordField.text!) {
-            (authResult,error) in
-            if let error = error as NSError? {
-                self.errorMessage.text = "\(error.localizedDescription)"
+            (authResult, error) in
+            if (error as NSError?) != nil {
+                self.showAlert(title: "Email or Password is incorrect", message: "Retry credentials or create an account!")
             } else {
-                self.errorMessage.text = ""
                 self.performSegue(withIdentifier: "startUpToBrowseEventsPage", sender: self)
             }
         }
-        
-        
-        // if not alert no account found please sign up
-        /*
-         if username not found
-         let controller = UIAlertController(
-             title: "Username not found or password does not match username",
-             message: "Please try verify your password or Create an account!",
-             preferredStyle: .alert)
-         
-         // if password does not match username ?? if we decide to do this
-         */
-        
+    }
+    
+    
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     @IBAction func signUpButton(_ sender: Any) {
