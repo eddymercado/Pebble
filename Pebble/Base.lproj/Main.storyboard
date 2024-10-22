@@ -102,6 +102,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Create"/>
+                                <connections>
+                                    <action selector="createEventBtnPressed:" destination="ytu-j9-R5n" eventType="touchUpInside" id="OC0-8l-Bls"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Bxc-06-ttu">
                                 <rect key="frame" x="16" y="399" width="361" height="34"/>
@@ -120,6 +123,16 @@
                             <constraint firstItem="pF7-2T-mV0" firstAttribute="centerX" secondItem="Yd1-V6-Llc" secondAttribute="centerX" id="DGg-FT-sFD"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="eventActivityType" destination="Ezh-em-yMV" id="QH0-Xq-qjF"/>
+                        <outlet property="eventDate" destination="Yvx-c0-DVT" id="cW9-e4-pgM"/>
+                        <outlet property="eventDesc" destination="pF7-2T-mV0" id="liH-BN-5SC"/>
+                        <outlet property="eventEndTime" destination="Oew-Wh-HE2" id="mkH-4i-Sh7"/>
+                        <outlet property="eventLocation" destination="Bxc-06-ttu" id="rb4-gy-2Gz"/>
+                        <outlet property="eventNumPeople" destination="heh-CV-pIy" id="f9y-Xz-eQE"/>
+                        <outlet property="eventStartTime" destination="3uv-aX-uLJ" id="jcg-oT-PM6"/>
+                        <outlet property="eventTitle" destination="bIN-2T-iKc" id="OOn-EB-YzG"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UGO-Re-QaK" sceneMemberID="firstResponder"/>
             </objects>

@@ -7,15 +7,50 @@
 
 import UIKit
 
-class CreateEvents: UIViewController {
+protocol EventCreationDelegate: AnyObject {
+    func createdEvent(_event: Event)
+}
 
+class CreateEvents: UIViewController {
+    
+    
+    @IBOutlet weak var eventTitle: UITextField!
+    @IBOutlet weak var eventDesc: UITextView!
+    @IBOutlet weak var eventDate: UIDatePicker!
+    @IBOutlet weak var eventStartTime: UIDatePicker!
+    @IBOutlet weak var eventEndTime: UIDatePicker!
+    @IBOutlet weak var eventLocation: UITextField!
+    @IBOutlet weak var eventActivityType: UITextField!
+    @IBOutlet weak var eventNumPeople: UITextField!
+    
+    weak var delegate:EventCreationDelegate?
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        
     }
     
-
+    
+    @IBAction func createEventBtnPressed(_ sender: UIButton) {
+        
+        //get selected date and times from date picker
+        let selectedDate = eventDate.date
+        let selectedStart = eventStartTime.date
+        let selectedEnd = eventEndTime.date
+        
+        //new instance of event, populate inputs
+        let newEvent = Event (title: eventTitle.text ?? "", description: eventDesc.text ?? "", date: selectedDate, startTime: selectedStart, endTime: selectedEnd, location: eventLocation.text ?? "", numPeople: Int(eventNumPeople.text ?? "0") ?? 0
+        )
+        
+        //notify delegate new event created
+        delegate?.createdEvent(_event: newEvent)
+        
+        //need to add some navigation controller code to go to a diff VC potentially
+    }
 }
 
 class Event {
