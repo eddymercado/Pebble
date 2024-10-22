@@ -43,10 +43,10 @@
             </objects>
             <point key="canvasLocation" x="1066.4122137404579" y="3.5211267605633805"/>
         </scene>
-        <!--View Controller-->
+        <!--Create Events-->
         <scene sceneID="Xa6-tz-b4C">
             <objects>
-                <viewController id="ytu-j9-R5n" customClass="ViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ytu-j9-R5n" customClass="CreateEvents" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Yd1-V6-Llc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -109,6 +109,10 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="Oew-Wh-HE2">
+                                <rect key="frame" x="274" y="322" width="112" height="69"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </datePicker>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="3eD-m3-vKX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
