@@ -8,7 +8,23 @@
 import UIKit
 
 class SignUpInfoVC: UIViewController {
-
+    
+    
+    
+    @IBOutlet weak var usernameField: UITextField!
+    
+    @IBOutlet weak var passwordField: UITextField!
+    
+    @IBOutlet weak var fullNameField: UITextField!
+    
+    @IBOutlet weak var emailAddressField: UITextField!
+    
+    @IBOutlet weak var phoneNumberField: UITextField!
+    
+    @IBOutlet weak var dateOfBirthField: UITextField!
+    
+    @IBOutlet weak var zipCodeFIeld: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
