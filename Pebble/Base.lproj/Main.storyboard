@@ -302,9 +302,15 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Next"/>
                                 <connections>
                                     <action selector="signUpNextButton:" destination="8sT-ES-0vp" eventType="touchUpInside" id="51z-B5-c5I"/>
-                                    <segue destination="ake-SA-81c" kind="presentation" identifier="signUpPageToProfilePic" modalPresentationStyle="fullScreen" id="tet-is-Ylq"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Error Message" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KhJ-Gb-Ri6">
+                                <rect key="frame" x="16" y="663" width="361" height="72"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="pKa-ru-1LK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -313,11 +319,13 @@
                     <connections>
                         <outlet property="dateOfBirthField" destination="WDK-vP-A8f" id="xjc-Qu-d9F"/>
                         <outlet property="emailAddressField" destination="ceL-1P-rWR" id="UeG-ya-Rr5"/>
+                        <outlet property="errorMessage" destination="KhJ-Gb-Ri6" id="gw9-cx-3PS"/>
                         <outlet property="fullNameField" destination="EHA-LK-0YQ" id="jWg-Fd-pla"/>
                         <outlet property="passwordField" destination="QZ0-l1-mfq" id="lpE-Mc-acR"/>
                         <outlet property="phoneNumberField" destination="Aow-kB-0df" id="cb8-h9-vxa"/>
                         <outlet property="usernameField" destination="eGX-mE-TRO" id="7Tw-E4-UiS"/>
                         <outlet property="zipCodeFIeld" destination="pu8-i5-m3j" id="4jz-K7-Jnv"/>
+                        <segue destination="ake-SA-81c" kind="presentation" identifier="signUpPageToProfilePic" modalPresentationStyle="fullScreen" id="4nv-j5-9fr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TlI-4w-oNY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -475,21 +483,29 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Login"/>
                                 <connections>
                                     <action selector="loginButton:" destination="IFF-u7-qir" eventType="touchUpInside" id="IpQ-cr-GKO"/>
-                                    <segue destination="JYb-a6-fxm" kind="presentation" identifier="startUpToBrowseEventsPage" modalPresentationStyle="fullScreen" id="ooq-Sl-RHL"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Error Message" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KFm-It-cSe">
+                                <rect key="frame" x="16" y="694" width="361" height="64"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="C7C-ks-3KD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
+                        <outlet property="errorMessage" destination="KFm-It-cSe" id="Pbx-yj-Q8k"/>
                         <outlet property="passwordField" destination="wb9-X5-TeG" id="MHC-1N-T3a"/>
                         <outlet property="usernameField" destination="ozC-3s-7IC" id="JiS-MF-igF"/>
+                        <segue destination="JYb-a6-fxm" kind="presentation" identifier="startUpToBrowseEventsPage" modalPresentationStyle="fullScreen" id="tqj-Pe-BKV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="55q-7B-i8c" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1290.8396946564885" y="3.5211267605633805"/>
+            <point key="canvasLocation" x="-918" y="17"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Q4m-PB-k3G">

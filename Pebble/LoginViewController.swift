@@ -12,17 +12,32 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
+    @IBOutlet weak var errorMessage: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        errorMessage.text = ""
     }
     
     @IBAction func loginButton(_ sender: Any) {
         // if username is valid login/ segue to browse events
+        guard let email = usernameField.text, !email.isEmpty,
+              let password = passwordField.text, !password.isEmpty else {
+            self.errorMessage.text = "Please enter both email and password."
+            return
+        }
         
-        
+        Auth.auth().signIn(withEmail: usernameField.text!, password: passwordField.text!) {
+            (authResult,error) in
+            if let error = error as NSError? {
+                self.errorMessage.text = "\(error.localizedDescription)"
+            } else {
+                self.errorMessage.text = ""
+                self.performSegue(withIdentifier: "startUpToBrowseEventsPage", sender: self)
+            }
+        }
         
         
         // if not alert no account found please sign up
@@ -36,7 +51,6 @@ class LoginViewController: UIViewController {
          // if password does not match username ?? if we decide to do this
          */
         
-        performSegue(withIdentifier: "startUpToBrowseEventsPage", sender: self)
     }
     
     @IBAction func signUpButton(_ sender: Any) {
