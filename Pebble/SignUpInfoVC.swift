@@ -4,12 +4,12 @@
 //
 //  Created by Eddy Mercado on 10/21/24.
 //
+// balls
 
 import UIKit
 import FirebaseAuth
 import FirebaseAnalytics
-
-//import FirebaseFirestoreInternal
+import FirebaseFirestoreInternal
 
 class SignUpInfoVC: UIViewController {
     
@@ -31,7 +31,7 @@ class SignUpInfoVC: UIViewController {
     
     @IBOutlet weak var errorMessage: UILabel!
     
-//    let db = Firestore.firestore()
+    let db = Firestore.firestore()
 
     
     override func viewDidLoad() {
@@ -89,23 +89,23 @@ class SignUpInfoVC: UIViewController {
                     ]
                     
                     // Store user information in Firestore
-//                    self.db.collection("users").document(userId).setData(userData) { error in
-//                        if let error = error {
-//                            self.errorMessage.text = "Error saving user data: \(error.localizedDescription)"
-//                        } else {
-//                            // Set zip code as a user property for Firebase Analytics
-//                            Analytics.setUserProperty(zipCode, forName: "Zip Code")
-//                            
-//                            // Optionally set additional properties for Analytics
-//                            Analytics.setUserProperty(phoneNumber, forName: "Phone Number")
-//                            Analytics.setUserProperty(dateOfBirth, forName: "Date of Birth")
-//                            Analytics.setUserProperty(username, forName: "Username")
-//
-//                            self.errorMessage.text = ""
-//                            // Proceed to the next screen
-//                            self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
-//                        }
-//                    }
+                    self.db.collection("users").document(userId).setData(userData) { error in
+                        if let error = error {
+                            self.errorMessage.text = "Error saving user data: \(error.localizedDescription)"
+                        } else {
+                            // Set zip code as a user property for Firebase Analytics
+                            Analytics.setUserProperty(zipCode, forName: "Zip Code")
+                            
+                            // Optionally set additional properties for Analytics
+                            Analytics.setUserProperty(phoneNumber, forName: "Phone Number")
+                            Analytics.setUserProperty(dateOfBirth, forName: "Date of Birth")
+                            Analytics.setUserProperty(username, forName: "Username")
+
+                            self.errorMessage.text = ""
+                            // Proceed to the next screen
+                            self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
+                        }
+                    }
                 }
             }
     }
