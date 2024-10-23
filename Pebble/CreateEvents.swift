@@ -12,8 +12,6 @@ protocol EventCreationDelegate: AnyObject {
 }
 
 class CreateEvents: UIViewController {
-    
-    
     @IBOutlet weak var eventTitle: UITextField!
     @IBOutlet weak var eventDesc: UITextView!
     @IBOutlet weak var eventDate: UIDatePicker!
