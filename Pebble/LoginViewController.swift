@@ -7,6 +7,10 @@
 
 import UIKit
 import FirebaseAuth
+import Firebase
+import FirebaseFirestore
+
+let db = Firestore.firestore()
 
 class LoginViewController: UIViewController {
 
@@ -14,8 +18,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordField: UITextField!
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
+        super.viewDidLoad()        
     }
     
     @IBAction func loginButton(_ sender: Any) {
