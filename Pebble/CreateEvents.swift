@@ -20,16 +20,23 @@ class CreateEvents: UIViewController {
     @IBOutlet weak var eventLocation: UITextField!
     @IBOutlet weak var eventActivityType: UITextField!
     @IBOutlet weak var eventNumPeople: UITextField!
+    @IBOutlet weak var eventImageView: UIImageView!
     
     weak var delegate:EventCreationDelegate?
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+    }
+    
+    @IBAction func uploadPhotoPressed(_ sender: UIButton) {
+        let vc = UIImagePickerController()
+        vc.sourceType = .photoLibrary
+        vc.delegate = self
+        vc.allowsEditing = true
         
-        
+        present(vc, animated: true)
     }
     
     
@@ -53,6 +60,24 @@ class CreateEvents: UIViewController {
         //need to add some navigation controller code to go to a diff VC potentially
         navigationController?.popViewController(animated: true)
     }
+}
+
+extension CreateEvents:UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let eventPic = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
+            
+            eventImageView.image = eventPic
+            
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 class Event {
