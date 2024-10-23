@@ -18,17 +18,15 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         ["image": "cultural_gathering_image"]
         // Add more events here
     ]
-    
-    
-    @IBOutlet weak var eventsCollectionView: UICollectionView!
+
     @IBOutlet weak var profilePic: UIImageView!
+    @IBOutlet weak var eventSegmentView: UIView!
+    @IBOutlet weak var myEventSegmentView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupProfilePic()
-        eventsCollectionView.dataSource = self
-        eventsCollectionView.delegate = self
     }
     
     func setupUI() {
@@ -40,6 +38,18 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         profilePic.layer.cornerRadius = profilePic.frame.size.width / 2
         profilePic.clipsToBounds = true
         view.addSubview(profilePic)
+    }
+    
+    // Event Segment Changer
+    @IBAction func eventSegment(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+            case 0:
+            self.view.bringSubviewToFront(eventSegmentView)
+            case 1:
+            self.view.bringSubviewToFront(myEventSegmentView)
+            default:
+                break
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
