@@ -43,19 +43,19 @@ class SignUpInfoVC: UIViewController {
     
 
     @IBAction func signUpNextButton(_ sender: Any) {
-//        Auth.auth().createUser(withEmail: emailAddressField.text!, password: passwordField.text!) {
-//            (authResult,error) in
-//            if let error = error as NSError? {
-//                self.errorMessage.text = "\(error.localizedDescription)"
-//            } else {
-//                
-//                Analytics.setUserProperty(self.zipCodeFIeld.text?.isEmpty == false ? self.zipCodeFIeld.text : nil, forName: "Zip Code")
-//                
-//                
-//                self.errorMessage.text = ""
-//                self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
-//            }
-//        }
+        Auth.auth().createUser(withEmail: emailAddressField.text!, password: passwordField.text!) {
+            (authResult,error) in
+            if let error = error as NSError? {
+                self.errorMessage.text = "\(error.localizedDescription)"
+            } else {
+                
+                Analytics.setUserProperty(self.zipCodeFIeld.text?.isEmpty == false ? self.zipCodeFIeld.text : nil, forName: "Zip Code")
+                
+                
+                self.errorMessage.text = ""
+                self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
+            }
+        }
         
         
         // Ensure all fields are filled

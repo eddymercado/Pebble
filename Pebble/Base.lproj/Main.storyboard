@@ -422,7 +422,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1qT-Tf-yDE">
-                                <rect key="frame" x="133" y="267" width="105" height="35"/>
+                                <rect key="frame" x="16" y="206" width="105" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="⚽️ Soccer">
@@ -432,12 +432,25 @@
                                     <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="L88-K5-r9h"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yfK-VN-iyW">
+                                <rect key="frame" x="139" y="206" width="114" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="🏃‍♀️ Running">
+                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="Ckw-aJ-LpL"/>
+                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="Ilt-Lz-b8e"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="28H-SC-ppy"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="DBC-uA-IvT"/>
                     <connections>
+                        <outlet property="toggleRunningButton" destination="yfK-VN-iyW" id="NuA-Y7-7mp"/>
                         <outlet property="toggleSoccerButton" destination="1qT-Tf-yDE" id="RjK-3a-KgO"/>
                     </connections>
                 </viewController>
