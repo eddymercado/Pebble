@@ -67,9 +67,7 @@ extension CreateEvents:UIImagePickerControllerDelegate, UINavigationControllerDe
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         if let eventPic = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
-            
             eventImageView.image = eventPic
-            
         }
         picker.dismiss(animated: true, completion: nil)
     }

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-let instanceForArray = Event()
+//let instanceForArray = Event()
 
 class selectInterestsViewController: UIViewController {
     var count = 0;
@@ -45,7 +45,7 @@ class selectInterestsViewController: UIViewController {
         if isSoccerSelected {
             toggleSoccerButton.backgroundColor = UIColor.systemBlue
             count = count + 1
-            instanceForArray.array.append("Soccer")
+//            instanceForArray.array.append("Soccer")
             // check if over 5
             if fiveIsLimit() {
                 count = count - 1
