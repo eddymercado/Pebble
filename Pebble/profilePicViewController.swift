@@ -10,10 +10,13 @@ import UIKit
 class profilePicViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
+    
+    var isPhotoUploaded = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+
     }
     
 
