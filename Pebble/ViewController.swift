@@ -21,13 +21,16 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         collectionView.dataSource = self
         collectionView.delegate = self
         
+        let nib = UINib(nibName: "EventCell", bundle: nil)
+        collectionView.register(nib, forCellWithReuseIdentifier: "EventCell")
+        
         // Configure layout for the collection view
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: view.frame.width - 20, height: 200) // Adjust height as needed
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
         collectionView.collectionViewLayout = layout
-        collectionView.backgroundColor = UIColor.red // Just for debugging
+        collectionView.backgroundColor = UIColor.lightGray // Just for debugging
         print("Collection view frame: \(collectionView.frame)") // Check the frame of the collection view
         collectionView.register(EventCell.self, forCellWithReuseIdentifier: "EventCell")
 
@@ -58,7 +61,12 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         print("cellForItemAt called for index: \(indexPath.item)")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCell
         let event = eventsList[indexPath.item]
-        
+        if let titleLabel = cell.titleLabel {
+            titleLabel.text = event.title
+            print("Assigned title: \(event.title)")
+        } else {
+            print("titleLabel is nil")
+        }
         // Configure the cell with event details
         cell.titleLabel.text = event.title
         cell.descriptionLabel.text = event.description

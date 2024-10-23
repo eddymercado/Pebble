@@ -114,36 +114,36 @@ class Event {
 // Singleton class, global list of activities
 // Each event has its own associated list of activities
 // which pulls from the class
-class allActivities {
-    //single instance
-    static let shared = allActivities()
-    
-    //other classes cannot directly access this
-    private(set) var globalActivities: [String] = ["Hiking", "Running"]
-    
-    //initializer
-    private init() {}
-    
-    func addGlobalActivity(_ activity: String) {
-        if !globalActivities.contains(activity) {
-            globalActivities.append(activity)
-            print("\(activity) has been added to the global list")
-        } else {
-            print("\(activity) already exists in the global list")
-        }
-    }
-    
-    func removeGlobalActivity(_ activity: String) {
-        if let index = globalActivities.firstIndex(of: activity) {
-            globalActivities.remove(at: index)
-            print("\(activity) has been removed from the global activity list")
-        } else {
-            print("\(activity) does not exist in global activity list")
-        }
-    }
-    //print all activities in global list
-    func printActivities() {
-        let activitiesList = globalActivities.joined(separator: ", ")
-            print("Global activities: \(activitiesList)")
-    }
-}
+//class allActivities {
+//    //single instance
+//    static let shared = allActivities()
+//    
+//    //other classes cannot directly access this
+//    private(set) var globalActivities: [String] = ["Hiking", "Running"]
+//    
+//    //initializer
+//    private init() {}
+//    
+//    func addGlobalActivity(_ activity: String) {
+//        if !globalActivities.contains(activity) {
+//            globalActivities.append(activity)
+//            print("\(activity) has been added to the global list")
+//        } else {
+//            print("\(activity) already exists in the global list")
+//        }
+//    }
+//    
+//    func removeGlobalActivity(_ activity: String) {
+//        if let index = globalActivities.firstIndex(of: activity) {
+//            globalActivities.remove(at: index)
+//            print("\(activity) has been removed from the global activity list")
+//        } else {
+//            print("\(activity) does not exist in global activity list")
+//        }
+//    }
+//    //print all activities in global list
+//    func printActivities() {
+//        let activitiesList = globalActivities.joined(separator: ", ")
+//            print("Global activities: \(activitiesList)")
+//    }
+//}
