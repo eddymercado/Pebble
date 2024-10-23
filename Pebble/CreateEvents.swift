@@ -44,10 +44,14 @@ class CreateEvents: UIViewController {
         let newEvent = Event (title: eventTitle.text ?? "", description: eventDesc.text ?? "", date: selectedDate, startTime: selectedStart, endTime: selectedEnd, location: eventLocation.text ?? "", numPeople: Int(eventNumPeople.text ?? "0") ?? 0
         )
         
+        //add event to global array
+        eventsList.append(newEvent)
+        
         //notify delegate new event created
         delegate?.createdEvent(_event: newEvent)
         
         //need to add some navigation controller code to go to a diff VC potentially
+        navigationController?.popViewController(animated: true)
     }
 }
 
