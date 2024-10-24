@@ -642,8 +642,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="B7k-bG-iql"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="IwU-hc-pnT"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="adX-wN-zPR"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xt9-Cd-HyN">
@@ -667,8 +666,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="qfA-S3-tcL"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="akg-Ep-g0t"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="Lak-xm-BZG"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hvq-3j-kXU">
@@ -692,8 +690,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="8Z0-dO-ae4"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="xdp-Ij-r6S"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="MIK-Bq-miR"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5TV-XE-cvR">
@@ -717,8 +714,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="sWA-ny-rsM"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="Zi7-mm-mBz"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="uab-eT-ayn"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g0E-Hn-mU8">
@@ -730,8 +726,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="sNx-5k-vNT"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="9Le-cp-hB5"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="vDm-Vy-qjv"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bWq-tr-EoJ">
@@ -743,8 +738,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="mQQ-Th-OFt"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="hgD-0D-qWz"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="7di-9e-6In"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qFZ-JX-msD">
@@ -756,8 +750,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="PaT-Zz-B7m"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="z1R-If-kHb"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="zRs-U1-JGB"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qgd-ly-UcJ">
@@ -769,8 +762,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="QHL-Qk-ou7"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="psw-xt-Iuw"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="LMD-gr-UkZ"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ke-MM-zrS">
@@ -782,8 +774,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="F9s-ut-LTj"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="uDM-wd-LdW"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="1j1-c7-V4l"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hxu-3R-ixj">
@@ -795,8 +786,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="8dC-9n-fBu"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="I8g-iP-44j"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="caC-uM-lr0"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z8o-RX-TsJ">
@@ -808,8 +798,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="8sj-9f-V1T"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="rw8-Bt-MXb"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="z2T-qf-IJi"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rso-eO-gn8">
@@ -821,8 +810,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="HrI-NU-3YC"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="KwX-NK-OJp"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="yFF-2D-Mx3"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aJB-21-8R8">
@@ -834,8 +822,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="runningPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="oBo-gj-vuY"/>
-                                    <action selector="toggleButtonPressed:" destination="h4d-C8-dHP" eventType="touchUpInside" id="1aF-Ie-KZe"/>
+                                    <action selector="genericPush:" destination="h4d-C8-dHP" eventType="touchUpInside" id="rql-SI-X5T"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select interests" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hpi-NO-iHW">

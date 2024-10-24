@@ -81,12 +81,12 @@ class SignUpInfoVC: UIViewController {
                         Analytics.setUserProperty(phoneNumber, forName: "Phone Number")
                         Analytics.setUserProperty(dateOfBirth, forName: "Date of Birth")
                         Analytics.setUserProperty(username, forName: "Username")
-                        Analytics.setUserProperty(username, forName: "First Name")
-                        Analytics.setUserProperty(username, forName: "Last Name")
-                        self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
+                        Analytics.setUserProperty(firstName, forName: "First Name")
+                        Analytics.setUserProperty(lastName, forName: "Last Name")
                     }
                 }
             }
+            self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
         }
     }
     
