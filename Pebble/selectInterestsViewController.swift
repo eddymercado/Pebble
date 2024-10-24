@@ -10,7 +10,7 @@ import UIKit
 
 class selectInterestsViewController: UIViewController {
     var count = 0;
-    let activities = allActivities.shared.globalActivities
+//    let activities = allActivities.shared.globalActivities
 
     
     override func viewDidLoad() {
