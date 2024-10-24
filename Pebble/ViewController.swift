@@ -34,8 +34,6 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         layout.minimumInteritemSpacing = 10
         collectionView.collectionViewLayout = layout
         collectionView.backgroundColor = UIColor.lightGray // For debugging
-
-        print("Collection view frame: \(collectionView.frame)")
     }
 
     
@@ -43,28 +41,16 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     func createdEvent(_ event: Event) {
         eventsList.append(event)
         DispatchQueue.main.async {
-            print("Reloading collection view with \(eventsList.count) events")
             self.collectionView.reloadData()
        }
-        print("Event created: \(event.title)")
-        print("Description: \(event.description)")
-        print("Date: \(event.date)")
-        print("Start Time: \(event.startTime)")
-        print("End Time: \(event.endTime)")
-        print("Location: \(event.location)")
-        print("Number of People: \(event.numPeople)")
-        print("Activity: \(event.activities)")
-        print("Total events: \(eventsList.count)")
     }
     
     // MARK: - UICollectionView DataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("I have \(eventsList.count) events")
         return eventsList.count // Number of events determines the number of items
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("cellForItemAt called for index: \(indexPath.item)")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCell
         let event = eventsList[indexPath.item]
         

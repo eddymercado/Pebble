@@ -1,1 +1,72 @@
-// README
+Contributions:
+
+Katherine Chao:
+
+Create Events screen:
+- text fields for all required event fields (title, description, date, times, location, etc)
+- Event class to populate events on other VCs
+- singleton class for global array of activities to be reused in Profile, Sign Up, etc.
+- upload profile pic functionality
+- segues back to browse events using delegate/protocol, made sure at least one event can be sent onto browseEvents page using delegate logic
+
+
+Denise Ramos:
+
+Login and sign up page:
+- Basic user info
+- Alert for if login information is incorrect
+- Upload profile pic
+- Select interests
+- Made the rest of the toggle buttons and allowed only five interests to be selected and added to profile
+
+Create and set up firebase and firestore (database– set up read and write access, user collection) along with importing correct package to xcode:
+- Make user collection and utilize google analytics to store correct data associated with each user profile that is created
+
+
+Eduardo Mercado:
+
+LoginViewController:
+- I made the segues from here (technically just fixed them later on but same idea)
+- Logic for successful/unsuccessful login
+
+Sign Up Pages:
+- Upload profile pic in ProfilePicViewController functionality
+- I made a single toggle button on SelectInterestsViewController that would be highlighted when selected and then unhighlights when clicked again
+
+Browse Events Page (Currently called ViewController)
+- Made an eventsList array to store the events made
+- Made a Collection View to display the events’ information in their own cells
+- Delegate logic to accept a created event from CreateEvents
+- Formatted the EventCell
+
+Firebase
+- Create and set up firebase
+- Installed the initial packages for firebase
+
+Tesna Thomas:
+
+Profile Page:
+- Image View for Profile Picture
+- Username, Interests, Bio all started
+- Segmented View for Events vs Events User is hosting
+- Different View Controllers presented when segment button pressed
+
+Tab Bar Navigation:
+- Integrated Tab Bar
+- Navigates to event home page, create page, and profile page
+
+
+Deviations:
+
+- Eddy: We can upload pictures but haven’t stored them in firebase so that we can access them later when displaying the event and displaying the user profile pic
+Why: Did not have time (I was the best man to a wedding during the weekend and last week I had an OS project due) but finishing before start Beta coding next week
+
+- Katherine: Currently using a button to segue from ViewController (browse events page) to create because segue from create back to browse events doesn’t work properly.
+Why: still debugging this but did not have time due to not being able to get into my GitHub earlier (I made a new account), was helping debug why sending events from CreateEvents to BrowseEvents wasn’t working properly first
+
+- aesthetic colors and fonts from figma will be added in future releases;
+Why: focused on functionality first could not find color we liked (hex from figma looked ugly) will find different color pattern next
+
+- Tesna: Username, Picture, Interests, and Bio not auto populated with stored data when Profile is clicked
+- Why: We had to finish the Login In Page + Firebase set up first and by that time my xcode stopped functioning (emailed you about this). Also I am maid of honor for sister’s wedding this weekend so I have been very swamped.
+
