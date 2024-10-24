@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class selectInterestsViewController: UIViewController {
     var count = 0;
     let activities = allActivities.shared.globalActivities
@@ -18,6 +19,7 @@ class selectInterestsViewController: UIViewController {
     }
     //     sender.isSelected.toggle()
     //     sender.backgroundColor = sender.isSelected ? UIColor.systemBlue : UIColor.systemGray2
+
 
     @IBAction func genericPush(_ sender: UIButton) {
         
