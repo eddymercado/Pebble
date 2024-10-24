@@ -17,6 +17,7 @@ class selectInterestsViewController: UIViewController {
 
     // let activities = allActivities.shared.globalActivities
 
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
