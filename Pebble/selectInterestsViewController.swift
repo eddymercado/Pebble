@@ -6,50 +6,67 @@
 //
 
 import UIKit
-
+import FirebaseAuth
+import FirebaseAnalytics
+import FirebaseFirestoreInternal
 
 class selectInterestsViewController: UIViewController {
     var count = 0;
-//    let activities = allActivities.shared.globalActivities
+    var arrayOfInterests: [String] = []
+    let db = Firestore.firestore()
+
+    // let activities = allActivities.shared.globalActivities
+
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
     }
-    //     sender.isSelected.toggle()
-    //     sender.backgroundColor = sender.isSelected ? UIColor.systemBlue : UIColor.systemGray2
-
 
     @IBAction func genericPush(_ sender: UIButton) {
-        
-        sender.isSelected.toggle()
-        if sender.isSelected {
-            sender.backgroundColor = UIColor.systemBlue
-            count = count + 1
-            print(count)
+        let buttonTitle = sender.title(for: .normal) ?? "NaN"
             
-            // allActivities.shared.addGlobalActivity("Soccer")   // check if over 5
-            // let userData:
-            // Analytics.setUserProperty(arrayOfInterests, forName: "Zip Code")
-            if count > 5 {
-                showAlert(title: "Only 5 interests can be selected", message: "")
-                count = count - 1
-                print(count)
-                sender.isSelected.toggle()
+            if sender.isSelected {
+                // If the button is already selected, deselect it
+                sender.isSelected = false
                 sender.backgroundColor = UIColor.systemGray2
+                // Remove the last added interest since this button is being deselected
+                if let index = arrayOfInterests.firstIndex(of: buttonTitle) {
+                    arrayOfInterests.remove(at: index)
+                    count -= 1
+                }
+            } else {
+                // If the button is not selected, check if we can select it
+                if count < 5 {
+                    sender.isSelected = true
+                    sender.backgroundColor = UIColor.systemBlue
+                    arrayOfInterests.append(buttonTitle)
+                    count += 1
+                } else {
+                    // If the limit is reached, show an alert
+                    showAlert(title: "Only 5 interests can be selected", message: "")
+                }
             }
-        } else {
-            sender.backgroundColor = UIColor.systemGray2
-            // remove from array
-            count = count - 1
-            print(count)
-        }
     }
 
     @IBAction func selectInterestToBrowseEvents(_ sender: Any) {
-        performSegue(withIdentifier: "selectInterestToBrowseEvents", sender: self)
+        // add array of interests to user profile in firstore
         
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        let userData: [String: Any] = ["Interests": arrayOfInterests]
+        
+        self.db.collection("users").document(userId).updateData(userData) { error in
+            if let error = error {
+                self.showAlert(title: "Error", message: "\(error.localizedDescription)")
+            } else {
+                let interestsString = self.arrayOfInterests.joined(separator: ", ")
+                Analytics.setUserProperty(interestsString, forName: "Interests")
+            }
+            self.performSegue(withIdentifier: "selectInterestToBrowseEvents", sender: self)
+            
+        }
     }
 
     
