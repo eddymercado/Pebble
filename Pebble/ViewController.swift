@@ -69,14 +69,14 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         let event = eventsList[indexPath.item]
         
         // Configure the cell with event details
-        cell.titleLabel.text = event.title
-        cell.descriptionLabel.text = event.description
-        cell.dateLabel.text = DateFormatter.localizedString(from: event.date, dateStyle: .medium, timeStyle: .none)
-        cell.startTimeLabel.text = DateFormatter.localizedString(from: event.startTime, dateStyle: .none, timeStyle: .short)
-        cell.endTimeLabel.text = DateFormatter.localizedString(from: event.endTime, dateStyle: .none, timeStyle: .short)
-        cell.locationLabel.text = event.location
-        cell.numPeopleLabel.text = "\(event.numPeople) people"
-        cell.activitiesLabel.text = event.activities
+        cell.titleLabel.text = "Title: \(event.title)"
+        cell.descriptionLabel.text = "Descirption: \(event.description)"
+        cell.dateLabel.text = "Date: \(DateFormatter.localizedString(from: event.date, dateStyle: .medium, timeStyle: .none))"
+        cell.startTimeLabel.text = "Start Time: \(DateFormatter.localizedString(from: event.startTime, dateStyle: .none, timeStyle: .short))"
+        cell.endTimeLabel.text = "End Time: \(DateFormatter.localizedString(from: event.endTime, dateStyle: .none, timeStyle: .short))"
+        cell.locationLabel.text = "Location: \(event.location)"
+        cell.numPeopleLabel.text = "Headcount: \(event.numPeople)"
+        cell.activitiesLabel.text = "Activity: \(event.activities)"
         
         return cell
     }
