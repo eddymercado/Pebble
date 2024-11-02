@@ -22,11 +22,17 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     @IBOutlet weak var profilePic: UIImageView!
     @IBOutlet weak var eventSegmentView: UIView!
     @IBOutlet weak var myEventSegmentView: UIView!
+    @IBOutlet weak var usernameLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupProfilePic()
+        
+        // Retrieve the username from UserDefaults
+        if let usernameData = UserDefaults.standard.string(forKey: "username") {
+            usernameLabel.text = usernameData
+        }
     }
     
     func setupUI() {
@@ -65,5 +71,24 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
 //        }
         return cell
     }
+    
+//    @IBAction func settingsButtonPressed(_ sender: Any) {
+//        print("MADE IT!!!!!")
+//        //        let controller = UIAlertController(
+////            title: "",
+////            message: "",
+////            preferredStyle: .actionSheet)
+////        
+////        // meat options
+////        controller.addAction(UIAlertAction(title: "Update Profile", style: .default) {_ in
+////            // Code to update profile goes here
+////            print("Update Profile selected")})
+////        controller.addAction(UIAlertAction(title: "Update Interests", style: .default) {_ in
+////            // Code to update interests goes here
+////            print("Update Interests selected")})
+////        controller.addAction(UIAlertAction(title: "Update Info", style: .default) {_ in // Code to update info goes here
+////            print("Update Info selected")})
+////        self.present(controller, animated: true, completion: nil)
+//    }
 
 }

@@ -13,8 +13,6 @@ import FirebaseFirestoreInternal
 
 class SignUpInfoVC: UIViewController {
     
-    
-    
     @IBOutlet weak var usernameField: UITextField!
     
     @IBOutlet weak var passwordField: UITextField!
@@ -88,6 +86,7 @@ class SignUpInfoVC: UIViewController {
             }
             self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
         }
+        UserDefaults.standard.set(usernameField.text, forKey: "username")
     }
     
     func showAlert(title: String, message: String) {
