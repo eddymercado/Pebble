@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseFirestoreInternal
 
 class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var delegate: ViewController!
     let eventCellIdentifier = "EventCell"
+    var selectedInterests: [String] = []
 
     // Sample data for events
     var events = [
@@ -23,6 +26,7 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     @IBOutlet weak var eventSegmentView: UIView!
     @IBOutlet weak var myEventSegmentView: UIView!
     @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var interestsStackView: UIStackView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +37,7 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         if let usernameData = UserDefaults.standard.string(forKey: "username") {
             usernameLabel.text = usernameData
         }
+        fetchInterestsFromFirestore()
     }
     
     func setupUI() {
@@ -64,31 +69,79 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: eventCellIdentifier, for: indexPath)
-//        let event = events[indexPath.row]
-//        // Set the event image
-//        if let imageName = event["image"] {
-//            cell.eventImageView.image = UIImage(named: cultural_gathering_image)
-//        }
         return cell
     }
     
-//    @IBAction func settingsButtonPressed(_ sender: Any) {
-//        print("MADE IT!!!!!")
-//        //        let controller = UIAlertController(
-////            title: "",
-////            message: "",
-////            preferredStyle: .actionSheet)
-////        
-////        // meat options
-////        controller.addAction(UIAlertAction(title: "Update Profile", style: .default) {_ in
-////            // Code to update profile goes here
-////            print("Update Profile selected")})
-////        controller.addAction(UIAlertAction(title: "Update Interests", style: .default) {_ in
-////            // Code to update interests goes here
-////            print("Update Interests selected")})
-////        controller.addAction(UIAlertAction(title: "Update Info", style: .default) {_ in // Code to update info goes here
-////            print("Update Info selected")})
-////        self.present(controller, animated: true, completion: nil)
-//    }
+    func populateInterests() {
+        // Clear any existing rows in the stack view
+        interestsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
+        // Start a new row
+        var currentRowStackView = createHorizontalStackView()
+
+        for interest in selectedInterests {
+            let label = UILabel()
+            label.text = " \(interest) "
+            label.textAlignment = .center
+            label.backgroundColor = UIColor.systemBlue
+            label.textColor = .white
+            label.font = UIFont.systemFont(ofSize: 12)
+            label.layer.cornerRadius = 6
+            label.clipsToBounds = true
+            label.sizeToFit()
+
+            // Add constraints to ensure proper sizing
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.heightAnchor.constraint(equalToConstant: 30).isActive = true
+
+            // Calculate the total width of the current row + the new label
+            let totalWidth = currentRowStackView.arrangedSubviews.reduce(0) { $0 + $1.frame.width }
+                            + label.intrinsicContentSize.width
+                            + (CGFloat(currentRowStackView.arrangedSubviews.count) * currentRowStackView.spacing)
+
+            if totalWidth > interestsStackView.frame.width {
+                // If adding this label exceeds the row width, finalize the current row and start a new one
+                interestsStackView.addArrangedSubview(currentRowStackView)
+                currentRowStackView = createHorizontalStackView()
+            }
+
+            // Add the label to the current row
+            currentRowStackView.addArrangedSubview(label)
+        }
+
+        // Add the final row if it has any labels
+        if !currentRowStackView.arrangedSubviews.isEmpty {
+            interestsStackView.addArrangedSubview(currentRowStackView)
+        }
+    }
+
+    // Helper function to create a horizontal stack view
+    private func createHorizontalStackView() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 8 // Adjust spacing as necessary
+        stackView.alignment = .leading
+        stackView.distribution = .fillProportionally
+        return stackView
+    }
+    
+    func fetchInterestsFromFirestore() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+
+        db.collection("users").document(userId).getDocument { document, error in
+            if let error = error {
+                print("Error fetching user interests: \(error.localizedDescription)")
+                return
+            }
+
+            if let document = document, let data = document.data(), let interests = data["Interests"] as? [String] {
+                self.selectedInterests = interests
+                self.populateInterests()
+            }
+        }
+        print("hi here")
+        print(selectedInterests)
+    }
 
 }
