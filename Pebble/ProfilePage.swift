@@ -27,6 +27,7 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     @IBOutlet weak var myEventSegmentView: UIView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var interestsStackView: UIStackView!
+    @IBOutlet weak var backupInterestsStackView: UIStackView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,11 +74,13 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
     func populateInterests() {
-        // Clear any existing rows in the stack view
+        // Clear any existing rows in both stack views
         interestsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        backupInterestsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        // Start a new row
+        // Start a new row for the primary stack view
         var currentRowStackView = createHorizontalStackView()
+        interestsStackView.addArrangedSubview(currentRowStackView)
 
         for interest in selectedInterests {
             let label = UILabel()
@@ -88,38 +91,42 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             label.font = UIFont.systemFont(ofSize: 12)
             label.layer.cornerRadius = 6
             label.clipsToBounds = true
-            label.sizeToFit()
 
-            // Add constraints to ensure proper sizing
+            // Ensure dynamic size for the label
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            label.heightAnchor.constraint(equalToConstant: 20).isActive = true
 
-            // Calculate the total width of the current row + the new label
-            let totalWidth = currentRowStackView.arrangedSubviews.reduce(0) { $0 + $1.frame.width }
-                            + label.intrinsicContentSize.width
-                            + (CGFloat(currentRowStackView.arrangedSubviews.count) * currentRowStackView.spacing)
+            // Calculate label width
+            let labelWidth = label.intrinsicContentSize.width + 16 // Adding internal padding
 
+            // Calculate current row width including spacing
+            let totalWidth = currentRowStackView.arrangedSubviews.reduce(0) { $0 + $1.intrinsicContentSize.width + 16 }
+                             + CGFloat(currentRowStackView.arrangedSubviews.count) * currentRowStackView.spacing
+                             + labelWidth
+
+            // Check if current row exceeds the width of the interestsStackView
             if totalWidth > interestsStackView.frame.width {
-                // If adding this label exceeds the row width, finalize the current row and start a new one
-                interestsStackView.addArrangedSubview(currentRowStackView)
-                currentRowStackView = createHorizontalStackView()
+                // If adding exceeds primary stack view width, check if it's in the backup stack view
+                if currentRowStackView.superview === interestsStackView {
+                    // Move to backup stack view
+                    currentRowStackView = createHorizontalStackView()
+                    backupInterestsStackView.addArrangedSubview(currentRowStackView)
+                }
             }
 
-            // Add the label to the current row
             currentRowStackView.addArrangedSubview(label)
         }
 
-        // Add the final row if it has any labels
-        if !currentRowStackView.arrangedSubviews.isEmpty {
-            interestsStackView.addArrangedSubview(currentRowStackView)
-        }
+        // Force layout updates
+        interestsStackView.layoutIfNeeded()
+        backupInterestsStackView.layoutIfNeeded()
     }
 
-    // Helper function to create a horizontal stack view
+    // Helper function to create horizontal stack views
     private func createHorizontalStackView() -> UIStackView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.spacing = 8 // Adjust spacing as necessary
+        stackView.spacing = 8 // Space between labels
         stackView.alignment = .leading
         stackView.distribution = .fillProportionally
         return stackView
@@ -140,8 +147,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
                 self.populateInterests()
             }
         }
-        print("hi here")
-        print(selectedInterests)
     }
-
+    
 }

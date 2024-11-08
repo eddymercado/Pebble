@@ -26,8 +26,6 @@ class CreateEvents: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func uploadPhotoPressed(_ sender: UIButton) {
