@@ -28,6 +28,7 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var interestsStackView: UIStackView!
     @IBOutlet weak var backupInterestsStackView: UIStackView!
+    @IBOutlet weak var settingsButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,15 +42,59 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         fetchInterestsFromFirestore()
     }
     
+    
+    @IBAction func settingsButtonClicked(_ sender: Any) {
+        print("Button tapped")
+        // Create the action sheet
+        let actionSheet = UIAlertController(title: "Settings", message: "Select an option to update", preferredStyle: .actionSheet)
+        
+        // Add actions for each setting option
+        actionSheet.addAction(UIAlertAction(title: "Update Profile", style: .default, handler: { _ in
+            print("Update Profile selected")
+            // Perform actions for updating profile
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Update Interests", style: .default, handler: { _ in
+            print("Update Interests selected")
+            // Perform actions for updating interests
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Update Info", style: .default, handler: { _ in
+            print("Update Info selected")
+            // Perform actions for updating info
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Update Location", style: .default, handler: { _ in
+            print("Update Location selected")
+            // Perform actions for updating location
+        }))
+        
+        // Add a cancel button
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        // Present the action sheet
+        present(actionSheet, animated: true, completion: nil)
+    }
     func setupUI() {
         view.backgroundColor = .systemGray6
     }
 
     func setupProfilePic() {
-        profilePic.frame.size.width = profilePic.frame.size.height
-        profilePic.layer.cornerRadius = profilePic.frame.size.width / 2
+        // Ensure the image view is a square
+        let width = profilePic.frame.size.width
+        profilePic.layer.cornerRadius = width / 2
         profilePic.clipsToBounds = true
-        view.addSubview(profilePic)
+        
+        // Maintain aspect fill for the image
+        profilePic.contentMode = .scaleAspectFill
+
+        // Retrieve and set the image
+        if let imageData = UserDefaults.standard.data(forKey: "profilePic"),
+           let image = UIImage(data: imageData) {
+            profilePic.image = image
+        } else {
+            profilePic.image = UIImage(systemName: "person.circle") // Default placeholder
+        }
     }
     
     // Event Segment Changer
@@ -148,5 +193,4 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             }
         }
     }
-    
 }
