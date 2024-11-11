@@ -1262,13 +1262,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-<<<<<<< HEAD
         <segue reference="v5f-vA-7Wo"/>
         <segue reference="Mm1-ev-8aY"/>
-=======
         <segue reference="US9-ix-6uy"/>
         <segue reference="FnY-UG-W1m"/>
->>>>>>> 06008a9abf06d83c1ff047c4d1d852c30e7f53d3
     </inferredMetricsTieBreakers>
     <resources>
         <image name="empty_user.light.png" width="828" height="1792"/>
