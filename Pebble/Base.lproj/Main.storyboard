@@ -309,7 +309,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="College student looking to join some fun communities!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vm1-zH-ZyL">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text=" " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vm1-zH-ZyL">
                                 <rect key="frame" x="34" y="277" width="324" height="86"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -369,6 +369,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <outlet property="backupInterestsStackView" destination="nh9-kB-VPq" id="Xac-ra-ooi"/>
+                        <outlet property="bioLabel" destination="Vm1-zH-ZyL" id="KrZ-Oo-bv8"/>
                         <outlet property="eventSegmentView" destination="jct-eO-2w4" id="f3Y-nb-Hi2"/>
                         <outlet property="interestsStackView" destination="frP-lh-3h2" id="FkL-zB-mRB"/>
                         <outlet property="myEventSegmentView" destination="qNJ-ed-gW6" id="bJP-VJ-bhv"/>
@@ -1049,10 +1050,10 @@
             </objects>
             <point key="canvasLocation" x="187" y="1343"/>
         </scene>
-        <!--View Controller-->
+        <!--Update Profile View Controller-->
         <scene sceneID="GJ0-IT-Vbv">
             <objects>
-                <viewController id="m0G-qN-4uP" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UpdateProfileViewController" id="m0G-qN-4uP" customClass="UpdateProfileViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oEj-AX-ja2">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1087,10 +1088,33 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fIY-dH-zad">
+                                <rect key="frame" x="20" y="101" width="353" height="328"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title=""/>
+                                <connections>
+                                    <action selector="uploadPhotoButtonTapped:" destination="m0G-qN-4uP" eventType="touchUpInside" id="OuY-wo-yZc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OJP-pF-Ce9">
+                                <rect key="frame" x="129" y="712" width="135" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Save"/>
+                                <connections>
+                                    <action selector="saveProfileChanges:" destination="m0G-qN-4uP" eventType="touchUpInside" id="BE6-yo-Z3b"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="105-Ir-mEt"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <connections>
+                        <outlet property="bioTextField" destination="4c8-Ze-TBw" id="6w0-ly-ALc"/>
+                        <outlet property="profileImageView" destination="D4A-mM-YGx" id="bND-9M-rvt"/>
+                        <outlet property="usernameTextField" destination="mRg-aX-XDc" id="Ab2-pH-B28"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gF1-Bf-Lgw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

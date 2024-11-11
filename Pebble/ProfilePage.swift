@@ -29,6 +29,7 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     @IBOutlet weak var interestsStackView: UIStackView!
     @IBOutlet weak var backupInterestsStackView: UIStackView!
     @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var bioLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +43,21 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         fetchInterestsFromFirestore()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupProfileInfo() // Ensure profile data is updated
+    }
+    
+    func setupProfileInfo() {
+        if let imageData = UserDefaults.standard.data(forKey: "profilePic"),
+           let image = UIImage(data: imageData) {
+            profilePic.image = image
+        }
+        usernameLabel.text = UserDefaults.standard.string(forKey: "username")
+        
+        // Assuming you have a UILabel for bio
+        bioLabel.text = UserDefaults.standard.string(forKey: "bio")
+    }
     
     @IBAction func settingsButtonClicked(_ sender: Any) {
         print("Button tapped")
@@ -51,7 +67,12 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         // Add actions for each setting option
         actionSheet.addAction(UIAlertAction(title: "Update Profile", style: .default, handler: { _ in
             print("Update Profile selected")
-            // Perform actions for updating profile
+            // Navigate to UpdateProfileVC
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "UpdateProfileViewController") as? UpdateProfileViewController {
+                updateProfileVC.modalPresentationStyle = .fullScreen
+                self.present(updateProfileVC, animated: true, completion: nil)
+            }
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Interests", style: .default, handler: { _ in
@@ -69,12 +90,13 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             // Perform actions for updating location
         }))
         
-        // Add a cancel button
+        // Add a cancel action
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         // Present the action sheet
         present(actionSheet, animated: true, completion: nil)
     }
+    
     func setupUI() {
         view.backgroundColor = .systemGray6
     }
