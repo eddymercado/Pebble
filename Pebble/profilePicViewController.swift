@@ -30,6 +30,9 @@ class profilePicViewController: UIViewController {
     }
     
     @IBAction func profilePicSaveButton(_ sender: Any) {
+        if let imageData = imageView.image?.jpegData(compressionQuality: 0.8) {
+            UserDefaults.standard.set(imageData, forKey: "profilePic")
+        }
         performSegue(withIdentifier: "profilePicToSelectInterests", sender: self)
         }
     

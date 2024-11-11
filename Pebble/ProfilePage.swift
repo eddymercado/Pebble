@@ -27,6 +27,9 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     @IBOutlet weak var myEventSegmentView: UIView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var interestsStackView: UIStackView!
+    @IBOutlet weak var backupInterestsStackView: UIStackView!
+    @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var bioLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,15 +43,80 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         fetchInterestsFromFirestore()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupProfileInfo() // Ensure profile data is updated
+    }
+    
+    func setupProfileInfo() {
+        if let imageData = UserDefaults.standard.data(forKey: "profilePic"),
+           let image = UIImage(data: imageData) {
+            profilePic.image = image
+        }
+        usernameLabel.text = UserDefaults.standard.string(forKey: "username")
+        
+        // Assuming you have a UILabel for bio
+        bioLabel.text = UserDefaults.standard.string(forKey: "bio")
+    }
+    
+    @IBAction func settingsButtonClicked(_ sender: Any) {
+        print("Button tapped")
+        // Create the action sheet
+        let actionSheet = UIAlertController(title: "Settings", message: "Select an option to update", preferredStyle: .actionSheet)
+        
+        // Add actions for each setting option
+        actionSheet.addAction(UIAlertAction(title: "Update Profile", style: .default, handler: { _ in
+            print("Update Profile selected")
+            // Navigate to UpdateProfileVC
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "UpdateProfileViewController") as? UpdateProfileViewController {
+                updateProfileVC.modalPresentationStyle = .fullScreen
+                self.present(updateProfileVC, animated: true, completion: nil)
+            }
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Update Interests", style: .default, handler: { _ in
+            print("Update Interests selected")
+            // Perform actions for updating interests
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Update Info", style: .default, handler: { _ in
+            print("Update Info selected")
+            // Perform actions for updating info
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Update Location", style: .default, handler: { _ in
+            print("Update Location selected")
+            // Perform actions for updating location
+        }))
+        
+        // Add a cancel action
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        // Present the action sheet
+        present(actionSheet, animated: true, completion: nil)
+    }
+    
     func setupUI() {
         view.backgroundColor = .systemGray6
     }
 
     func setupProfilePic() {
-        profilePic.frame.size.width = profilePic.frame.size.height
-        profilePic.layer.cornerRadius = profilePic.frame.size.width / 2
+        // Ensure the image view is a square
+        let width = profilePic.frame.size.width
+        profilePic.layer.cornerRadius = width / 2
         profilePic.clipsToBounds = true
-        view.addSubview(profilePic)
+        
+        // Maintain aspect fill for the image
+        profilePic.contentMode = .scaleAspectFill
+
+        // Retrieve and set the image
+        if let imageData = UserDefaults.standard.data(forKey: "profilePic"),
+           let image = UIImage(data: imageData) {
+            profilePic.image = image
+        } else {
+            profilePic.image = UIImage(systemName: "person.circle") // Default placeholder
+        }
     }
     
     // Event Segment Changer
@@ -73,11 +141,13 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
     func populateInterests() {
-        // Clear any existing rows in the stack view
+        // Clear any existing rows in both stack views
         interestsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        backupInterestsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        // Start a new row
+        // Start a new row for the primary stack view
         var currentRowStackView = createHorizontalStackView()
+        interestsStackView.addArrangedSubview(currentRowStackView)
 
         for interest in selectedInterests {
             let label = UILabel()
@@ -88,38 +158,42 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             label.font = UIFont.systemFont(ofSize: 12)
             label.layer.cornerRadius = 6
             label.clipsToBounds = true
-            label.sizeToFit()
 
-            // Add constraints to ensure proper sizing
+            // Ensure dynamic size for the label
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            label.heightAnchor.constraint(equalToConstant: 20).isActive = true
 
-            // Calculate the total width of the current row + the new label
-            let totalWidth = currentRowStackView.arrangedSubviews.reduce(0) { $0 + $1.frame.width }
-                            + label.intrinsicContentSize.width
-                            + (CGFloat(currentRowStackView.arrangedSubviews.count) * currentRowStackView.spacing)
+            // Calculate label width
+            let labelWidth = label.intrinsicContentSize.width + 16 // Adding internal padding
 
+            // Calculate current row width including spacing
+            let totalWidth = currentRowStackView.arrangedSubviews.reduce(0) { $0 + $1.intrinsicContentSize.width + 16 }
+                             + CGFloat(currentRowStackView.arrangedSubviews.count) * currentRowStackView.spacing
+                             + labelWidth
+
+            // Check if current row exceeds the width of the interestsStackView
             if totalWidth > interestsStackView.frame.width {
-                // If adding this label exceeds the row width, finalize the current row and start a new one
-                interestsStackView.addArrangedSubview(currentRowStackView)
-                currentRowStackView = createHorizontalStackView()
+                // If adding exceeds primary stack view width, check if it's in the backup stack view
+                if currentRowStackView.superview === interestsStackView {
+                    // Move to backup stack view
+                    currentRowStackView = createHorizontalStackView()
+                    backupInterestsStackView.addArrangedSubview(currentRowStackView)
+                }
             }
 
-            // Add the label to the current row
             currentRowStackView.addArrangedSubview(label)
         }
 
-        // Add the final row if it has any labels
-        if !currentRowStackView.arrangedSubviews.isEmpty {
-            interestsStackView.addArrangedSubview(currentRowStackView)
-        }
+        // Force layout updates
+        interestsStackView.layoutIfNeeded()
+        backupInterestsStackView.layoutIfNeeded()
     }
 
-    // Helper function to create a horizontal stack view
+    // Helper function to create horizontal stack views
     private func createHorizontalStackView() -> UIStackView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.spacing = 8 // Adjust spacing as necessary
+        stackView.spacing = 8 // Space between labels
         stackView.alignment = .leading
         stackView.distribution = .fillProportionally
         return stackView
@@ -140,8 +214,5 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
                 self.populateInterests()
             }
         }
-        print("hi here")
-        print(selectedInterests)
     }
-
 }
