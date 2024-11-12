@@ -31,15 +31,22 @@ class SignUpInfoVC: UIViewController {
     
     
     let db = Firestore.firestore()
-
+//    let profilePicture = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        emailAddressField.text = ""
+        passwordField.text = ""
+        
+    }
 
     @IBAction func signUpNextButton(_ sender: Any) {
-        self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
         guard let email = emailAddressField.text, !email.isEmpty,
               let password = passwordField.text, !password.isEmpty,
               let firstName = firstNameField.text, !firstName.isEmpty,
@@ -68,7 +75,7 @@ class SignUpInfoVC: UIViewController {
                     "email": email,
                     "phoneNumber": phoneNumber,
                     "dateOfBirth": dateOfBirth,
-                    "zipCode": zipCode
+                    "zipCode": zipCode,
                 ]
                 
                 self.db.collection("users").document(userId).setData(userData) { error in
@@ -81,12 +88,11 @@ class SignUpInfoVC: UIViewController {
                         Analytics.setUserProperty(username, forName: "Username")
                         Analytics.setUserProperty(firstName, forName: "First Name")
                         Analytics.setUserProperty(lastName, forName: "Last Name")
+                        self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
                     }
                 }
             }
-            self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
         }
-        UserDefaults.standard.set(usernameField.text, forKey: "username")
     }
     
     func showAlert(title: String, message: String) {

@@ -14,6 +14,7 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     var delegate: ViewController!
     let eventCellIdentifier = "EventCell"
     var selectedInterests: [String] = []
+    let db = Firestore.firestore()
 
     // Sample data for events
     var events = [
@@ -49,15 +50,47 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
     func setupProfileInfo() {
-        if let imageData = UserDefaults.standard.data(forKey: "profilePic"),
-           let image = UIImage(data: imageData) {
-            profilePic.image = image
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        db.collection("users").document(userId).getDocument { (document, error) in
+            if let error = error {
+                print("Error retrieving document: \(error.localizedDescription)")
+                return
+            }
+
+            if let document = document, document.exists {
+
+                if let base64String = document.get("profilePic") as? String {
+                    // Convert the Base64 string to UIImage
+
+                    if let image = self.decodeBase64ToImage(base64String) {
+                        self.profilePic.image = image // Set the decoded image in an UIImageView
+                    }
+                }
+                
+                if let username = document.get("username") as? String {
+                    self.usernameLabel.text = username
+                } else {
+                    print("Username not found or not a string")
+                }
+                
+                if let bio = document.get("bio") as? String {
+                    self.bioLabel.text = bio
+                } else {
+                    print("bio not found or not a string")
+                }
+                
+            } else {
+                print("Document does not exist")
+            }
         }
-        usernameLabel.text = UserDefaults.standard.string(forKey: "username")
-        
-        // Assuming you have a UILabel for bio
-        bioLabel.text = UserDefaults.standard.string(forKey: "bio")
     }
+    
+    func decodeBase64ToImage(_ base64String: String) -> UIImage? {
+        guard let imageData = Data(base64Encoded: base64String) else { return nil }
+        return UIImage(data: imageData)
+    }
+    
     
     @IBAction func settingsButtonClicked(_ sender: Any) {
         print("Button tapped")
@@ -89,6 +122,16 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             print("Update Location selected")
             // Perform actions for updating location
         }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { _ in
+            do {
+                try Auth.auth().signOut()
+                self.dismiss(animated: true)
+            } catch {
+                print("Sign out error")
+            }
+        }))
+
         
         // Add a cancel action
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

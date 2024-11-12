@@ -21,12 +21,12 @@ class selectInterestsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
     }
 
     @IBAction func genericPush(_ sender: UIButton) {
         let buttonTitle = sender.titleLabel?.text
-        print(buttonTitle ?? "NAURRR")
+//        print(buttonTitle ?? "NAURRR")
         if sender.isSelected {
             // If the button is already selected, deselect it
             sender.isSelected = false
@@ -44,7 +44,7 @@ class selectInterestsViewController: UIViewController {
 //                print("ARRAY OF INTERESTS before add: \(arrayOfInterests)")
 //                print("button title: \(buttonTitle)")
                 arrayOfInterests.append(buttonTitle!)
-                print("ARRAY OF INTERESTS after add: \(arrayOfInterests)")
+//                print("ARRAY OF INTERESTS after add: \(arrayOfInterests)")
                 count += 1
             } else {
                 // If the limit is reached, show an alert
@@ -59,8 +59,8 @@ class selectInterestsViewController: UIViewController {
         guard let userId = Auth.auth().currentUser?.uid else { return }
 
         let userData: [String: Any] = ["Interests": arrayOfInterests]
-        print("ARRAY OF INTERESTS:")
-        print(arrayOfInterests)
+//        print("ARRAY OF INTERESTS:")
+//        print(arrayOfInterests)
         self.db.collection("users").document(userId).updateData(userData) { error in
             if let error = error {
                 self.showAlert(title: "Error", message: "\(error.localizedDescription)")
