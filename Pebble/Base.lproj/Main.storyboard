@@ -114,19 +114,11 @@
                                             <outlet property="eventTitleLabel" destination="BJf-wc-hr3" id="eaD-O5-AfQ"/>
                                             <outlet property="profileImageView" destination="VZa-DR-2R4" id="9Og-JV-axk"/>
                                             <outlet property="profileUsernameLabel" destination="nq8-jW-cxv" id="qOK-yM-f3P"/>
+                                            <segue destination="rql-e6-J7q" kind="show" identifier="showSingleEvent" id="MNk-l9-521"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="odx-tm-Zco">
-                                <rect key="frame" x="40" y="657" width="314" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="[FOR TESTING: segue to single event]"/>
-                                <connections>
-                                    <segue destination="rql-e6-J7q" kind="show" identifier="openSingleEvent" id="DE9-lM-9g7"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -264,7 +256,7 @@
                                 <rect key="frame" x="0.0" y="83" width="393" height="177"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Description" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lhM-a4-xiw">
-                                <rect key="frame" x="35" y="426" width="237" height="104"/>
+                                <rect key="frame" x="35" y="478" width="237" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -357,6 +349,14 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="NWT-UI-p4E"/>
+                    <connections>
+                        <outlet property="eventDate" destination="8IL-OQ-ias" id="duG-7M-b97"/>
+                        <outlet property="eventDescription" destination="lhM-a4-xiw" id="VVC-0R-xvu"/>
+                        <outlet property="eventHost" destination="pQS-7A-Qj4" id="KXA-Ag-xwI"/>
+                        <outlet property="eventLocation" destination="x0m-4x-eSF" id="w4E-kG-6fd"/>
+                        <outlet property="eventTime" destination="heQ-bf-AhC" id="Zmq-Cy-OAX"/>
+                        <outlet property="eventTitle" destination="dYb-xP-Xq3" id="2w5-gO-Bg0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qni-Ih-JMg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

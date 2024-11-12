@@ -92,6 +92,7 @@ class Event {
     //each event can be sorted by specific activities, ex. fitness and soccer
     var activities: String
     var numPeople: Int
+    //need RSVP list
     
     init(title: String, description: String, date: Date, startTime: Date, endTime: Date, location: String, activities: String, numPeople: Int) {
         self.title = title

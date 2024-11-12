@@ -16,6 +16,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     
     let profilePageSegueIdentifier = "ProfilePageSegueIdentifier"
     let createEventsSegueIdentifier = "createEventsSegueIdentifier"
+    let openSingleEventSegue = "showSingleEvent"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,14 +59,37 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         
         let event = eventsList[indexPath.item]
         cell.configure(with: event)
+        
+        // Add a tap gesture recognizer to the cell
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped(_:)))
+            cell.addGestureRecognizer(tapGesture)
 
         return cell
     }
+    
+    @objc func cellTapped(_ gesture: UITapGestureRecognizer) {
+        if let cell = gesture.view as? UICollectionViewCell,
+           let indexPath = collectionView.indexPath(for: cell) {
+            print("Cell tapped at index: \(indexPath.item)")
+            let selectedEvent = eventsList[indexPath.item]
+            performSegue(withIdentifier: openSingleEventSegue, sender: selectedEvent)
+        }
+    }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Cell selected at index: \(indexPath.item)")
+        let selectedEvent = eventsList[indexPath.item]
+        print("Selected event: \(selectedEvent)")
+        performSegue(withIdentifier: openSingleEventSegue, sender: selectedEvent)
+    }
 
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("prepare(for:sender:) called in ViewController")
+        print("Segue identifier: \(segue.identifier ?? "nil")")
+        print("Destination view controller: \(segue.destination)")
+        print("Sender: \(String(describing: sender))")
         if segue.identifier == profilePageSegueIdentifier {
             if let nextVC = segue.destination as? ProfilePage {
                 nextVC.delegate = self // Set the delegate for ProfilePage
@@ -74,6 +98,16 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             if let createVC = segue.destination as? CreateEvents {
                 createVC.delegate = self // Set the delegate for CreateEvents
             }
+        } else if segue.identifier == openSingleEventSegue {
+            print("Segue to SingleEventViewController")
+            if let singleEventVC = segue.destination as? SingleEventViewController, let selectedEvent = sender as? Event {
+                print("Event being passed: \(selectedEvent)")
+                singleEventVC.event = selectedEvent
+            } else {
+                print("Failed to cast destination to SingleEventViewController or sender to Event")
+            }
+        } else {
+            print("Unknown segue identifier: \(segue.identifier ?? "nil")")
         }
     }
 }
