@@ -21,6 +21,14 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Clear the text fields when the view appears
+        usernameField.text = ""
+        passwordField.text = ""
+    }
+    
     @IBAction func loginButton(_ sender: Any) {
         // if username is valid login/ segue to browse events
         guard let email = usernameField.text, !email.isEmpty,
