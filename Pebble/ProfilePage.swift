@@ -41,6 +41,8 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupProfileInfo() // Ensure profile data is updated
+//        fetchInterestsFromFirestore()
+
     }
     
     func setupProfileInfo() {
@@ -82,9 +84,12 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
                     print("bio not found or not a string")
                 }
                 
+                self.populateInterests()
+                
             } else {
                 print("Document does not exist")
             }
+            
         }
     }
     
@@ -111,13 +116,27 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Interests", style: .default, handler: { _ in
-            print("Update Interests selected")
+//            print("Update Interests selected")
             // Perform actions for updating interests
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "selectInterestsViewController") as? selectInterestsViewController {
+                updateProfileVC.modalPresentationStyle = .fullScreen
+                updateProfileVC.cameFromUpdateInterests = true
+                self.present(updateProfileVC, animated: true, completion: nil)
+            }
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Info", style: .default, handler: { _ in
-            print("Update Info selected")
+//            print("Update Info selected")
             // Perform actions for updating info
+            // Navigate to UpdateProfileVC
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "updateInfoViewController") as? updateInfoViewController {
+                updateProfileVC.modalPresentationStyle = .fullScreen
+                self.present(updateProfileVC, animated: true, completion: nil)
+            }
+
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Location", style: .default, handler: { _ in
@@ -128,7 +147,11 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         actionSheet.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { _ in
             do {
                 try Auth.auth().signOut()
-                self.dismiss(animated: true)
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+                    updateProfileVC.modalPresentationStyle = .fullScreen
+                    self.present(updateProfileVC, animated: true, completion: nil)
+                }
             } catch {
                 print("Sign out error")
             }

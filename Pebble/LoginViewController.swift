@@ -12,7 +12,7 @@ import FirebaseFirestore
 
 let db = Firestore.firestore()
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UINavigationControllerDelegate {
 
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!

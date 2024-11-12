@@ -390,12 +390,12 @@
             </objects>
             <point key="canvasLocation" x="3135" y="768"/>
         </scene>
-        <!--Settings-->
+        <!--ProfilePage-->
         <scene sceneID="2ld-U7-7Vn">
             <objects>
-                <viewController id="ooW-hV-CUX" customClass="ProfilePage" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfilePage" title="ProfilePage" id="ooW-hV-CUX" customClass="ProfilePage" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3pg-tl-omT">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="803"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="empty_user.light.png" translatesAutoresizingMaskIntoConstraints="NO" id="o8Q-u3-Bxo">
@@ -426,14 +426,14 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qNJ-ed-gW6">
-                                <rect key="frame" x="16" y="455" width="357" height="269"/>
+                                <rect key="frame" x="16" y="445" width="357" height="269"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <segue destination="hAV-Fr-Nad" kind="embed" id="kZS-1r-Wxm"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jct-eO-2w4">
-                                <rect key="frame" x="16" y="455" width="357" height="269"/>
+                                <rect key="frame" x="16" y="445" width="357" height="269"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <segue destination="Z8x-Cy-l0G" kind="embed" id="RsW-V3-ob3"/>
@@ -627,10 +627,10 @@
             </objects>
             <point key="canvasLocation" x="-98.473282442748086" y="-675.35211267605632"/>
         </scene>
-        <!--Select Interests View Controller-->
+        <!--selectInterestsViewController-->
         <scene sceneID="qAo-ND-cJY">
             <objects>
-                <viewController id="h4d-C8-dHP" customClass="selectInterestsViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="selectInterestsViewController" title="selectInterestsViewController" id="h4d-C8-dHP" customClass="selectInterestsViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9Fi-ZX-y63">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -641,8 +641,8 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Done"/>
                                 <connections>
-                                    <action selector="selectInterestToBrowseEvents:" destination="h4d-C8-dHP" eventType="touchUpInside" id="e0A-fV-63D"/>
-                                    <segue destination="YZF-IL-Rie" kind="show" identifier="selectInterestToBrowseEvents" id="v5f-vA-7Wo"/>
+                                    <action selector="selectInterestToBrowseEvents:" destination="h4d-C8-dHP" eventType="touchUpInside" id="rYg-5H-pwK"/>
+                                    <segue destination="ooW-hV-CUX" kind="presentation" id="Qhn-Jv-aYx"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1qT-Tf-yDE">
@@ -986,10 +986,10 @@
             </objects>
             <point key="canvasLocation" x="756.48854961832058" y="-675.35211267605632"/>
         </scene>
-        <!--Login View Controller-->
+        <!--LoginViewController-->
         <scene sceneID="tAq-lD-1pS">
             <objects>
-                <viewController id="IFF-u7-qir" customClass="LoginViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" title="LoginViewController" id="IFF-u7-qir" customClass="LoginViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PIV-eP-FmX">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1225,9 +1225,86 @@
             </objects>
             <point key="canvasLocation" x="310.68702290076334" y="1855.6338028169016"/>
         </scene>
+        <!--updateInfoViewController-->
+        <scene sceneID="9qY-hf-YCP">
+            <objects>
+                <viewController storyboardIdentifier="updateInfoViewController" title="updateInfoViewController" id="EjJ-0e-CKS" customClass="updateInfoViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="k2E-7S-dMk">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="clr-pw-WkG">
+                                <rect key="frame" x="57" y="246" width="278" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3tG-CV-Lgf">
+                                <rect key="frame" x="57" y="185" width="278" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dDJ-Ny-rKc">
+                                <rect key="frame" x="57" y="310" width="278" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone Number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fIf-9h-mnR">
+                                <rect key="frame" x="57" y="374" width="278" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ScO-CJ-j2g">
+                                <rect key="frame" x="166" y="534" width="61" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Save"/>
+                                <connections>
+                                    <action selector="saveUpdatedProfileInfoButton:" destination="EjJ-0e-CKS" eventType="touchUpInside" id="wlg-S4-rbJ"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfz-Wv-XEK">
+                                <rect key="frame" x="16" y="607" width="361" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ORq-2H-EOv">
+                                <rect key="frame" x="126" y="734" width="141" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Delete Account">
+                                    <color key="baseForegroundColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="deleteAccountButtonPressed:" destination="EjJ-0e-CKS" eventType="touchUpInside" id="Xt7-bv-5fq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="y5e-db-Xo3"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="successfulOrNot" destination="cfz-Wv-XEK" id="g9R-nU-idN"/>
+                        <outlet property="updateEmailAddressTextField" destination="3tG-CV-Lgf" id="fRC-Tj-PBu"/>
+                        <outlet property="updateFirstNameTextField" destination="clr-pw-WkG" id="BmC-HM-xNm"/>
+                        <outlet property="updateLastNameTextField" destination="dDJ-Ny-rKc" id="TAm-Mi-ZN4"/>
+                        <outlet property="updatePhoneNumberTextField" destination="fIf-9h-mnR" id="CFK-ey-Q4M"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oHt-N9-UyS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1162.5954198473282" y="1855.6338028169016"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="US9-ix-6uy"/>
+        <segue reference="Qhn-Jv-aYx"/>
         <segue reference="FnY-UG-W1m"/>
     </inferredMetricsTieBreakers>
     <resources>

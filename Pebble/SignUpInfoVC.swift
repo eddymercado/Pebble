@@ -37,13 +37,6 @@ class SignUpInfoVC: UIViewController {
         super.viewDidLoad()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("this was called")
-        emailAddressField.text = "no"
-        passwordField.text = " yes"
-    }
-
     @IBAction func signUpNextButton(_ sender: Any) {
         guard let email = emailAddressField.text, !email.isEmpty,
               let password = passwordField.text, !password.isEmpty,
