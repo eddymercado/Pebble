@@ -14,6 +14,7 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     var delegate: ViewController!
     let eventCellIdentifier = "EventCell"
     var selectedInterests: [String] = []
+    let db = Firestore.firestore()
 
     // Sample data for events
     var events = [
@@ -34,30 +35,69 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupProfilePic()
-        
-        // Retrieve the username from UserDefaults
-        if let usernameData = UserDefaults.standard.string(forKey: "username") {
-            usernameLabel.text = usernameData
-        }
         fetchInterestsFromFirestore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupProfileInfo() // Ensure profile data is updated
+//        fetchInterestsFromFirestore()
+
     }
     
     func setupProfileInfo() {
-        if let imageData = UserDefaults.standard.data(forKey: "profilePic"),
-           let image = UIImage(data: imageData) {
-            profilePic.image = image
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        db.collection("users").document(userId).getDocument { (document, error) in
+            if let error = error {
+                print("Error retrieving document: \(error.localizedDescription)")
+                return
+            }
+
+            // Ensure the image view is a square
+            let width = self.profilePic.frame.size.width
+            self.profilePic.layer.cornerRadius = width / 2
+            self.profilePic.clipsToBounds = true
+            
+            // Maintain aspect fill for the image
+            self.profilePic.contentMode = .scaleAspectFill
+            
+            if let document = document, document.exists {
+
+                if let base64String = document.get("profilePic") as? String {
+                    // Convert the Base64 string to UIImage
+
+                    if let image = self.decodeBase64ToImage(base64String) {
+                        self.profilePic.image = image // Set the decoded image in an UIImageView
+                    }
+                }
+                
+                if let username = document.get("username") as? String {
+                    self.usernameLabel.text = username
+                } else {
+                    print("Username not found or not a string")
+                }
+                
+                if let bio = document.get("bio") as? String {
+                    self.bioLabel.text = bio
+                } else {
+                    print("bio not found or not a string")
+                }
+                
+                self.populateInterests()
+                
+            } else {
+                print("Document does not exist")
+            }
+            
         }
-        usernameLabel.text = UserDefaults.standard.string(forKey: "username")
-        
-        // Assuming you have a UILabel for bio
-        bioLabel.text = UserDefaults.standard.string(forKey: "bio")
     }
+    
+    func decodeBase64ToImage(_ base64String: String) -> UIImage? {
+        guard let imageData = Data(base64Encoded: base64String) else { return nil }
+        return UIImage(data: imageData)
+    }
+    
     
     @IBAction func settingsButtonClicked(_ sender: Any) {
         print("Button tapped")
@@ -76,19 +116,47 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Interests", style: .default, handler: { _ in
-            print("Update Interests selected")
+//            print("Update Interests selected")
             // Perform actions for updating interests
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "selectInterestsViewController") as? selectInterestsViewController {
+                updateProfileVC.modalPresentationStyle = .fullScreen
+                updateProfileVC.cameFromUpdateInterests = true
+                self.present(updateProfileVC, animated: true, completion: nil)
+            }
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Info", style: .default, handler: { _ in
-            print("Update Info selected")
+//            print("Update Info selected")
             // Perform actions for updating info
+            // Navigate to UpdateProfileVC
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "updateInfoViewController") as? updateInfoViewController {
+                updateProfileVC.modalPresentationStyle = .fullScreen
+                self.present(updateProfileVC, animated: true, completion: nil)
+            }
+
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Location", style: .default, handler: { _ in
             print("Update Location selected")
             // Perform actions for updating location
         }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { _ in
+            do {
+                try Auth.auth().signOut()
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+                    updateProfileVC.modalPresentationStyle = .fullScreen
+                    self.present(updateProfileVC, animated: true, completion: nil)
+                }
+            } catch {
+                print("Sign out error")
+            }
+        }))
+
         
         // Add a cancel action
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -101,23 +169,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         view.backgroundColor = .systemGray6
     }
 
-    func setupProfilePic() {
-        // Ensure the image view is a square
-        let width = profilePic.frame.size.width
-        profilePic.layer.cornerRadius = width / 2
-        profilePic.clipsToBounds = true
-        
-        // Maintain aspect fill for the image
-        profilePic.contentMode = .scaleAspectFill
-
-        // Retrieve and set the image
-        if let imageData = UserDefaults.standard.data(forKey: "profilePic"),
-           let image = UIImage(data: imageData) {
-            profilePic.image = image
-        } else {
-            profilePic.image = UIImage(systemName: "person.circle") // Default placeholder
-        }
-    }
     
     // Event Segment Changer
     @IBAction func eventSegment(_ sender: UISegmentedControl) {

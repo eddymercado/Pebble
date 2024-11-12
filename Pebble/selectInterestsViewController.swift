@@ -10,23 +10,29 @@ import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseFirestoreInternal
 
-class selectInterestsViewController: UIViewController {
+
+
+class selectInterestsViewController: UIViewController, UINavigationControllerDelegate {
     var count = 0;
     var arrayOfInterests: [String] = []
     let db = Firestore.firestore()
-
+    var cameFromUpdateInterests = false
     // let activities = allActivities.shared.globalActivities
 
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        print("came to viewdidload")
     }
 
+    // add view will appear to show already chosen interests
+    override func viewWillAppear(_ animated: Bool) {
+        print(cameFromUpdateInterests)
+    }
+    
     @IBAction func genericPush(_ sender: UIButton) {
         let buttonTitle = sender.titleLabel?.text
-        print(buttonTitle ?? "NAURRR")
         if sender.isSelected {
             // If the button is already selected, deselect it
             sender.isSelected = false
@@ -41,10 +47,7 @@ class selectInterestsViewController: UIViewController {
             if count < 5 {
                 sender.isSelected = true
                 sender.backgroundColor = UIColor.systemBlue
-//                print("ARRAY OF INTERESTS before add: \(arrayOfInterests)")
-//                print("button title: \(buttonTitle)")
                 arrayOfInterests.append(buttonTitle!)
-                print("ARRAY OF INTERESTS after add: \(arrayOfInterests)")
                 count += 1
             } else {
                 // If the limit is reached, show an alert
@@ -59,8 +62,7 @@ class selectInterestsViewController: UIViewController {
         guard let userId = Auth.auth().currentUser?.uid else { return }
 
         let userData: [String: Any] = ["Interests": arrayOfInterests]
-        print("ARRAY OF INTERESTS:")
-        print(arrayOfInterests)
+
         self.db.collection("users").document(userId).updateData(userData) { error in
             if let error = error {
                 self.showAlert(title: "Error", message: "\(error.localizedDescription)")
@@ -68,7 +70,20 @@ class selectInterestsViewController: UIViewController {
                 let interestsString = self.arrayOfInterests.joined(separator: ", ")
                 Analytics.setUserProperty(interestsString, forName: "Interests")
             }
-            self.performSegue(withIdentifier: "selectInterestToBrowseEvents", sender: self)
+            
+            // add if it came from porfile update go back to profile page if not still in sign up mode and need o degue to browse events
+
+            if self.cameFromUpdateInterests {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "ProfilePage") as? ProfilePage {
+                    updateProfileVC.modalPresentationStyle = .fullScreen
+                    self.present(updateProfileVC, animated: true, completion: nil)
+                }
+            } else {
+                self.performSegue(withIdentifier: "selectInterestToBrowseEvents", sender: self)
+//                print("i am not supposed to be here")
+            }
+            
             
         }
     }
