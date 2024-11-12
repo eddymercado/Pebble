@@ -35,12 +35,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupProfilePic()
-        
-        // Retrieve the username from UserDefaults
-        if let usernameData = UserDefaults.standard.string(forKey: "username") {
-            usernameLabel.text = usernameData
-        }
         fetchInterestsFromFirestore()
     }
     
@@ -58,6 +52,14 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
                 return
             }
 
+            // Ensure the image view is a square
+            let width = self.profilePic.frame.size.width
+            self.profilePic.layer.cornerRadius = width / 2
+            self.profilePic.clipsToBounds = true
+            
+            // Maintain aspect fill for the image
+            self.profilePic.contentMode = .scaleAspectFill
+            
             if let document = document, document.exists {
 
                 if let base64String = document.get("profilePic") as? String {
@@ -144,23 +146,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         view.backgroundColor = .systemGray6
     }
 
-    func setupProfilePic() {
-        // Ensure the image view is a square
-        let width = profilePic.frame.size.width
-        profilePic.layer.cornerRadius = width / 2
-        profilePic.clipsToBounds = true
-        
-        // Maintain aspect fill for the image
-        profilePic.contentMode = .scaleAspectFill
-
-        // Retrieve and set the image
-        if let imageData = UserDefaults.standard.data(forKey: "profilePic"),
-           let image = UIImage(data: imageData) {
-            profilePic.image = image
-        } else {
-            profilePic.image = UIImage(systemName: "person.circle") // Default placeholder
-        }
-    }
     
     // Event Segment Changer
     @IBAction func eventSegment(_ sender: UISegmentedControl) {
