@@ -56,12 +56,13 @@ class CreateEvents: UIViewController {
             numPeople: Int(eventNumPeople.text ?? "0") ?? 0
         )
 
-        // Notify delegate that a new event was created
+        // Notify the delegate that a new event was created
         delegate?.createdEvent(newEvent)
 
-        // Dismiss the view controller
-        navigationController?.popViewController(animated: true)
+        // Dismiss the modal view controller
+        dismiss(animated: true)
     }
+
 
 }
 
@@ -105,7 +106,7 @@ class Event {
     
 //    func addActivity(_ activity: String) {
 //        //Check if activity exists in global list before adding to event
-//        
+//
 //    }
 }
 
@@ -115,13 +116,13 @@ class Event {
 //class allActivities {
 //    //single instance
 //    static let shared = allActivities()
-//    
+//
 //    //other classes cannot directly access this
 //    private(set) var globalActivities: [String] = ["Hiking", "Running"]
-//    
+//
 //    //initializer
 //    private init() {}
-//    
+//
 //    func addGlobalActivity(_ activity: String) {
 //        if !globalActivities.contains(activity) {
 //            globalActivities.append(activity)
@@ -130,7 +131,7 @@ class Event {
 //            print("\(activity) already exists in the global list")
 //        }
 //    }
-//    
+//
 //    func removeGlobalActivity(_ activity: String) {
 //        if let index = globalActivities.firstIndex(of: activity) {
 //            globalActivities.remove(at: index)
