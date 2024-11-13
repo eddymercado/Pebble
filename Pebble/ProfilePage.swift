@@ -35,18 +35,14 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupProfilePic()
-        
-        // Retrieve the username from UserDefaults
-        if let usernameData = UserDefaults.standard.string(forKey: "username") {
-            usernameLabel.text = usernameData
-        }
         fetchInterestsFromFirestore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupProfileInfo() // Ensure profile data is updated
+//        fetchInterestsFromFirestore()
+
     }
     
     func setupProfileInfo() {
@@ -58,6 +54,14 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
                 return
             }
 
+            // Ensure the image view is a square
+            let width = self.profilePic.frame.size.width
+            self.profilePic.layer.cornerRadius = width / 2
+            self.profilePic.clipsToBounds = true
+            
+            // Maintain aspect fill for the image
+            self.profilePic.contentMode = .scaleAspectFill
+            
             if let document = document, document.exists {
 
                 if let base64String = document.get("profilePic") as? String {
@@ -80,9 +84,12 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
                     print("bio not found or not a string")
                 }
                 
+                self.populateInterests()
+                
             } else {
                 print("Document does not exist")
             }
+            
         }
     }
     
@@ -109,13 +116,27 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Interests", style: .default, handler: { _ in
-            print("Update Interests selected")
+//            print("Update Interests selected")
             // Perform actions for updating interests
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "selectInterestsViewController") as? selectInterestsViewController {
+                updateProfileVC.modalPresentationStyle = .fullScreen
+                updateProfileVC.cameFromUpdateInterests = true
+                self.present(updateProfileVC, animated: true, completion: nil)
+            }
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Info", style: .default, handler: { _ in
-            print("Update Info selected")
+//            print("Update Info selected")
             // Perform actions for updating info
+            // Navigate to UpdateProfileVC
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "updateInfoViewController") as? updateInfoViewController {
+                updateProfileVC.modalPresentationStyle = .fullScreen
+                self.present(updateProfileVC, animated: true, completion: nil)
+            }
+
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Location", style: .default, handler: { _ in
@@ -126,7 +147,11 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         actionSheet.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { _ in
             do {
                 try Auth.auth().signOut()
-                self.dismiss(animated: true)
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+                    updateProfileVC.modalPresentationStyle = .fullScreen
+                    self.present(updateProfileVC, animated: true, completion: nil)
+                }
             } catch {
                 print("Sign out error")
             }
@@ -144,23 +169,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         view.backgroundColor = .systemGray6
     }
 
-    func setupProfilePic() {
-        // Ensure the image view is a square
-        let width = profilePic.frame.size.width
-        profilePic.layer.cornerRadius = width / 2
-        profilePic.clipsToBounds = true
-        
-        // Maintain aspect fill for the image
-        profilePic.contentMode = .scaleAspectFill
-
-        // Retrieve and set the image
-        if let imageData = UserDefaults.standard.data(forKey: "profilePic"),
-           let image = UIImage(data: imageData) {
-            profilePic.image = image
-        } else {
-            profilePic.image = UIImage(systemName: "person.circle") // Default placeholder
-        }
-    }
     
     // Event Segment Changer
     @IBAction func eventSegment(_ sender: UISegmentedControl) {

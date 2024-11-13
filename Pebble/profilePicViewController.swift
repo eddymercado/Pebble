@@ -21,6 +21,7 @@ class profilePicViewController: UIViewController, UIImagePickerControllerDelegat
         super.viewDidLoad()
     }
 
+
     @IBAction func uploadPhotoButton(_ sender: Any) {
         let vc = UIImagePickerController()
         vc.sourceType = .photoLibrary

@@ -149,6 +149,7 @@ class Event {
     var hostUsername: String
     var hostPfp: String
     var eventPic: String
+    //need RSVP list
     
     init(title: String, description: String, date: Date, startTime: Date, endTime: Date, location: String, activities: String, numPeople: Int, hostUsername: String, hostPfp: String, eventPic: String) {
         self.title = title

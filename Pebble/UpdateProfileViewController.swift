@@ -23,13 +23,45 @@ class UpdateProfileViewController:  UIViewController, UIImagePickerControllerDel
     }
     
     func loadExistingProfileData() {
-        // Load from UserDefaults or Firestore
-        if let imageData = UserDefaults.standard.data(forKey: "profilePic"),
-           let image = UIImage(data: imageData) {
-            profileImageView.image = image
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        db.collection("users").document(userId).getDocument { (document, error) in
+            if let error = error {
+                print("Error retrieving document: \(error.localizedDescription)")
+                return
+            }
+            
+            if let document = document, document.exists {
+
+                if let base64String = document.get("profilePic") as? String {
+                    // Convert the Base64 string to UIImage
+
+                    if let image = self.decodeBase64ToImage(base64String) {
+                        self.profileImageView.image = image // Set the decoded image in an UIImageView
+                    }
+                }
+                
+                if let username = document.get("username") as? String {
+                    self.usernameTextField.text = username
+                } else {
+                    print("Username not found or not a string")
+                }
+                
+                if let bio = document.get("bio") as? String {
+                    self.bioTextField.text = bio
+                } else {
+                    print("bio not found or not a string")
+                }
+                
+            } else {
+                print("Document does not exist")
+            }
         }
-        usernameTextField.text = UserDefaults.standard.string(forKey: "username")
-        bioTextField.text = UserDefaults.standard.string(forKey: "bio")
+    }
+    
+    func decodeBase64ToImage(_ base64String: String) -> UIImage? {
+        guard let imageData = Data(base64Encoded: base64String) else { return nil }
+        return UIImage(data: imageData)
     }
     
     @IBAction func uploadPhotoButtonTapped(_ sender: UIButton) {
@@ -41,17 +73,20 @@ class UpdateProfileViewController:  UIViewController, UIImagePickerControllerDel
     }
     
     @IBAction func saveProfileChanges(_ sender: UIButton) {
-        // Save to UserDefaults or Firestore
-        if let imageData = profileImageView.image?.jpegData(compressionQuality: 0.8) {
-            UserDefaults.standard.set(imageData, forKey: "profilePic")
-        }
-        
-        if let username = usernameTextField.text, !username.isEmpty {
-            UserDefaults.standard.set(username, forKey: "username")
-        }
-        
-        if let bio = bioTextField.text, !bio.isEmpty {
-            UserDefaults.standard.set(bio, forKey: "bio")
+        if let image = profileImageView.image,
+           let imageData = image.jpegData(compressionQuality: 0.5) {
+            let base64String = imageData.base64EncodedString()
+            
+            let db = Firestore.firestore()
+            guard let userId = Auth.auth().currentUser?.uid else { return }
+
+            db.collection("users").document(userId).updateData(["profilePic": base64String]) { error in
+                if let error = error {
+                    print("Failed to save profile pic to Firestore: \(error.localizedDescription)")
+                } else {
+                    print("Profile picture successfully saved in Firestore")
+                }
+            }
         }
 
         // Firestore Save

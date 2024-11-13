@@ -12,13 +12,21 @@ import FirebaseFirestore
 
 let db = Firestore.firestore()
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UINavigationControllerDelegate {
 
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Clear the text fields when the view appears
+        usernameField.text = ""
+        passwordField.text = ""
     }
     
     @IBAction func loginButton(_ sender: Any) {

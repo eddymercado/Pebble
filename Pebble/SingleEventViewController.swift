@@ -8,13 +8,36 @@
 import UIKit
 
 class SingleEventViewController: UIViewController {
+    var event: Event?
+    
+    @IBOutlet weak var eventTitle: UILabel!
+    @IBOutlet weak var eventHost: UILabel!
+    @IBOutlet weak var eventDate: UILabel!
+    @IBOutlet weak var eventTime: UILabel!
+    @IBOutlet weak var eventDescription: UILabel!
+    @IBOutlet weak var eventLocation: UILabel!
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        print("event in SingleEventViewController: \(event)")
+        updateUI()
     }
     
+    func updateUI() {
+        guard let event = event else {
+            print("no event data")
+            return
+        }
+        
+        eventTitle.text = event.title
+        //event host
+        eventDate.text = DateFormatter.localizedString(from: event.date, dateStyle: .medium, timeStyle: .none)
+//        eventTime.text =
+        eventDescription.text = event.description
+        eventLocation.text = event.location
+        
+    }
 
     /*
     // MARK: - Navigation
