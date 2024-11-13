@@ -25,7 +25,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.backgroundColor = UIColor.lightGray // For debugging
         fetchAllEvents()
     }
     
@@ -43,10 +42,10 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
                 for document in querySnapshot!.documents {
                     // Assuming each document has a field "name" or "title" of type String
                     if let eventID = document.get("eventID") as? String {
+                        // maybe sort by sometihng !!
                         eventsList.append(eventID) // Add event name to the array
                     }
                 }
-                
                 // Print or use the array as needed
                 print("All events: \(eventsList)")
                 

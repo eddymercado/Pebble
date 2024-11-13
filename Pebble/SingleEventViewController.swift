@@ -50,6 +50,7 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
                     
                     if let image = self.decodeBase64ToImage(base64String) {
                         self.eventPic.image = image // Set the decoded image in an UIImageView
+                        self.eventPic.contentMode = .scaleAspectFill
                     }
                 }
                 

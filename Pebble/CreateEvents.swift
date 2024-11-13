@@ -16,7 +16,7 @@ import FirebaseFirestoreInternal
 //    func createdEvent(_ event: Event)
 //}
 
-class CreateEvents: UIViewController, MKMapViewDelegate {
+class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     @IBOutlet weak var eventTitle: UITextField!
     @IBOutlet weak var eventDesc: UITextField!
     @IBOutlet weak var eventDate: UIDatePicker!
@@ -27,11 +27,64 @@ class CreateEvents: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var eventNumPeople: UITextField!
     @IBOutlet weak var eventImageView: UIImageView!
     
-//    weak var delegate:EventCreationDelegate?
+    var eventsThatUserCreated: [String] = []
+
+
+    @IBOutlet weak var mapView: MKMapView!
+
+    let geocoder = CLGeocoder() //convert address to coordinates
+    var selectedLocation: CLLocationCoordinate2D? //stores coordinates
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        eventLocation.delegate = self
+        mapView.delegate = self
     }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == eventLocation {
+            searchLocation()
+        }
+    }
+    
+    func searchLocation() {
+        guard let address = eventLocation.text, !address.isEmpty else {return}
+        
+        //convert address string to coordinates
+        geocoder.geocodeAddressString(address) { [weak self] (placemarks, error) in guard let self = self else {return}
+            if let error = error {
+                print("Geocoding error: \(error.localizedDescription)")
+                return
+            }
+            guard let placemark = placemarks?.first, let location = placemark.location
+            else {
+                print("No location found")
+                return
+            }
+            self.selectedLocation = location.coordinate
+            self.updateMap(with: location.coordinate)
+        }
+    }
+    
+    func updateMap(with coordinate: CLLocationCoordinate2D) {
+        //create region centered on location
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        mapView.setRegion(region, animated: true)
+        
+        //create and add annotation for location
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = eventLocation.text
+        //remove existing annotations
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.addAnnotation(annotation)
+    }
+    
+    func updateMap(with geoPoint: GeoPoint) {
+        let coordinate = CLLocationCoordinate2D(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
+        updateMap(with: coordinate)
+    }
+    
     
     @IBAction func uploadPhotoPressed(_ sender: UIButton) {
         let vc = UIImagePickerController()
@@ -51,7 +104,7 @@ class CreateEvents: UIViewController, MKMapViewDelegate {
         let db = Firestore.firestore()
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
-        db.collection("users").document(userId).getDocument { (document, error) in
+        db.collection("users").document(userId).getDocument(source: .default) { (document, error) in
             if let error = error {
                 print("Error retrieving document: \(error.localizedDescription)")
                 return
@@ -70,7 +123,7 @@ class CreateEvents: UIViewController, MKMapViewDelegate {
             }
             
             // Prepare event data for Firestore
-            let eventData: [String: Any] = [
+            var eventData: [String: Any] = [
                 "title": self.eventTitle.text ?? "",
                 "description": self.eventDesc.text ?? "",
                 "date": self.eventDate.date,
@@ -85,6 +138,11 @@ class CreateEvents: UIViewController, MKMapViewDelegate {
                 "eventPic": "",
                 "eventID": ""
             ]
+            
+            //add location coordinates to eventData
+            if let coordinate = self.selectedLocation {
+                eventData["coordinate"] = GeoPoint(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            }
 
             // Step 1: Create a document reference with a unique ID
             let documentReference = db.collection("events").document()
@@ -103,13 +161,31 @@ class CreateEvents: UIViewController, MKMapViewDelegate {
                         db.collection("events").document(currEventID).updateData(["eventPic": eventPic])
 
                     }
-                    
+
+                    // Notify the delegate and dismiss the view
+//                    let newEvent = Event(
+//                        title: eventData["title"] as! String,
+//                        description: eventData["description"] as! String,
+//                        date: eventData["date"] as! Date,
+//                        startTime: eventData["startTime"] as! Date,
+//                        endTime: eventData["endTime"] as! Date,
+//                        location: eventData["location"] as! String,
+//                        coordinate: eventData["coordinate"] as? GeoPoint,
+//                        activities: eventData["activities"] as! String,
+//                        numPeople: eventData["numPeople"] as! Int,
+//                        hostUsername: hostUsername,
+//                        hostPfp: hostPfp,
+//                        eventPic: eventPic
+//                    )
+//                    
+//                    self.delegate?.createdEvent(newEvent)
+//                    //DONT NEED THE BOTTOM LINE OF CODE?
+//                    self.dismiss(animated: true)
                     db.collection("events").document(currEventID).updateData(["eventID": currEventID])
                     
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-                    if let segueVC = storyboard.instantiateViewController(withIdentifier: "ViewController") as? ViewController {
-                        segueVC.createdEvent(currEventID)
+                    if let segueVC = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController {
                         segueVC.modalPresentationStyle = .fullScreen
                         self.present(segueVC, animated: true, completion: nil)
                     }
@@ -135,37 +211,4 @@ extension CreateEvents:UIImagePickerControllerDelegate, UINavigationControllerDe
     }
     
 }
-
-//class Event {
-//    var title: String
-//    var description: String
-//    var date: Date
-//    var startTime: Date
-//    var endTime: Date
-//    var location: String
-//    //each event can be sorted by specific activities, ex. fitness and soccer
-//    var activities: String
-//    var numPeople: Int
-//    var hostUsername: String
-//    var hostPfp: String
-//    var eventPic: String
-//    var eventID: String
-//    //need RSVP list
-//    
-//    init(title: String, description: String, date: Date, startTime: Date, endTime: Date, location: String, activities: String, numPeople: Int, hostUsername: String, hostPfp: String, eventPic: String, eventID: String) {
-//        self.title = title
-//        self.description = description
-//        self.date = date
-//        self.startTime = startTime
-//        self.endTime = endTime
-//        self.location = location
-//        self.activities = activities
-//        self.numPeople = numPeople
-//        self.hostUsername = hostUsername
-//        self.hostPfp = hostPfp
-//        self.eventPic = eventPic
-//        self.eventID = eventID
-//    }
-//
-//}
 

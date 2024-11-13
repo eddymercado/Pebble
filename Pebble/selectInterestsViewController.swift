@@ -23,7 +23,6 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("came to viewdidload")
     }
 
     // add view will appear to show already chosen interests
