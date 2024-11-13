@@ -25,7 +25,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.backgroundColor = UIColor.lightGray // For debugging
         fetchAllEvents()
     }
     
