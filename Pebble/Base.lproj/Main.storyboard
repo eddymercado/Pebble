@@ -237,6 +237,7 @@
                         <outlet property="eventNumPeople" destination="heh-CV-pIy" id="f9y-Xz-eQE"/>
                         <outlet property="eventStartTime" destination="3uv-aX-uLJ" id="jcg-oT-PM6"/>
                         <outlet property="eventTitle" destination="bIN-2T-iKc" id="OOn-EB-YzG"/>
+                        <outlet property="mapView" destination="iCK-Do-GEy" id="IC8-9L-7iE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UGO-Re-QaK" sceneMemberID="firstResponder"/>
@@ -1311,7 +1312,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="US9-ix-6uy"/>
-        <segue reference="Mm1-ev-8aY"/>
+        <segue reference="FnY-UG-W1m"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="empty_user.light.png" width="828" height="1792"/>
