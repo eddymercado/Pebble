@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import MapKit
+import CoreLocation
 
 protocol EventCreationDelegate: AnyObject {
     func createdEvent(_ event: Event)
 }
 
-class CreateEvents: UIViewController {
+class CreateEvents: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var eventTitle: UITextField!
     @IBOutlet weak var eventDesc: UITextField!
     @IBOutlet weak var eventDate: UIDatePicker!
