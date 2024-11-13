@@ -16,7 +16,7 @@ import FirebaseFirestoreInternal
 //    func createdEvent(_ event: Event)
 //}
 
-class CreateEvents: UIViewController, MKMapViewDelegate {
+class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     @IBOutlet weak var eventTitle: UITextField!
     @IBOutlet weak var eventDesc: UITextField!
     @IBOutlet weak var eventDate: UIDatePicker!
@@ -29,9 +29,62 @@ class CreateEvents: UIViewController, MKMapViewDelegate {
     
     var eventsThatUserCreated: [String] = []
 
+
+    @IBOutlet weak var mapView: MKMapView!
+
+    let geocoder = CLGeocoder() //convert address to coordinates
+    var selectedLocation: CLLocationCoordinate2D? //stores coordinates
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        eventLocation.delegate = self
+        mapView.delegate = self
     }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == eventLocation {
+            searchLocation()
+        }
+    }
+    
+    func searchLocation() {
+        guard let address = eventLocation.text, !address.isEmpty else {return}
+        
+        //convert address string to coordinates
+        geocoder.geocodeAddressString(address) { [weak self] (placemarks, error) in guard let self = self else {return}
+            if let error = error {
+                print("Geocoding error: \(error.localizedDescription)")
+                return
+            }
+            guard let placemark = placemarks?.first, let location = placemark.location
+            else {
+                print("No location found")
+                return
+            }
+            self.selectedLocation = location.coordinate
+            self.updateMap(with: location.coordinate)
+        }
+    }
+    
+    func updateMap(with coordinate: CLLocationCoordinate2D) {
+        //create region centered on location
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        mapView.setRegion(region, animated: true)
+        
+        //create and add annotation for location
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = eventLocation.text
+        //remove existing annotations
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.addAnnotation(annotation)
+    }
+    
+    func updateMap(with geoPoint: GeoPoint) {
+        let coordinate = CLLocationCoordinate2D(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
+        updateMap(with: coordinate)
+    }
+    
     
     @IBAction func uploadPhotoPressed(_ sender: UIButton) {
         let vc = UIImagePickerController()
@@ -51,7 +104,7 @@ class CreateEvents: UIViewController, MKMapViewDelegate {
         let db = Firestore.firestore()
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
-        db.collection("users").document(userId).getDocument { (document, error) in
+        db.collection("users").document(userId).getDocument(source: .default) { (document, error) in
             if let error = error {
                 print("Error retrieving document: \(error.localizedDescription)")
                 return
@@ -70,7 +123,7 @@ class CreateEvents: UIViewController, MKMapViewDelegate {
             }
             
             // Prepare event data for Firestore
-            let eventData: [String: Any] = [
+            var eventData: [String: Any] = [
                 "title": self.eventTitle.text ?? "",
                 "description": self.eventDesc.text ?? "",
                 "date": self.eventDate.date,
@@ -85,6 +138,11 @@ class CreateEvents: UIViewController, MKMapViewDelegate {
                 "eventPic": "",
                 "eventID": ""
             ]
+            
+            //add location coordinates to eventData
+            if let coordinate = self.selectedLocation {
+                eventData["coordinate"] = GeoPoint(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            }
 
             // Step 1: Create a document reference with a unique ID
             let documentReference = db.collection("events").document()
@@ -103,7 +161,26 @@ class CreateEvents: UIViewController, MKMapViewDelegate {
                         db.collection("events").document(currEventID).updateData(["eventPic": eventPic])
 
                     }
-                    
+
+                    // Notify the delegate and dismiss the view
+//                    let newEvent = Event(
+//                        title: eventData["title"] as! String,
+//                        description: eventData["description"] as! String,
+//                        date: eventData["date"] as! Date,
+//                        startTime: eventData["startTime"] as! Date,
+//                        endTime: eventData["endTime"] as! Date,
+//                        location: eventData["location"] as! String,
+//                        coordinate: eventData["coordinate"] as? GeoPoint,
+//                        activities: eventData["activities"] as! String,
+//                        numPeople: eventData["numPeople"] as! Int,
+//                        hostUsername: hostUsername,
+//                        hostPfp: hostPfp,
+//                        eventPic: eventPic
+//                    )
+//                    
+//                    self.delegate?.createdEvent(newEvent)
+//                    //DONT NEED THE BOTTOM LINE OF CODE?
+//                    self.dismiss(animated: true)
                     db.collection("events").document(currEventID).updateData(["eventID": currEventID])
                     
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
