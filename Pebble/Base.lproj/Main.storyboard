@@ -345,6 +345,9 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="RSVP"/>
+                                <connections>
+                                    <action selector="RSVPButtonPressed:" destination="rql-e6-J7q" eventType="touchUpInside" id="S0c-yG-w5w"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Event Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="heQ-bf-AhC">
                                 <rect key="frame" x="35" y="509" width="85" height="21"/>
@@ -382,6 +385,13 @@
                                     <constraint firstAttribute="height" constant="21" id="TG7-Y2-Ndo"/>
                                     <constraint firstAttribute="width" constant="117" id="ZT2-Eu-zkD"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j0Z-Wt-ewE">
+                                <rect key="frame" x="35" y="340" width="342" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -442,9 +452,11 @@
                         <outlet property="eventDescription" destination="lhM-a4-xiw" id="VVC-0R-xvu"/>
                         <outlet property="eventHost" destination="pQS-7A-Qj4" id="KXA-Ag-xwI"/>
                         <outlet property="eventLocation" destination="x0m-4x-eSF" id="w4E-kG-6fd"/>
-                        <outlet property="eventPic" destination="187-92-UAg" id="503-zK-htT"/>
+                        <outlet property="eventPic" destination="187-92-UAg" id="TAo-z5-Gb5"/>
                         <outlet property="eventTime" destination="heQ-bf-AhC" id="Zmq-Cy-OAX"/>
                         <outlet property="eventTitle" destination="dYb-xP-Xq3" id="2w5-gO-Bg0"/>
+                        <outlet property="goingOrNotLabel" destination="j0Z-Wt-ewE" id="6gG-Pm-qUv"/>
+                        <outlet property="rsvpbutton" destination="Vac-P6-6We" id="wG5-rs-5MN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qni-Ih-JMg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

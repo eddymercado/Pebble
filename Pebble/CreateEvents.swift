@@ -27,8 +27,10 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     @IBOutlet weak var eventNumPeople: UITextField!
     @IBOutlet weak var eventImageView: UIImageView!
     
+    let db = Firestore.firestore()
     var eventsThatUserCreated: [String] = []
-
+    var eventsThatUserIsAttending: [String] = []
+    var currNumOfAttendees = 0
 
     @IBOutlet weak var mapView: MKMapView!
 
@@ -101,7 +103,6 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     }
     
     @IBAction func createEventBtnPressed(_ sender: UIButton) {
-        let db = Firestore.firestore()
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
         db.collection("users").document(userId).getDocument(source: .default) { (document, error) in
@@ -118,6 +119,8 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
             if let document = document, document.exists {
                 hostPfp = document.get("profilePic") as? String ?? "temp"
                 hostUsername = document.get("username") as? String ?? "temp"
+                self.eventsThatUserCreated = document.get("eventsThatUserIsHosting") as? Array ?? []
+                self.eventsThatUserIsAttending = document.get("eventsThatUserIsAttending") as? Array ?? []
             } else {
                 print("Document does not exist")
             }
@@ -136,7 +139,8 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                 "hostPfp": hostPfp,
                 "hostId": userId,
                 "eventPic": "",
-                "eventID": ""
+                "eventID": "",
+                "currentnumberofattendees": 0
             ]
             
             //add location coordinates to eventData
@@ -145,7 +149,7 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
             }
 
             // Step 1: Create a document reference with a unique ID
-            let documentReference = db.collection("events").document()
+            let documentReference = self.db.collection("events").document()
 
             // Step 2: Set the data with the document reference
             documentReference.setData(eventData) { error in
@@ -158,30 +162,21 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                        let imageData = image.jpegData(compressionQuality: 0.5) {
                         let base64String = imageData.base64EncodedString()
                         eventPic = base64String
-                        db.collection("events").document(currEventID).updateData(["eventPic": eventPic])
+                        self.db.collection("events").document(currEventID).updateData(["eventPic": eventPic])
 
                     }
-
-                    // Notify the delegate and dismiss the view
-//                    let newEvent = Event(
-//                        title: eventData["title"] as! String,
-//                        description: eventData["description"] as! String,
-//                        date: eventData["date"] as! Date,
-//                        startTime: eventData["startTime"] as! Date,
-//                        endTime: eventData["endTime"] as! Date,
-//                        location: eventData["location"] as! String,
-//                        coordinate: eventData["coordinate"] as? GeoPoint,
-//                        activities: eventData["activities"] as! String,
-//                        numPeople: eventData["numPeople"] as! Int,
-//                        hostUsername: hostUsername,
-//                        hostPfp: hostPfp,
-//                        eventPic: eventPic
-//                    )
-//                    
-//                    self.delegate?.createdEvent(newEvent)
-//                    //DONT NEED THE BOTTOM LINE OF CODE?
-//                    self.dismiss(animated: true)
-                    db.collection("events").document(currEventID).updateData(["eventID": currEventID])
+                    
+                    self.db.collection("events").document(currEventID).updateData(["eventID": currEventID])
+                    self.eventsThatUserCreated.append(currEventID)
+                    self.eventsThatUserIsAttending.append(currEventID)
+                    self.db.collection("users").document(userId).updateData(["eventsThatUserIsHosting": self.eventsThatUserCreated])
+                    self.db.collection("users").document(userId).updateData(["eventsThatUserIsAttending": self.eventsThatUserIsAttending])
+                    self.db.collection("events").document(currEventID).updateData(["currentnumberofattendees": 1])
+                
+                    
+                    
+                    
+                    
                     
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
