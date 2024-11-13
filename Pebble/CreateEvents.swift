@@ -28,11 +28,9 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     @IBOutlet weak var eventImageView: UIImageView!
 
     @IBOutlet weak var mapView: MKMapView!
-    
-    weak var delegate:EventCreationDelegate?
+
     let geocoder = CLGeocoder() //convert address to coordinates
     var selectedLocation: CLLocationCoordinate2D? //stores coordinates
-//    weak var delegate:EventCreationDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
