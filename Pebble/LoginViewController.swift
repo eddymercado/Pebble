@@ -39,10 +39,12 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
         
         Auth.auth().signIn(withEmail: usernameField.text!, password: passwordField.text!) {
             (authResult, error) in
-            if (error as NSError?) != nil {
-                self.showAlert(title: "Email or Password is incorrect", message: "Retry credentials or create an account!")
-            } else {
-                self.performSegue(withIdentifier: "startUpToBrowseEventsPage", sender: self)
+            DispatchQueue.main.async {
+                if (error as NSError?) != nil {
+                    self.showAlert(title: "Email or Password is incorrect", message: "Retry credentials or create an account!")
+                } else {
+                    self.performSegue(withIdentifier: "startUpToBrowseEventsPage", sender: self)
+                }
             }
         }
     }
@@ -56,7 +58,6 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @IBAction func signUpButton(_ sender: Any) {
-        performSegue(withIdentifier: "startUpToSignUp", sender: self)
     }
 
 }

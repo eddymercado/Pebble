@@ -12,9 +12,9 @@ import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseFirestoreInternal
 
-protocol EventCreationDelegate: AnyObject {
-    func createdEvent(_ event: Event)
-}
+//protocol EventCreationDelegate: AnyObject {
+//    func createdEvent(_ event: Event)
+//}
 
 class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     @IBOutlet weak var eventTitle: UITextField!
@@ -32,6 +32,7 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     weak var delegate:EventCreationDelegate?
     let geocoder = CLGeocoder() //convert address to coordinates
     var selectedLocation: CLLocationCoordinate2D? //stores coordinates
+//    weak var delegate:EventCreationDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,6 +112,7 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
             var hostUsername = "temp"
             var hostPfp = "temp"
             var eventPic = "temp"
+            var currEventID = "temp"
             
             if let document = document, document.exists {
                 hostPfp = document.get("profilePic") as? String ?? "temp"
@@ -131,7 +133,9 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                 "numPeople": Int(self.eventNumPeople.text ?? "0") ?? 0,
                 "hostUsername": hostUsername,
                 "hostPfp": hostPfp,
-                "hostId": userId
+                "hostId": userId,
+                "eventPic": "",
+                "eventID": ""
             ]
             
             //add location coordinates to eventData
@@ -139,41 +143,52 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                 eventData["coordinate"] = GeoPoint(latitude: coordinate.latitude, longitude: coordinate.longitude)
             }
 
-            // Add event to "events" collection
-            db.collection("events").addDocument(data: eventData) { error in
-                if let error = error {
+            // Step 1: Create a document reference with a unique ID
+            let documentReference = db.collection("events").document()
+
+            // Step 2: Set the data with the document reference
+            documentReference.setData(eventData) { error in
+                if error != nil {
                     print("error")
                 } else {
+                    currEventID = documentReference.documentID
+
                     if let image = self.eventImageView.image,
                        let imageData = image.jpegData(compressionQuality: 0.5) {
                         let base64String = imageData.base64EncodedString()
                         eventPic = base64String
-                        Analytics.setUserProperty(base64String, forName: "Event Pic")
+                        db.collection("events").document(currEventID).updateData(["eventPic": eventPic])
+
                     }
-                    // Optional: Track analytics properties for the event
-                    Analytics.setUserProperty(hostUsername, forName: "Host Username")
-                    Analytics.setUserProperty(self.eventTitle.text ?? "", forName: "Event Title")
-                    Analytics.setUserProperty(self.eventLocation.text ?? "", forName: "Event Location")
-                    
+
                     // Notify the delegate and dismiss the view
-                    let newEvent = Event(
-                        title: eventData["title"] as! String,
-                        description: eventData["description"] as! String,
-                        date: eventData["date"] as! Date,
-                        startTime: eventData["startTime"] as! Date,
-                        endTime: eventData["endTime"] as! Date,
-                        location: eventData["location"] as! String,
-                        coordinate: eventData["coordinate"] as? GeoPoint,
-                        activities: eventData["activities"] as! String,
-                        numPeople: eventData["numPeople"] as! Int,
-                        hostUsername: hostUsername,
-                        hostPfp: hostPfp,
-                        eventPic: eventPic
-                    )
+//                    let newEvent = Event(
+//                        title: eventData["title"] as! String,
+//                        description: eventData["description"] as! String,
+//                        date: eventData["date"] as! Date,
+//                        startTime: eventData["startTime"] as! Date,
+//                        endTime: eventData["endTime"] as! Date,
+//                        location: eventData["location"] as! String,
+//                        coordinate: eventData["coordinate"] as? GeoPoint,
+//                        activities: eventData["activities"] as! String,
+//                        numPeople: eventData["numPeople"] as! Int,
+//                        hostUsername: hostUsername,
+//                        hostPfp: hostPfp,
+//                        eventPic: eventPic
+//                    )
+//                    
+//                    self.delegate?.createdEvent(newEvent)
+//                    //DONT NEED THE BOTTOM LINE OF CODE?
+//                    self.dismiss(animated: true)
+                    db.collection("events").document(currEventID).updateData(["eventID": currEventID])
                     
-                    self.delegate?.createdEvent(newEvent)
-                    //DONT NEED THE BOTTOM LINE OF CODE?
-                    self.dismiss(animated: true)
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+                    if let segueVC = storyboard.instantiateViewController(withIdentifier: "ViewController") as? ViewController {
+                        segueVC.createdEvent(currEventID)
+                        segueVC.modalPresentationStyle = .fullScreen
+                        self.present(segueVC, animated: true, completion: nil)
+                    }
                 }
             }
         }
@@ -197,35 +212,35 @@ extension CreateEvents:UIImagePickerControllerDelegate, UINavigationControllerDe
     
 }
 
-class Event {
-    var title: String
-    var description: String
-    var date: Date
-    var startTime: Date
-    var endTime: Date
-    var location: String
-    var coordinate: GeoPoint?
-    //each event can be sorted by specific activities, ex. fitness and soccer
-    var activities: String
-    var numPeople: Int
-    var hostUsername: String
-    var hostPfp: String
-    var eventPic: String
-    //need RSVP list
-    
-    init(title: String, description: String, date: Date, startTime: Date, endTime: Date, location: String, coordinate: GeoPoint?, activities: String, numPeople: Int, hostUsername: String, hostPfp: String, eventPic: String) {
-        self.title = title
-        self.description = description
-        self.date = date
-        self.startTime = startTime
-        self.endTime = endTime
-        self.location = location
-        self.coordinate = coordinate
-        self.activities = activities
-        self.numPeople = numPeople
-        self.hostUsername = hostUsername
-        self.hostPfp = hostPfp
-        self.eventPic = eventPic
-    }
-}
+//class Event {
+//    var title: String
+//    var description: String
+//    var date: Date
+//    var startTime: Date
+//    var endTime: Date
+//    var location: String
+//    var coordinate: GeoPoint?
+//    //each event can be sorted by specific activities, ex. fitness and soccer
+//    var activities: String
+//    var numPeople: Int
+//    var hostUsername: String
+//    var hostPfp: String
+//    var eventPic: String
+//    //need RSVP list
+//    
+//    init(title: String, description: String, date: Date, startTime: Date, endTime: Date, location: String, coordinate: GeoPoint?, activities: String, numPeople: Int, hostUsername: String, hostPfp: String, eventPic: String) {
+//        self.title = title
+//        self.description = description
+//        self.date = date
+//        self.startTime = startTime
+//        self.endTime = endTime
+//        self.location = location
+//        self.coordinate = coordinate
+//        self.activities = activities
+//        self.numPeople = numPeople
+//        self.hostUsername = hostUsername
+//        self.hostPfp = hostPfp
+//        self.eventPic = eventPic
+//    }
+//}
 

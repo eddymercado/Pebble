@@ -21,19 +21,44 @@ class EventCell: UICollectionViewCell {
         return UIImage(data: imageData)
     }
 
-    func configure(with event: Event) {
-        // Set the images
-        if let image = decodeBase64ToImage(event.eventPic) {
-            eventImageView.image = image // Set the decoded image in an UIImageView
-        } else {
-            eventImageView.image = UIImage(named: "eventImage")
+    func configure(currEventID: String) {
+        
+        db.collection("events").document(currEventID).getDocument { (document, error) in
+            if let error = error {
+                print("Error retrieving document: \(error.localizedDescription)")
+                return
+            }
+            if let document = document, document.exists {
+                // Set other event details
+                
+                if let username = document.get("hostUsername") as? String {
+                    self.profileUsernameLabel.text = username
+                }
+                if let eventTitle = document.get("title") as? String {
+                    self.eventTitleLabel.text = eventTitle
+                }
+                if let eventDate = document.get("date") as? Date {
+                    self.eventDateLabel.text = DateFormatter.localizedString(from: eventDate, dateStyle: .medium, timeStyle: .none)
+                }
+                
+                // Set the images
+                if let image = document.get("eventPic") as? String {
+                    if let eventPic = self.decodeBase64ToImage(image) {
+                        self.eventImageView.image = eventPic
+                    }
+                } /* else {
+                    self.eventImageView.image = UIImage(named: "eventImage") // is this default ?
+                } */
+                
+                if let image = document.get("hostPfp") as? String {
+                    if let profilePic = self.decodeBase64ToImage(image) {
+                        self.profileImageView.image = profilePic
+                    }
+                } /* else {
+                    self.profileImageView.image = UIImage(named: "profileImage")
+                } */
+            }
         }
-        if let image = decodeBase64ToImage(event.hostPfp) {
-            profileImageView.image = image // Set the decoded image in an UIImageView
-        } else {
-            profileImageView.image = UIImage(named: "profileImage")
-        }
-
         // Set profile image to be circular
         profileImageView.layer.cornerRadius = profileImageView.frame.height / 2
         profileImageView.clipsToBounds = true
@@ -44,10 +69,7 @@ class EventCell: UICollectionViewCell {
         eventImageView.layer.cornerRadius = 12
         eventImageView.clipsToBounds = true
 
-        // Set other event details
-        profileUsernameLabel.text = event.hostUsername
-        eventTitleLabel.text = event.title
-        eventDateLabel.text = DateFormatter.localizedString(from: event.date, dateStyle: .medium, timeStyle: .none)
+
     }
 
 }
