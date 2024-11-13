@@ -26,6 +26,9 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     @IBOutlet weak var eventActivityType: UITextField!
     @IBOutlet weak var eventNumPeople: UITextField!
     @IBOutlet weak var eventImageView: UIImageView!
+    
+    var eventsThatUserCreated: [String] = []
+
 
     @IBOutlet weak var mapView: MKMapView!
 
@@ -182,8 +185,7 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                     
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-                    if let segueVC = storyboard.instantiateViewController(withIdentifier: "ViewController") as? ViewController {
-                        segueVC.createdEvent(currEventID)
+                    if let segueVC = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController {
                         segueVC.modalPresentationStyle = .fullScreen
                         self.present(segueVC, animated: true, completion: nil)
                     }
@@ -209,36 +211,4 @@ extension CreateEvents:UIImagePickerControllerDelegate, UINavigationControllerDe
     }
     
 }
-
-//class Event {
-//    var title: String
-//    var description: String
-//    var date: Date
-//    var startTime: Date
-//    var endTime: Date
-//    var location: String
-//    var coordinate: GeoPoint?
-//    //each event can be sorted by specific activities, ex. fitness and soccer
-//    var activities: String
-//    var numPeople: Int
-//    var hostUsername: String
-//    var hostPfp: String
-//    var eventPic: String
-//    //need RSVP list
-//    
-//    init(title: String, description: String, date: Date, startTime: Date, endTime: Date, location: String, coordinate: GeoPoint?, activities: String, numPeople: Int, hostUsername: String, hostPfp: String, eventPic: String) {
-//        self.title = title
-//        self.description = description
-//        self.date = date
-//        self.startTime = startTime
-//        self.endTime = endTime
-//        self.location = location
-//        self.coordinate = coordinate
-//        self.activities = activities
-//        self.numPeople = numPeople
-//        self.hostUsername = hostUsername
-//        self.hostPfp = hostPfp
-//        self.eventPic = eventPic
-//    }
-//}
 

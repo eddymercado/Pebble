@@ -1168,10 +1168,10 @@
             </objects>
             <point key="canvasLocation" x="-60.305343511450381" y="336.61971830985919"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--TabBarViewController-->
         <scene sceneID="G3i-tg-nVU">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="YZF-IL-Rie" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" title="TabBarViewController" automaticallyAdjustsScrollViewInsets="NO" id="YZF-IL-Rie" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="d5V-06-Afo"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="XtE-FH-HLz">
