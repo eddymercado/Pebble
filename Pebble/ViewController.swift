@@ -6,63 +6,77 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseAnalytics
+import FirebaseFirestoreInternal
 
 // Ensure eventsList is properly initialized
-var eventsList: [Event] = []
+var eventsList: [String] = []
 
-class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EventCreationDelegate {
+class ViewController: UIViewController, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
     let profilePageSegueIdentifier = "ProfilePageSegueIdentifier"
     let createEventsSegueIdentifier = "createEventsSegueIdentifier"
-    let openSingleEventSegue = "showSingleEvent"
-
+    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Set data source and delegate for the collection view
         collectionView.dataSource = self
         collectionView.delegate = self
-        
-        // Register the EventCell class (no NIB needed)
-//        collectionView.register(EventCell.self, forCellWithReuseIdentifier: "EventCell")
-        
-        // Configure layout for the collection view
-//        let layout = UICollectionViewFlowLayout()
-//        layout.itemSize = CGSize(width: view.frame.width - 20, height: 200) // Adjust height as needed
-//        layout.minimumLineSpacing = 10
-//        layout.minimumInteritemSpacing = 10
-//        collectionView.collectionViewLayout = layout
         collectionView.backgroundColor = UIColor.lightGray // For debugging
+        fetchAllEvents()
     }
-
     
-    // MARK: - EventCreationDelegate
-    func createdEvent(_ event: Event) {
-        // Add the new event to the events list
+
+    func fetchAllEvents() {
+        let db = Firestore.firestore()
+        db.collection("events").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching documents: \(error)")
+            } else {
+                // Clear eventsList to avoid duplications
+                eventsList.removeAll()
+                
+                // Loop through each document in the collection
+                for document in querySnapshot!.documents {
+                    // Assuming each document has a field "name" or "title" of type String
+                    if let eventID = document.get("eventID") as? String {
+                        eventsList.append(eventID) // Add event name to the array
+                    }
+                }
+                
+                // Print or use the array as needed
+                print("All events: \(eventsList)")
+                
+                // Reload the collection view or table view if you need to display data
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
+    }
+    
+    func createdEvent(_ event: String) {
         eventsList.append(event)
-        
-        // Reload collection view to show the new event
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
     }
     
-    // MARK: - UICollectionView DataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return eventsList.count // Number of events determines the number of items
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCell
         
-        let event = eventsList[indexPath.item]
-        cell.configure(with: event)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCell
+        let event = cell.configure(currEventID: eventsList[indexPath.item])
         
         // Add a tap gesture recognizer to the cell
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped(_:)))
-            cell.addGestureRecognizer(tapGesture)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped(_:)))
+        cell.addGestureRecognizer(tapGesture)
 
         return cell
     }
@@ -72,36 +86,15 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
            let indexPath = collectionView.indexPath(for: cell) {
             print("Cell tapped at index: \(indexPath.item)")
             let selectedEvent = eventsList[indexPath.item]
-            performSegue(withIdentifier: openSingleEventSegue, sender: selectedEvent)
-        }
-    }
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Cell selected at index: \(indexPath.item)")
-        let selectedEvent = eventsList[indexPath.item]
-        print("Selected event: \(selectedEvent)")
-        performSegue(withIdentifier: openSingleEventSegue, sender: selectedEvent)
-    }
-
-
-    // MARK: - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        print("prepare(for:sender:) called in ViewController")
-//        print("Segue identifier: \(segue.identifier ?? "nil")")
-//        print("Destination view controller: \(segue.destination)")
-//        print("Sender: \(String(describing: sender))")
-        if segue.identifier == profilePageSegueIdentifier {
-            if let nextVC = segue.destination as? ProfilePage {
-                nextVC.delegate = self // Set the delegate for ProfilePage
-            }
-        } else if segue.identifier == createEventsSegueIdentifier {
-            if let createVC = segue.destination as? CreateEvents {
-                createVC.delegate = self // Set the delegate for CreateEvents
-            }
-        } else if segue.identifier == openSingleEventSegue {
-            if let singleEventVC = segue.destination as? SingleEventViewController, let selectedEvent = sender as? Event {
-                singleEventVC.event = selectedEvent
+            if let segueVC = storyboard.instantiateViewController(withIdentifier: "SingleEventViewController") as? SingleEventViewController {
+                segueVC.currEventID = selectedEvent
+                segueVC.modalPresentationStyle = .fullScreen
+                self.present(segueVC, animated: true, completion: nil)
             }
         }
     }
+
 }

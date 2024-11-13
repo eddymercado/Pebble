@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--ViewController-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" title="ViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -237,10 +237,10 @@
             </objects>
             <point key="canvasLocation" x="1529" y="768"/>
         </scene>
-        <!--Single Event View Controller-->
+        <!--SingleEventViewController-->
         <scene sceneID="6of-JE-BMH">
             <objects>
-                <viewController id="rql-e6-J7q" customClass="SingleEventViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SingleEventViewController" title="SingleEventViewController" id="rql-e6-J7q" customClass="SingleEventViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="stX-gW-bZk">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -348,12 +348,14 @@
                             <constraint firstItem="h5y-pk-wan" firstAttribute="trailing" secondItem="187-92-UAg" secondAttribute="trailing" id="adN-Gu-pBq"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="KIK-ZR-4Es"/>
                     <navigationItem key="navigationItem" id="NWT-UI-p4E"/>
                     <connections>
                         <outlet property="eventDate" destination="8IL-OQ-ias" id="duG-7M-b97"/>
                         <outlet property="eventDescription" destination="lhM-a4-xiw" id="VVC-0R-xvu"/>
                         <outlet property="eventHost" destination="pQS-7A-Qj4" id="KXA-Ag-xwI"/>
                         <outlet property="eventLocation" destination="x0m-4x-eSF" id="w4E-kG-6fd"/>
+                        <outlet property="eventPic" destination="187-92-UAg" id="503-zK-htT"/>
                         <outlet property="eventTime" destination="heQ-bf-AhC" id="Zmq-Cy-OAX"/>
                         <outlet property="eventTitle" destination="dYb-xP-Xq3" id="2w5-gO-Bg0"/>
                     </connections>
@@ -395,7 +397,7 @@
             <objects>
                 <viewController storyboardIdentifier="ProfilePage" title="ProfilePage" id="ooW-hV-CUX" customClass="ProfilePage" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3pg-tl-omT">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="803"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="empty_user.light.png" translatesAutoresizingMaskIntoConstraints="NO" id="o8Q-u3-Bxo">
@@ -426,14 +428,14 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qNJ-ed-gW6">
-                                <rect key="frame" x="16" y="445" width="357" height="269"/>
+                                <rect key="frame" x="16" y="455" width="357" height="269"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <segue destination="hAV-Fr-Nad" kind="embed" id="kZS-1r-Wxm"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jct-eO-2w4">
-                                <rect key="frame" x="16" y="445" width="357" height="269"/>
+                                <rect key="frame" x="16" y="455" width="357" height="269"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <segue destination="Z8x-Cy-l0G" kind="embed" id="RsW-V3-ob3"/>
@@ -1304,8 +1306,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Qhn-Jv-aYx"/>
-        <segue reference="FnY-UG-W1m"/>
+        <segue reference="EV9-qf-LUH"/>
+        <segue reference="Mm1-ev-8aY"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="empty_user.light.png" width="828" height="1792"/>

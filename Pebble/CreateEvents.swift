@@ -10,9 +10,9 @@ import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseFirestoreInternal
 
-protocol EventCreationDelegate: AnyObject {
-    func createdEvent(_ event: Event)
-}
+//protocol EventCreationDelegate: AnyObject {
+//    func createdEvent(_ event: Event)
+//}
 
 class CreateEvents: UIViewController {
     @IBOutlet weak var eventTitle: UITextField!
@@ -25,7 +25,7 @@ class CreateEvents: UIViewController {
     @IBOutlet weak var eventNumPeople: UITextField!
     @IBOutlet weak var eventImageView: UIImageView!
     
-    weak var delegate:EventCreationDelegate?
+//    weak var delegate:EventCreationDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +58,7 @@ class CreateEvents: UIViewController {
             var hostUsername = "temp"
             var hostPfp = "temp"
             var eventPic = "temp"
+            var currEventID = "temp"
             
             if let document = document, document.exists {
                 hostPfp = document.get("profilePic") as? String ?? "temp"
@@ -78,41 +79,38 @@ class CreateEvents: UIViewController {
                 "numPeople": Int(self.eventNumPeople.text ?? "0") ?? 0,
                 "hostUsername": hostUsername,
                 "hostPfp": hostPfp,
-                "hostId": userId
+                "hostId": userId,
+                "eventPic": "",
+                "eventID": ""
             ]
 
-            // Add event to "events" collection
-            db.collection("events").addDocument(data: eventData) { error in
-                if let error = error {
+            // Step 1: Create a document reference with a unique ID
+            let documentReference = db.collection("events").document()
+
+            // Step 2: Set the data with the document reference
+            documentReference.setData(eventData) { error in
+                if error != nil {
                     print("error")
                 } else {
+                    currEventID = documentReference.documentID
+
                     if let image = self.eventImageView.image,
                        let imageData = image.jpegData(compressionQuality: 0.5) {
                         let base64String = imageData.base64EncodedString()
                         eventPic = base64String
-                        Analytics.setUserProperty(base64String, forName: "Event Pic")
+                        db.collection("events").document(currEventID).updateData(["eventPic": eventPic])
+
                     }
-                    // Optional: Track analytics properties for the event
-                    Analytics.setUserProperty(hostUsername, forName: "Host Username")
-                    Analytics.setUserProperty(self.eventTitle.text ?? "", forName: "Event Title")
-                    Analytics.setUserProperty(self.eventLocation.text ?? "", forName: "Event Location")
                     
-                    // Notify the delegate and dismiss the view
-                    let newEvent = Event(
-                        title: eventData["title"] as! String,
-                        description: eventData["description"] as! String,
-                        date: eventData["date"] as! Date,
-                        startTime: eventData["startTime"] as! Date,
-                        endTime: eventData["endTime"] as! Date,
-                        location: eventData["location"] as! String,
-                        activities: eventData["activities"] as! String,
-                        numPeople: eventData["numPeople"] as! Int,
-                        hostUsername: hostUsername,
-                        hostPfp: hostPfp,
-                        eventPic: eventPic
-                    )
-                    self.delegate?.createdEvent(newEvent)
-                    self.dismiss(animated: true)
+                    db.collection("events").document(currEventID).updateData(["eventID": currEventID])
+                    
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+                    if let segueVC = storyboard.instantiateViewController(withIdentifier: "ViewController") as? ViewController {
+                        segueVC.createdEvent(currEventID)
+                        segueVC.modalPresentationStyle = .fullScreen
+                        self.present(segueVC, animated: true, completion: nil)
+                    }
                 }
             }
         }
@@ -136,74 +134,36 @@ extension CreateEvents:UIImagePickerControllerDelegate, UINavigationControllerDe
     
 }
 
-class Event {
-    var title: String
-    var description: String
-    var date: Date
-    var startTime: Date
-    var endTime: Date
-    var location: String
-    //each event can be sorted by specific activities, ex. fitness and soccer
-    var activities: String
-    var numPeople: Int
-    var hostUsername: String
-    var hostPfp: String
-    var eventPic: String
-    //need RSVP list
-    
-    init(title: String, description: String, date: Date, startTime: Date, endTime: Date, location: String, activities: String, numPeople: Int, hostUsername: String, hostPfp: String, eventPic: String) {
-        self.title = title
-        self.description = description
-        self.date = date
-        self.startTime = startTime
-        self.endTime = endTime
-        self.location = location
-        self.activities = activities
-        self.numPeople = numPeople
-        self.hostUsername = hostUsername
-        self.hostPfp = hostPfp
-        self.eventPic = eventPic
-    }
-    
-//    func addActivity(_ activity: String) {
-//        //Check if activity exists in global list before adding to event
-//
-//    }
-}
-
-// Singleton class, global list of activities
-// Each event has its own associated list of activities
-// which pulls from the class
-//class allActivities {
-//    //single instance
-//    static let shared = allActivities()
-//
-//    //other classes cannot directly access this
-//    private(set) var globalActivities: [String] = ["Hiking", "Running"]
-//
-//    //initializer
-//    private init() {}
-//
-//    func addGlobalActivity(_ activity: String) {
-//        if !globalActivities.contains(activity) {
-//            globalActivities.append(activity)
-//            print("\(activity) has been added to the global list")
-//        } else {
-//            print("\(activity) already exists in the global list")
-//        }
+//class Event {
+//    var title: String
+//    var description: String
+//    var date: Date
+//    var startTime: Date
+//    var endTime: Date
+//    var location: String
+//    //each event can be sorted by specific activities, ex. fitness and soccer
+//    var activities: String
+//    var numPeople: Int
+//    var hostUsername: String
+//    var hostPfp: String
+//    var eventPic: String
+//    var eventID: String
+//    //need RSVP list
+//    
+//    init(title: String, description: String, date: Date, startTime: Date, endTime: Date, location: String, activities: String, numPeople: Int, hostUsername: String, hostPfp: String, eventPic: String, eventID: String) {
+//        self.title = title
+//        self.description = description
+//        self.date = date
+//        self.startTime = startTime
+//        self.endTime = endTime
+//        self.location = location
+//        self.activities = activities
+//        self.numPeople = numPeople
+//        self.hostUsername = hostUsername
+//        self.hostPfp = hostPfp
+//        self.eventPic = eventPic
+//        self.eventID = eventID
 //    }
 //
-//    func removeGlobalActivity(_ activity: String) {
-//        if let index = globalActivities.firstIndex(of: activity) {
-//            globalActivities.remove(at: index)
-//            print("\(activity) has been removed from the global activity list")
-//        } else {
-//            print("\(activity) does not exist in global activity list")
-//        }
-//    }
-//    //print all activities in global list
-//    func printActivities() {
-//        let activitiesList = globalActivities.joined(separator: ", ")
-//            print("Global activities: \(activitiesList)")
-//    }
 //}
+
