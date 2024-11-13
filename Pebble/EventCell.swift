@@ -15,15 +15,29 @@ class EventCell: UICollectionViewCell {
     @IBOutlet weak var profileUsernameLabel: UILabel!
     @IBOutlet weak var eventTitleLabel: UILabel!
     @IBOutlet weak var eventDateLabel: UILabel!
+    
+    func decodeBase64ToImage(_ base64String: String) -> UIImage? {
+        guard let imageData = Data(base64Encoded: base64String) else { return nil }
+        return UIImage(data: imageData)
+    }
 
     func configure(with event: Event) {
         // Set the images
-        eventImageView.image = UIImage(named: "eventImage")
-        profileImageView.image = UIImage(named: "profileImage")
+        if let image = decodeBase64ToImage(event.eventPic) {
+            eventImageView.image = image // Set the decoded image in an UIImageView
+        } else {
+            eventImageView.image = UIImage(named: "eventImage")
+        }
+        if let image = decodeBase64ToImage(event.hostPfp) {
+            profileImageView.image = image // Set the decoded image in an UIImageView
+        } else {
+            profileImageView.image = UIImage(named: "profileImage")
+        }
 
         // Set profile image to be circular
         profileImageView.layer.cornerRadius = profileImageView.frame.height / 2
         profileImageView.clipsToBounds = true
+        profileImageView.contentMode = .scaleAspectFill
 
         // Set event image to fill the view
         eventImageView.contentMode = .scaleAspectFill
@@ -31,7 +45,7 @@ class EventCell: UICollectionViewCell {
         eventImageView.clipsToBounds = true
 
         // Set other event details
-        profileUsernameLabel.text = "speddy"
+        profileUsernameLabel.text = event.hostUsername
         eventTitleLabel.text = event.title
         eventDateLabel.text = DateFormatter.localizedString(from: event.date, dateStyle: .medium, timeStyle: .none)
     }
