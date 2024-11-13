@@ -1052,6 +1052,7 @@
                                 <buttonConfiguration key="configuration" style="filled" title="Login"/>
                                 <connections>
                                     <action selector="loginButton:" destination="IFF-u7-qir" eventType="touchUpInside" id="IpQ-cr-GKO"/>
+                                    <segue destination="YZF-IL-Rie" kind="presentation" identifier="startUpToBrowseEventsPage" modalPresentationStyle="fullScreen" id="1ZH-0c-WPq"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wb9-X5-TeG">
@@ -1091,7 +1092,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="kAU-OR-xJa"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" destinationCreationSelector="startUpToBrowseEventsPage" id="kAU-OR-xJa"/>
                         <segue destination="ytu-j9-R5n" kind="relationship" relationship="viewControllers" id="Mm1-ev-8aY"/>
                         <segue destination="ooW-hV-CUX" kind="relationship" relationship="viewControllers" id="EV9-qf-LUH"/>
                     </connections>
@@ -1317,7 +1318,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="FnY-UG-W1m"/>
+        <segue reference="1ZH-0c-WPq"/>
+        <segue reference="Mm1-ev-8aY"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Screenshot 2024-11-12 at 11.03.56 PM.png" width="421" height="367"/>
