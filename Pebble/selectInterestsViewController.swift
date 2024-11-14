@@ -45,7 +45,7 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
             // If the button is not selected, check if we can select it
             if count < 5 {
                 sender.isSelected = true
-                sender.backgroundColor = UIColor.systemBlue
+                sender.backgroundColor = UIColor.systemGreen
                 arrayOfInterests.append(buttonTitle!)
                 count += 1
             } else {

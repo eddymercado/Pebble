@@ -199,7 +199,7 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             let label = UILabel()
             label.text = " \(interest) "
             label.textAlignment = .center
-            label.backgroundColor = UIColor.systemBlue
+            label.backgroundColor = UIColor.systemGreen
             label.textColor = .white
             label.font = UIFont.systemFont(ofSize: 12)
             label.layer.cornerRadius = 6

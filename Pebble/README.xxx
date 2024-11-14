@@ -1,72 +1,57 @@
 Contributions:
 
-Katherine Chao:
+Eduardo Mercado (Release 25%, Overall 23%)
+• Majority of the browse events page functionality (collection view, cards)
+• Added a gradient to the browse event cards to make the text more readable
+• Populated the “events” collection in firestore from CreateEvents
+• Formatted the SingleEventViewController
+• Fixed how the date for the events was saving to firestore incorrectly and also how it displayed incorrectly on the cards after switching from a delegate to pass the events to pulling from firestore
 
-Create Events screen:
-- text fields for all required event fields (title, description, date, times, location, etc)
-- Event class to populate events on other VCs
-- singleton class for global array of activities to be reused in Profile, Sign Up, etc.
-- upload profile pic functionality
-- segues back to browse events using delegate/protocol, made sure at least one event can be sent onto browseEvents page using delegate logic
-
-
-Denise Ramos:
-
-Login and sign up page:
-- Basic user info
-- Alert for if login information is incorrect
-- Upload profile pic
-- Select interests
-- Made the rest of the toggle buttons and allowed only five interests to be selected and added to profile
-
-Create and set up firebase and firestore (database– set up read and write access, user collection) along with importing correct package to xcode:
-- Make user collection and utilize google analytics to store correct data associated with each user profile that is created
+Denise (Release 25%, Overall 31%)
+• stored all necessary information in firestore and firebase and the cloud retrieval for create events, singular events view, and profile page, updating profile page, and other UI buttons and labels
+•  finished profile page (including profile picture, profile info, interests buttons, delete account (from firestore and firebase, user information) segues
+•  next steps
+    • final update user settings implementation
+    • block out password letters when logging in
+    • alerts for things such as “are you sure you want to delete your account” “are you sure you want to unrsvp”
+    • delete event (from browse events page and firestore)
+    • limit number of rsvps with max amount of attendees
+    • guest list (in firestore) to populate the event icon on browse events page
 
 
-Eduardo Mercado:
+Tesna (Release 25%, Overall 23%)
+•  Majority of profile page VC (included bio, interests, username, pfp, event attending vs events hosting segmented view)
+    •  Also populated data from sign up VC to the Profile VC
+•  Settings Action Sheet: Created and did ‘Update Profile Button
+•  Navigation bar setup
+•  Entire tab bar setup to each of the different pages
+•  Updated UI throughout the app (color scheme, partial layout)
+•  Did login page UI and created app icon/logo using Figma
 
-LoginViewController:
-- I made the segues from here (technically just fixed them later on but same idea)
-- Logic for successful/unsuccessful login
 
-Sign Up Pages:
-- Upload profile pic in ProfilePicViewController functionality
-- I made a single toggle button on SelectInterestsViewController that would be highlighted when selected and then unhighlights when clicked again
-
-Browse Events Page (Currently called ViewController)
-- Made an eventsList array to store the events made
-- Made a Collection View to display the events’ information in their own cells
-- Delegate logic to accept a created event from CreateEvents
-- Formatted the EventCell
-
-Firebase
-- Create and set up firebase
-- Installed the initial packages for firebase
-
-Tesna Thomas:
-
-Profile Page:
-- Image View for Profile Picture
-- Username, Interests, Bio all started
-- Segmented View for Events vs Events User is hosting
-- Different View Controllers presented when segment button pressed
-
-Tab Bar Navigation:
-- Integrated Tab Bar
-- Navigates to event home page, create page, and profile page
-
+Katherine (Release 25%, Overall 23%)
+• Single Event View Controller: transfer event info in an event cell from mainVC
+• MapView on CreateEvents and SingleEventVC
+    • Implement map view and core location functionality: when the user is creating an event, once they finish typing an address in the Location text field and click out of it, the location shows on map
+    • Store GeoPoint in firestore
+    • searchLocation to find address coordinates, updateMap to annotate map
 
 Deviations:
 
-- Eddy: We can upload pictures but haven’t stored them in firebase so that we can access them later when displaying the event and displaying the user profile pic
-Why: Did not have time (I was the best man to a wedding during the weekend and last week I had an OS project due) but finishing before start Beta coding next week
+Eduardo:
+    • I was not able to figure out how to filter the events on the browse events page by interests before the deadline. But Denise figured out how to filter out the event if a user posted it themself, so she said it wouldn’t take long to complete next week.
+    • I was not able to fix the hard coded “Soccer” label on the single event page as it was low on my priority list, but that would be an easy fix at the start of next week.
+    • I broke the the event date and time when we switched from delegate for the events to pulling from firestore, and did not realize until right before turn in.
 
-- Katherine: Currently using a button to segue from ViewController (browse events page) to create because segue from create back to browse events doesn’t work properly.
-Why: still debugging this but did not have time due to not being able to get into my GitHub earlier (I made a new account), was helping debug why sending events from CreateEvents to BrowseEvents wasn’t working properly first
+Katherine:
+    • I did not have time to complete populating the guest list for an event but started the tableView for it and will get to it in the next release.
+    • MapView was not part of our proposal but we added it as a beta feature to make the app more complex. A stretch goal for the final release is to have a full-screened mapView with the events as pins on a scrollable map.
+    • Need to implement scrolling for the event description on SingleEvent page.
 
-- aesthetic colors and fonts from figma will be added in future releases;
-Why: focused on functionality first could not find color we liked (hex from figma looked ugly) will find different color pattern next
+Denise:
+    • A couple things broke last minute such as the segue back to profile page when the user info is updated as well as the segue to the login page when an account is deleted.
+    • A user can rsvp for multiple events because it is repopulated on the browse events page instead of transferring to the users attending events on their profile
 
-- Tesna: Username, Picture, Interests, and Bio not auto populated with stored data when Profile is clicked
-- Why: We had to finish the Login In Page + Firebase set up first and by that time my xcode stopped functioning (emailed you about this). Also I am maid of honor for sister’s wedding this weekend so I have been very swamped.
-
+Tesna:
+    • Did not implement the horizontal scroll on the profile page for My Events vs Others Events. Mainly because it was a lower priority and we needed to get event card done first. Will be implemented by next release.
+    • Did not change color of interests buttons on pfp as we are still refining color scheme!
