@@ -125,7 +125,7 @@ class updateInfoViewController: UIViewController, UINavigationControllerDelegate
                         // Redirect to login screen after successful deletion
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
                         if let loginVC = storyboard.instantiateViewController(withIdentifier: "loginNav") as? UINavigationController {
-                            loginVC.modalPresentationStyle = .fullScreen
+                            loginVC.modalPresentationStyle = .popover
                             self?.present(loginVC, animated: true, completion: nil)
                         }
                     }

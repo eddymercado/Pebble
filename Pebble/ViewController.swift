@@ -25,7 +25,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.backgroundColor = UIColor.lightGray // For debugging
 
         Auth.auth().addStateDidChangeListener { [weak self] auth, user in
             guard let self = self else { return }
@@ -110,7 +109,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
 
             if let segueVC = storyboard.instantiateViewController(withIdentifier: "SingleEventViewController") as? SingleEventViewController {
                 segueVC.currEventID = selectedEvent
-                segueVC.modalPresentationStyle = .fullScreen
+                segueVC.modalPresentationStyle = .popover
                 self.present(segueVC, animated: true, completion: nil)
             }
         }

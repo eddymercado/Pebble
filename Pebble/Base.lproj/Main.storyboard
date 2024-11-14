@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="agC-bc-xIN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="agC-bc-xIN">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Map view configurations" minToolsVersion="14.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -166,13 +166,13 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Number of people" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="heh-CV-pIy">
-                                <rect key="frame" x="205" y="487" width="172" height="34"/>
+                                <rect key="frame" x="205" y="481" width="172" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Select Activity" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ezh-em-yMV">
-                                <rect key="frame" x="17" y="487" width="167" height="34"/>
+                                <rect key="frame" x="17" y="481" width="167" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -191,12 +191,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hT1-j2-BYI">
-                                <rect key="frame" x="16" y="540" width="361" height="152"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="62a-wn-0rs">
-                                <rect key="frame" x="133" y="700" width="128" height="35"/>
+                                <rect key="frame" x="132" y="693" width="128" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Upload photo"/>
@@ -220,14 +216,18 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </datePicker>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rro-tw-MaY">
-                                <rect key="frame" x="283" y="700" width="75" height="35"/>
+                                <rect key="frame" x="159" y="738" width="75" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Create"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Create"/>
                                 <connections>
                                     <action selector="createEventBtnPressed:" destination="ytu-j9-R5n" eventType="touchUpInside" id="OC0-8l-Bls"/>
                                 </connections>
                             </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hT1-j2-BYI">
+                                <rect key="frame" x="15" y="529" width="361" height="152"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="3eD-m3-vKX"/>
                         <color key="backgroundColor" red="0.99607843159999998" green="0.97254902119999997" blue="0.97254902119999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -356,6 +356,7 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="47" id="Ind-bW-AMt"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="75" id="tK9-FH-zUy"/>
                                 </constraints>
+                                <color key="tintColor" red="0.1647058824" green="0.40000000000000002" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="RSVP"/>
                                 <connections>
@@ -427,6 +428,7 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="Sgu-C3-eaI"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="31" id="t5z-es-iV2"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j0Z-Wt-ewE">
                                 <rect key="frame" x="35" y="340" width="342" height="21"/>
@@ -438,6 +440,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="h5y-pk-wan"/>
                         <color key="backgroundColor" red="0.99607843159999998" green="0.97254902119999997" blue="0.97254902119999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="tintColor" red="0.0078431372550000003" green="0.40000000000000002" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="j9Q-ua-92h" firstAttribute="top" secondItem="QU6-Ms-9a5" secondAttribute="bottom" constant="8" symbolic="YES" id="0lg-lp-0jv"/>
                             <constraint firstItem="YTw-9n-den" firstAttribute="leading" secondItem="pQS-7A-Qj4" secondAttribute="trailing" constant="93" id="0sk-GV-S4C"/>
@@ -492,10 +495,9 @@
                         <outlet property="eventLocation" destination="x0m-4x-eSF" id="w4E-kG-6fd"/>
                         <outlet property="eventPic" destination="187-92-UAg" id="TAo-z5-Gb5"/>
                         <outlet property="eventTime" destination="heQ-bf-AhC" id="Zmq-Cy-OAX"/>
-                        <outlet property="eventTitle" destination="dYb-xP-Xq3" id="hfK-Oy-CSo"/>
-                        <outlet property="mapView" destination="SPM-xb-imX" id="0FT-dV-OKm"/>
                         <outlet property="eventTitle" destination="dYb-xP-Xq3" id="2w5-gO-Bg0"/>
                         <outlet property="goingOrNotLabel" destination="j0Z-Wt-ewE" id="6gG-Pm-qUv"/>
+                        <outlet property="mapView" destination="SPM-xb-imX" id="0FT-dV-OKm"/>
                         <outlet property="rsvpbutton" destination="Vac-P6-6We" id="wG5-rs-5MN"/>
                     </connections>
                 </viewController>
@@ -548,8 +550,8 @@
                                 <rect key="frame" x="16" y="374" width="361" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
-                                    <segment title="Events"/>
-                                    <segment title="My Events"/>
+                                    <segment title="Events I'm Attending"/>
+                                    <segment title="Events I'm Hosting"/>
                                 </segments>
                                 <connections>
                                     <action selector="eventSegment:" destination="ooW-hV-CUX" eventType="valueChanged" id="tNQ-pC-M5x"/>
@@ -627,7 +629,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HYr-rV-auf" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="471" y="906"/>
+            <point key="canvasLocation" x="470.9923664122137" y="905.63380281690149"/>
         </scene>
         <!--Sign Up InfoVC-->
         <scene sceneID="29m-9I-Ytk">
@@ -1259,7 +1261,7 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="I44-dz-ECA"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.99607843159999998" green="0.97254902119999997" blue="0.97254902119999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="79x-wE-yjw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1283,7 +1285,7 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Hti-7k-gnY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.99607843159999998" green="0.97254902119999997" blue="0.97254902119999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S0n-j4-EJX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1459,9 +1461,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-<!--        <segue reference="4Z1-mL-nSM"/>-->
-<!--        <segue reference="Mm1-ev-8aY"/>-->
-        <segue reference="1ZH-0c-WPq"/>
+        <segue reference="4Z1-mL-nSM"/>
         <segue reference="FnY-UG-W1m"/>
     </inferredMetricsTieBreakers>
     <resources>

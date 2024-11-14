@@ -34,7 +34,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
         fetchInterestsFromFirestore()
     }
     
@@ -163,10 +162,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         // Present the action sheet
         present(actionSheet, animated: true, completion: nil)
-    }
-    
-    func setupUI() {
-        view.backgroundColor = .systemGray6
     }
 
     
