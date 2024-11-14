@@ -6,14 +6,17 @@
 //
 
 import UIKit
+import MapKit
+import CoreLocation
 import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseFirestore
 import FirebaseStorage
 
-class SingleEventViewController: UIViewController, UINavigationControllerDelegate {
-//    var event: Event?
-
+class SingleEventViewController: UIViewController, UINavigationControllerDelegate, MKMapViewDelegate {
+    
+    let geocoder = CLGeocoder()
+    @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var eventTitle: UILabel!
     @IBOutlet weak var eventHost: UILabel!
     @IBOutlet weak var eventDate: UILabel!
@@ -26,8 +29,23 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
     var currEventID = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-//        print("event in SingleEventViewController: \(event)")
+        mapView.delegate = self
         updateUI()
+    }
+    
+    
+    func updateMap(with coordinate: CLLocationCoordinate2D) {
+        //create region centered on location
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        mapView.setRegion(region, animated: true)
+        
+        //create and add annotation for location
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = eventLocation.text
+        //remove existing annotations
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.addAnnotation(annotation)
     }
     
     func decodeBase64ToImage(_ base64String: String) -> UIImage? {
@@ -72,6 +90,10 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
                 if let eventLocation = document.get("location") as? String {
                     self.eventLocation.text = eventLocation
                 }
+                if let geoPoint = document.get("coordinate") as? GeoPoint {
+                      let coordinate = CLLocationCoordinate2D(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
+                    self.updateMap(with: coordinate)
+                  }
                 
             } else {
                 print("Document does not exist")
