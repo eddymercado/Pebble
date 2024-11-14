@@ -19,20 +19,35 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
     
     let profilePageSegueIdentifier = "ProfilePageSegueIdentifier"
     let createEventsSegueIdentifier = "createEventsSegueIdentifier"
-    
-        
+    let db = Firestore.firestore()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = UIColor.lightGray // For debugging
-        fetchAllEvents()
+
+        Auth.auth().addStateDidChangeListener { [weak self] auth, user in
+            guard let self = self else { return }
+            
+            // Refresh `curruser` and fetch events when auth state changes
+            if let curruser = user?.uid {
+//                print("Current user ID: \(curruser)")
+                self.fetchAllEvents()
+            } else {
+//                print("No user logged in")
+                eventsList.removeAll()
+                self.collectionView.reloadData()
+            }
+        }
     }
     
-
     func fetchAllEvents() {
-        let db = Firestore.firestore()
+        
         db.collection("events").getDocuments { (querySnapshot, error) in
+            
+            guard let curruser = Auth.auth().currentUser?.uid else { return }
+
             if let error = error {
                 print("Error fetching documents: \(error)")
             } else {
@@ -44,7 +59,11 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
                     // Assuming each document has a field "name" or "title" of type String
                     if let eventID = document.get("eventID") as? String {
                         // maybe sort by sometihng !!
-                        eventsList.append(eventID) // Add event name to the array
+                        if let userId = document.get("hostId") as? String, userId != curruser {
+                            print("hostId " + userId)
+                            print("curruserId " + curruser)
+                            eventsList.append(eventID) // Add event name to the array
+                        }
                     }
                 }
                 // Print or use the array as needed
