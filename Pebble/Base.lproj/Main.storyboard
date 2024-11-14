@@ -410,7 +410,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-<<<<<<< HEAD
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SPM-xb-imX">
                                 <rect key="frame" x="35" y="535" width="320" height="140"/>
                                 <constraints>
@@ -428,11 +427,10 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="Sgu-C3-eaI"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="31" id="t5z-es-iV2"/>
                                 </constraints>
-=======
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j0Z-Wt-ewE">
                                 <rect key="frame" x="35" y="340" width="342" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
->>>>>>> 29ccab0c52c9211bd610fc4083422a724c226a0d
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -494,14 +492,11 @@
                         <outlet property="eventLocation" destination="x0m-4x-eSF" id="w4E-kG-6fd"/>
                         <outlet property="eventPic" destination="187-92-UAg" id="TAo-z5-Gb5"/>
                         <outlet property="eventTime" destination="heQ-bf-AhC" id="Zmq-Cy-OAX"/>
-<<<<<<< HEAD
                         <outlet property="eventTitle" destination="dYb-xP-Xq3" id="hfK-Oy-CSo"/>
                         <outlet property="mapView" destination="SPM-xb-imX" id="0FT-dV-OKm"/>
-=======
                         <outlet property="eventTitle" destination="dYb-xP-Xq3" id="2w5-gO-Bg0"/>
                         <outlet property="goingOrNotLabel" destination="j0Z-Wt-ewE" id="6gG-Pm-qUv"/>
                         <outlet property="rsvpbutton" destination="Vac-P6-6We" id="wG5-rs-5MN"/>
->>>>>>> 29ccab0c52c9211bd610fc4083422a724c226a0d
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qni-Ih-JMg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
