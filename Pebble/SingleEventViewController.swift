@@ -25,6 +25,7 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
     @IBOutlet weak var eventLocation: UILabel!
     @IBOutlet weak var rsvpbutton: UIButton!
     @IBOutlet weak var eventPic: UIImageView!
+    @IBOutlet weak var activityType: UIButton!
     var RSVPButtonPressedCheck  = false
     var eventsThatUserIsAttending: [String] = []
     let db = Firestore.firestore()
@@ -103,6 +104,9 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
                   }
                 if let currNum = document.get("currentnumberofattendees") as? Int {
                     self.currNum = currNum
+                }
+                if let currAct = document.get("activities") as? String {
+                    self.activityType.setTitle(currAct, for: .normal)
                 }
                 
             } else {

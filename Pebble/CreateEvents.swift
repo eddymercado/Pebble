@@ -12,10 +12,6 @@ import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseFirestoreInternal
 
-//protocol EventCreationDelegate: AnyObject {
-//    func createdEvent(_ event: Event)
-//}
-
 class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     @IBOutlet weak var eventTitle: UITextField!
     @IBOutlet weak var eventDesc: UITextField!
@@ -23,19 +19,25 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     @IBOutlet weak var eventStartTime: UIDatePicker!
     @IBOutlet weak var eventEndTime: UIDatePicker!
     @IBOutlet weak var eventLocation: UITextField!
-    @IBOutlet weak var eventActivityType: UITextField!
+    @IBOutlet weak var eventActivityTypeButton: UIButton! // UIButton for activity type
     @IBOutlet weak var eventNumPeople: UITextField!
     @IBOutlet weak var eventImageView: UIImageView!
-    
+    @IBOutlet weak var mapView: MKMapView!
+
     let db = Firestore.firestore()
+    let geocoder = CLGeocoder()
+    
     var eventsThatUserCreated: [String] = []
     var eventsThatUserIsAttending: [String] = []
     var currNumOfAttendees = 0
-
-    @IBOutlet weak var mapView: MKMapView!
-
-    let geocoder = CLGeocoder() //convert address to coordinates
-    var selectedLocation: CLLocationCoordinate2D? //stores coordinates
+    var selectedLocation: CLLocationCoordinate2D?
+    let activityTypes = [
+        "⚽️ Soccer", "🏃‍♀️ Running", "📕 Reading", "🎾 Pickleball", "🥮 Celebrations",
+        "🧑‍🍳 Cooking", "🎮 Gaming", "🐕 Animals", "🥾 Outdoors", "👒 Gardening",
+        "🧘‍♂️ Yoga", "🍽️ Food", "🏀 Basketball", "🎨 Art", "🎓 College", "🎶 Music",
+        "📖 Writing", "📸 Photography", "🎥 Movies", "🌍 Traveling", "🏋️‍♀️ Fitness",
+        "🍩 Baking", "🎉 Parties", "🎲 Misc", "🏌️‍♀️ Golf", "🎊 Culture", "🌊 Swimming"
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,16 +52,15 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     }
     
     func searchLocation() {
-        guard let address = eventLocation.text, !address.isEmpty else {return}
+        guard let address = eventLocation.text, !address.isEmpty else { return }
         
-        //convert address string to coordinates
-        geocoder.geocodeAddressString(address) { [weak self] (placemarks, error) in guard let self = self else {return}
+        geocoder.geocodeAddressString(address) { [weak self] (placemarks, error) in
+            guard let self = self else { return }
             if let error = error {
                 print("Geocoding error: \(error.localizedDescription)")
                 return
             }
-            guard let placemark = placemarks?.first, let location = placemark.location
-            else {
+            guard let placemark = placemarks?.first, let location = placemark.location else {
                 print("No location found")
                 return
             }
@@ -69,37 +70,36 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     }
     
     func updateMap(with coordinate: CLLocationCoordinate2D) {
-        //create region centered on location
         let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
         mapView.setRegion(region, animated: true)
         
-        //create and add annotation for location
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
         annotation.title = eventLocation.text
-        //remove existing annotations
         mapView.removeAnnotations(mapView.annotations)
         mapView.addAnnotation(annotation)
     }
     
-    func updateMap(with geoPoint: GeoPoint) {
-        let coordinate = CLLocationCoordinate2D(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
-        updateMap(with: coordinate)
+    @IBAction func activityTypeButtonTapped(_ sender: UIButton) {
+        let dropdownVC = DropdownViewController()
+        dropdownVC.activityTypes = activityTypes
+        dropdownVC.modalPresentationStyle = .popover
+        dropdownVC.popoverPresentationController?.sourceView = sender
+        dropdownVC.popoverPresentationController?.sourceRect = sender.bounds
+        dropdownVC.popoverPresentationController?.delegate = self
+        dropdownVC.popoverPresentationController?.permittedArrowDirections = .up
+        dropdownVC.onActivitySelected = { [weak self] selectedActivity in
+            self?.eventActivityTypeButton.setTitle(selectedActivity, for: .normal)
+        }
+        present(dropdownVC, animated: true)
     }
-    
     
     @IBAction func uploadPhotoPressed(_ sender: UIButton) {
         let vc = UIImagePickerController()
         vc.sourceType = .photoLibrary
         vc.delegate = self
         vc.allowsEditing = true
-        
         present(vc, animated: true)
-    }
-    
-    func decodeBase64ToImage(_ base64String: String) -> UIImage? {
-        guard let imageData = Data(base64Encoded: base64String) else { return nil }
-        return UIImage(data: imageData)
     }
     
     @IBAction func createEventBtnPressed(_ sender: UIButton) {
@@ -121,11 +121,8 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                 hostUsername = document.get("username") as? String ?? "temp"
                 self.eventsThatUserCreated = document.get("eventsThatUserIsHosting") as? Array ?? []
                 self.eventsThatUserIsAttending = document.get("eventsThatUserIsAttending") as? Array ?? []
-            } else {
-                print("Document does not exist")
             }
             
-            // Prepare event data for Firestore
             var eventData: [String: Any] = [
                 "title": self.eventTitle.text ?? "",
                 "description": self.eventDesc.text ?? "",
@@ -133,7 +130,7 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                 "startTime": self.eventStartTime.date,
                 "endTime": self.eventEndTime.date,
                 "location": self.eventLocation.text ?? "",
-                "activities": self.eventActivityType.text ?? "",
+                "activities": self.eventActivityTypeButton.currentTitle ?? "",
                 "numPeople": Int(self.eventNumPeople.text ?? "0") ?? 0,
                 "hostUsername": hostUsername,
                 "hostPfp": hostPfp,
@@ -143,18 +140,14 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                 "currentnumberofattendees": 0
             ]
             
-            //add location coordinates to eventData
             if let coordinate = self.selectedLocation {
                 eventData["coordinate"] = GeoPoint(latitude: coordinate.latitude, longitude: coordinate.longitude)
             }
 
-            // Step 1: Create a document reference with a unique ID
             let documentReference = self.db.collection("events").document()
-
-            // Step 2: Set the data with the document reference
             documentReference.setData(eventData) { error in
                 if error != nil {
-                    print("error")
+                    print("Error creating event.")
                 } else {
                     currEventID = documentReference.documentID
 
@@ -163,7 +156,6 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                         let base64String = imageData.base64EncodedString()
                         eventPic = base64String
                         self.db.collection("events").document(currEventID).updateData(["eventPic": eventPic])
-
                     }
                     
                     self.db.collection("events").document(currEventID).updateData(["eventID": currEventID])
@@ -173,13 +165,7 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                     self.db.collection("users").document(userId).updateData(["eventsThatUserIsAttending": self.eventsThatUserIsAttending])
                     self.db.collection("events").document(currEventID).updateData(["currentnumberofattendees": 1])
                 
-                    
-                    
-                    
-                    
-                    
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
                     if let segueVC = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController {
                         segueVC.modalPresentationStyle = .fullScreen
                         self.present(segueVC, animated: true, completion: nil)
@@ -188,13 +174,16 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
             }
         }
     }
-
 }
 
-extension CreateEvents:UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
+extension CreateEvents: UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+}
+
+extension CreateEvents: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
         if let eventPic = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
             eventImageView.image = eventPic
         }
@@ -204,6 +193,4 @@ extension CreateEvents:UIImagePickerControllerDelegate, UINavigationControllerDe
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-    
 }
-
