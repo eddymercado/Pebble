@@ -29,6 +29,7 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
     var RSVPButtonPressedCheck  = false
     var eventsThatUserIsAttending: [String] = []
     let db = Firestore.firestore()
+    //var numberOfGuests, increase when someone RSVPs, decrease when leave
 
     @IBOutlet weak var goingOrNotLabel: UILabel!
     var currEventID = ""
