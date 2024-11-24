@@ -12,13 +12,18 @@ import FirebaseFirestore
 
 let db = Firestore.firestore()
 
+    
+
+    
 class LoginViewController: UIViewController, UINavigationControllerDelegate {
 
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
     override func viewDidLoad() {
-        super.viewDidLoad()        
+        super.viewDidLoad()
+        passwordField.isSecureTextEntry = true
+        passwordField.enablePasswordToggle()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -30,6 +35,10 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
         usernameField.text = ""
         passwordField.text = ""
     }
+    
+    
+
+    
     
     @IBAction func loginButton(_ sender: Any) {
         // if username is valid login/ segue to browse events
@@ -44,8 +53,14 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
             DispatchQueue.main.async {
                 if (error as NSError?) != nil {
                     self.showAlert(title: "Email or Password is incorrect", message: "Retry credentials or create an account!")
+                    return
                 } else {
-                    self.performSegue(withIdentifier: "startUpToBrowseEventsPage", sender: self)
+//                    self.performSegue(withIdentifier: "startUpToBrowseEventsPage", sender: self)
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    if let segueVC = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController {
+                        segueVC.modalPresentationStyle = .fullScreen
+                        self.present(segueVC, animated: true, completion: nil)
+                    }
                 }
             }
         }
@@ -66,5 +81,43 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
             self.navigationController?.pushViewController(signUpVC, animated: true)
         }
     }
+    
 
+
+}
+
+extension UITextField {
+    fileprivate func setPasswordToggleImage(_ button: UIButton) {
+        if(!isSecureTextEntry){
+            button.setImage(UIImage(named: "eye"), for: .normal)
+        } else {
+            button.setImage(UIImage(named: "hidden"), for: .normal)
+            
+        }
+    }
+    
+
+    
+    func enablePasswordToggle(){
+        let button = UIButton(type: .custom)
+        setPasswordToggleImage(button)
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(button)
+        NSLayoutConstraint.activate([
+            button.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8),
+            button.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 25),
+            button.heightAnchor.constraint(equalToConstant: 25)
+        ])
+        
+        button.addTarget(self, action: #selector(self.togglePasswordView), for: .touchUpInside)
+        self.rightView = button
+        self.rightViewMode = .always
+    }
+    
+    @IBAction func togglePasswordView(_ sender: Any) {
+        self.isSecureTextEntry = !self.isSecureTextEntry
+        setPasswordToggleImage(sender as! UIButton)
+    }
 }

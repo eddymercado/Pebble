@@ -26,9 +26,11 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
     @IBOutlet weak var rsvpbutton: UIButton!
     @IBOutlet weak var eventPic: UIImageView!
     @IBOutlet weak var activityType: UIButton!
+    @IBOutlet weak var deleteEvent: UIButton!
     var RSVPButtonPressedCheck  = false
     var eventsThatUserIsAttending: [String] = []
     let db = Firestore.firestore()
+//    var currUser = ""
     //var numberOfGuests, increase when someone RSVPs, decrease when leave
 
     @IBOutlet weak var goingOrNotLabel: UILabel!
@@ -39,6 +41,11 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
         super.viewDidLoad()
         mapView.delegate = self
         updateUI()
+        // assume this works
+        guard let currUser = Auth.auth().currentUser?.uid else { return }
+        if(currUser != eventHost.text) {
+            deleteEvent.isHidden = true
+        }
     }
     
     
@@ -151,13 +158,24 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
             
             // UN RSVP
             else {
-                if let index = self.eventsThatUserIsAttending.firstIndex(of: self.currEventID) {
-                    self.eventsThatUserIsAttending.remove(at: index)
+                
+                let alertController = UIAlertController(title: "Are you sure you want to remove yourself from this event?", message: "", preferredStyle: .alert)
+                
+                let yesAction = UIAlertAction(title: "Yes", style: .default) { _ in
+                    if let index = self.eventsThatUserIsAttending.firstIndex(of: self.currEventID) {
+                        self.eventsThatUserIsAttending.remove(at: index)
+                    }
+                    self.goingOrNotLabel.text = ""
+                    self.rsvpbutton.setTitle("RSVP", for: .normal)
+                    self.db.collection("users").document(userId).updateData(["eventsThatUserIsAttending": self.eventsThatUserIsAttending])
+                    self.db.collection("events").document(self.currEventID).updateData(["currentnumberofattendees": self.checkNumOfAttendees() - 1])
                 }
-                self.goingOrNotLabel.text = ""
-                self.rsvpbutton.setTitle("RSVP", for: .normal)
-                self.db.collection("users").document(userId).updateData(["eventsThatUserIsAttending": self.eventsThatUserIsAttending])
-                self.db.collection("events").document(self.currEventID).updateData(["currentnumberofattendees": self.checkNumOfAttendees() - 1])
+                
+                let noAction = UIAlertAction(title: "No", style: .cancel)
+                alertController.addAction(yesAction)
+                alertController.addAction(noAction)
+                self.present(alertController, animated: true, completion: nil)
+
 
             }
         }

@@ -5,10 +5,6 @@
 //  Created by Denise Ramos on 11/12/24.
 //
 
-
-
-// add back button
-
 import UIKit
 import FirebaseFirestore
 import FirebaseAuth
@@ -28,9 +24,25 @@ class updateInfoViewController: UIViewController, UINavigationControllerDelegate
     
     @IBOutlet weak var successfulOrNot: UILabel!
     
+    var actuallydelete = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadExistingProfileData()
+        let backButton = UIButton(type: .system)
+        let attributedTitle = NSAttributedString(
+            string: "Back To Profile Page",
+            attributes: [
+                .underlineStyle: NSUnderlineStyle.single.rawValue, // Single underline
+                .foregroundColor: UIColor.blue                     // Text color
+            ]
+        )
+        backButton.setAttributedTitle(attributedTitle, for: .normal)
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        backButton.frame = CGRect(x: 15, y: 55, width: 200, height: 30)
+        
+        // Add the button to the view
+        self.view.addSubview(backButton)
         
         
     }
@@ -45,6 +57,15 @@ class updateInfoViewController: UIViewController, UINavigationControllerDelegate
         updateFirstNameTextField.text = ""
         updateLastNameTextField.text = ""
         updatePhoneNumberTextField.text = ""
+    }
+    
+    @objc func backButtonTapped() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let segueVC = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController {
+            segueVC.selectedIndex = 2 // Replace with the index of the desired child view controller
+            segueVC.modalPresentationStyle = .fullScreen
+            self.present(segueVC, animated: true, completion: nil)
+        }
     }
     
     func loadExistingProfileData() {
@@ -106,33 +127,42 @@ class updateInfoViewController: UIViewController, UINavigationControllerDelegate
     }
     
     @IBAction func deleteAccountButtonPressed(_ sender: Any) {
-        // are you sure you want to delete
+        let alertController = UIAlertController(title: "Are you sure you want to delete your account?", message: "This action cannot be undone.", preferredStyle: .alert)
         
-        guard let user = Auth.auth().currentUser else { return }
-        let userId = user.uid
-        
-        // Delete from Firestore
-        self.db.collection("users").document(userId).delete { [weak self] error in
-            if let error = error {
-                self?.showAlert(title: "Error", message: "\(error.localizedDescription)")
-                return
-            } else {
-                // Delete from Firebase Authentication
-                user.delete { error in
-                    if let error = error {
-                        self?.showAlert(title: "Error", message: "\(error.localizedDescription)")
-                    } else {
-                        // Redirect to login screen after successful deletion
-                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        if let loginVC = storyboard.instantiateViewController(withIdentifier: "loginNav") as? UINavigationController {
-                            loginVC.modalPresentationStyle = .popover
-                            self?.present(loginVC, animated: true, completion: nil)
+        let yesAction = UIAlertAction(title: "Yes", style: .default) { _ in
+            guard let user = Auth.auth().currentUser else { return }
+            let userId = user.uid
+            
+            // Delete from Firestore
+            self.db.collection("users").document(userId).delete { [weak self] error in
+                if let error = error {
+                    self?.showAlert(title: "Error", message: "\(error.localizedDescription)")
+                    return
+                } else {
+                    // Delete from Firebase Authentication
+                    user.delete { error in
+                        if let error = error {
+                            self?.showAlert(title: "Error", message: "\(error.localizedDescription)")
+                        } else {
+                            // Redirect to login screen after successful deletion
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            if let loginVC = storyboard.instantiateViewController(withIdentifier: "loginNav") as? UINavigationController {
+                                loginVC.modalPresentationStyle = .fullScreen
+                                self?.present(loginVC, animated: true, completion: nil)
+                            }
                         }
                     }
                 }
             }
         }
+        
+        let noAction = UIAlertAction(title: "No", style: .cancel)
+        
+        alertController.addAction(yesAction)
+        alertController.addAction(noAction)
+        present(alertController, animated: true, completion: nil)
     }
+ 
     
     func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)

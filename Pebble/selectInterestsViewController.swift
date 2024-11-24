@@ -27,7 +27,78 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
 
     // add view will appear to show already chosen interests
     override func viewWillAppear(_ animated: Bool) {
-        print(cameFromUpdateInterests)
+
+        // populate interests
+        
+        // set all buttons to grey
+        for subview in view.subviews {
+            if let button = subview as? UIButton {
+                button.backgroundColor = UIColor.systemGray2
+            }
+        }
+        
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+
+        db.collection("users").document(userId).getDocument { document, error in
+            if let error = error {
+                print("Error fetching user interests: \(error.localizedDescription)")
+                return
+            }
+
+            if let document = document, let data = document.data(), let interests = data["Interests"] as? [String] {
+                self.arrayOfInterests = interests
+                self.count = interests.count
+                for title in interests {
+                    if let button = self.findButton(withTitle: title, in: self.view) {
+                        button.backgroundColor = UIColor.systemGreen
+                        button.isSelected = true
+                    } else {
+                        print("Button with title \(title) not found")
+                    }
+                }
+            }
+        }
+        
+        if(self.cameFromUpdateInterests) {
+            let backButton = UIButton(type: .system)
+            let attributedTitle = NSAttributedString(
+                string: "Back To Profile Page",
+                attributes: [
+                    .underlineStyle: NSUnderlineStyle.single.rawValue, // Single underline
+                    .foregroundColor: UIColor.blue                     // Text color
+                ]
+            )
+            backButton.setAttributedTitle(attributedTitle, for: .normal)
+            backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+            backButton.frame = CGRect(x: 15, y: 55, width: 200, height: 30)
+            
+            // Add the button to the view
+            self.view.addSubview(backButton)
+        }
+
+    }
+    
+    func findButton(withTitle title: String, in view: UIView) -> UIButton? {
+        for subview in view.subviews {
+            if let button = subview as? UIButton, button.titleLabel?.text == title {
+                return button
+            } else if !subview.subviews.isEmpty {
+                if let foundButton = findButton(withTitle: title, in: subview) {
+                    return foundButton
+                }
+            }
+        }
+        return nil
+    }
+    
+    @objc func backButtonTapped() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let segueVC = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController {
+            segueVC.selectedIndex = 2
+            segueVC.modalPresentationStyle = .fullScreen
+            self.present(segueVC, animated: true, completion: nil)
+        }
     }
     
     @IBAction func genericPush(_ sender: UIButton) {
@@ -57,34 +128,54 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
 
     @IBAction func selectInterestToBrowseEvents(_ sender: Any) {
         // add array of interests to user profile in firstore
-        
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-
-        let userData: [String: Any] = ["Interests": arrayOfInterests]
-
-        self.db.collection("users").document(userId).updateData(userData) { error in
-            if let error = error {
-                self.showAlert(title: "Error", message: "\(error.localizedDescription)")
-            } else {
-                let interestsString = self.arrayOfInterests.joined(separator: ", ")
-                Analytics.setUserProperty(interestsString, forName: "Interests")
-            }
-            
-            // add if it came from porfile update go back to profile page if not still in sign up mode and need o degue to browse events
-
-            if self.cameFromUpdateInterests {
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "ProfilePage") as? ProfilePage {
-                    updateProfileVC.modalPresentationStyle = .fullScreen
-                    self.present(updateProfileVC, animated: true, completion: nil)
+        if(count == 0) {
+            showAlert(title: "Please select at least 1 interest.", message: "")
+        } else {
+            guard let userId = Auth.auth().currentUser?.uid else { return }
+            db.collection("users").document(userId).getDocument { document, error in
+                if let error = error {
+                    print("Error fetching user interests: \(error.localizedDescription)")
+                    return
                 }
-            } else {
-                self.performSegue(withIdentifier: "selectInterestToBrowseEvents", sender: self)
-//                print("i am not supposed to be here")
+
+                if let document = document, let data = document.data(), let interests = data["Interests"] as? [String] {
+                    self.arrayOfInterests = interests
+                }
             }
             
-            
+            let userData: [String: Any] = ["Interests": arrayOfInterests]
+
+            self.db.collection("users").document(userId).updateData(userData) { error in
+                if let error = error {
+                    self.showAlert(title: "Error", message: "\(error.localizedDescription)")
+                } else {
+                    let interestsString = self.arrayOfInterests.joined(separator: ", ")
+                    Analytics.setUserProperty(interestsString, forName: "Interests")
+                }
+                
+                // add if it came from porfile update go back to profile page if not still in sign up mode and need o degue to browse events
+                if self.cameFromUpdateInterests {
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    if let segueVC = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController {
+                        segueVC.selectedIndex = 2 // Replace with the index of the desired child view controller
+                        // 1 is create event
+                        // 2 is profile page
+                        // 3 is browse events
+                        segueVC.modalPresentationStyle = .fullScreen
+                        self.present(segueVC, animated: true, completion: nil)
+                    }
+                } else {
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    if let segueVC = storyboard.instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController {
+                        segueVC.modalPresentationStyle = .fullScreen
+                        self.present(segueVC, animated: true, completion: nil)
+                    }
+                }
+                
+                
+            }
         }
+        
     }
 
     
@@ -95,12 +186,12 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
         present(alertController, animated: true, completion: nil)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "selectInterestToBrowseEvents" {
-            if let destinationVC = segue.destination as? ProfilePage {
-                destinationVC.selectedInterests = self.arrayOfInterests
-            }
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "selectInterestToBrowseEvents" {
+//            if let destinationVC = segue.destination as? ProfilePage {
+//                destinationVC.selectedInterests = self.arrayOfInterests
+//            }
+//        }
+//    }
 
 }

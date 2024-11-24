@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="agC-bc-xIN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="agC-bc-xIN">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Map view configurations" minToolsVersion="14.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -16,11 +16,11 @@
             <objects>
                 <viewController storyboardIdentifier="ViewController" title="ViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="803"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="769"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9OT-9Y-JwX">
-                                <rect key="frame" x="16" y="47" width="361" height="756"/>
+                                <rect key="frame" x="16" y="106" width="361" height="663"/>
                                 <color key="backgroundColor" red="0.99607843159999998" green="0.97254902119999997" blue="0.97254902119999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="NWs-e6-gUm">
                                     <size key="itemSize" width="361" height="293"/>
@@ -77,7 +77,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="eventDateLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lR8-N9-juB">
-                                                    <rect key="frame" x="8" y="155" width="162" height="15"/>
+                                                    <rect key="frame" x="8" y="155" width="165" height="15"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="165" id="2iV-Ar-Xuy"/>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="15" id="bq8-L7-sXd"/>
@@ -147,7 +147,7 @@
             <objects>
                 <viewController id="ytu-j9-R5n" customClass="CreateEvents" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Yd1-V6-Llc">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="803"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="769"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Event Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bIN-2T-iKc">
@@ -411,6 +411,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cAl-ds-IsN">
+                                <rect key="frame" x="36" y="787" width="319" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Delete Event">
+                                    <color key="baseForegroundColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </buttonConfiguration>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="h5y-pk-wan"/>
                         <color key="backgroundColor" red="0.99607843159999998" green="0.97254902119999997" blue="0.97254902119999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -468,6 +476,7 @@
                     <navigationItem key="navigationItem" id="NWT-UI-p4E"/>
                     <connections>
                         <outlet property="activityType" destination="YTw-9n-den" id="0vK-ZW-Fs0"/>
+                        <outlet property="deleteEvent" destination="cAl-ds-IsN" id="Auq-HT-Kc1"/>
                         <outlet property="eventDate" destination="8IL-OQ-ias" id="duG-7M-b97"/>
                         <outlet property="eventDescription" destination="lhM-a4-xiw" id="VVC-0R-xvu"/>
                         <outlet property="eventHost" destination="pQS-7A-Qj4" id="KXA-Ag-xwI"/>
@@ -517,7 +526,7 @@
             <objects>
                 <viewController storyboardIdentifier="ProfilePage" title="ProfilePage" id="ooW-hV-CUX" customClass="ProfilePage" customModule="Pebble" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3pg-tl-omT">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="803"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="769"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Screenshot 2024-11-12 at 11.23.11 PM.png" translatesAutoresizingMaskIntoConstraints="NO" id="o8Q-u3-Bxo">
@@ -548,14 +557,14 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qNJ-ed-gW6">
-                                <rect key="frame" x="16" y="455" width="357" height="269"/>
+                                <rect key="frame" x="16" y="421" width="357" height="269"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <segue destination="hAV-Fr-Nad" kind="embed" id="kZS-1r-Wxm"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jct-eO-2w4">
-                                <rect key="frame" x="16" y="455" width="357" height="269"/>
+                                <rect key="frame" x="16" y="421" width="357" height="269"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <segue destination="Z8x-Cy-l0G" kind="embed" id="RsW-V3-ob3"/>
@@ -1118,7 +1127,6 @@
                                 <buttonConfiguration key="configuration" style="filled" title="Done"/>
                                 <connections>
                                     <action selector="selectInterestToBrowseEvents:" destination="h4d-C8-dHP" eventType="touchUpInside" id="rYg-5H-pwK"/>
-                                    <segue destination="YZF-IL-Rie" kind="presentation" identifier="selectInterestToBrowseEvents" modalPresentationStyle="fullScreen" id="4Z1-mL-nSM"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1187,7 +1195,6 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Login"/>
                                 <connections>
                                     <action selector="loginButton:" destination="IFF-u7-qir" eventType="touchUpInside" id="IpQ-cr-GKO"/>
-                                    <segue destination="YZF-IL-Rie" kind="presentation" identifier="startUpToBrowseEventsPage" modalPresentationStyle="fullScreen" id="1ZH-0c-WPq"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wb9-X5-TeG">
@@ -1397,20 +1404,13 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfz-Wv-XEK">
-                                <rect key="frame" x="16" y="607" width="361" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qvw-GW-oX7">
                                 <rect key="frame" x="132" y="564" width="135" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Save"/>
                                 <connections>
-                                    <action selector="saveProfileChanges:" destination="m0G-qN-4uP" eventType="touchUpInside" id="qPK-fG-27I"/>
+                                    <action selector="saveUpdatedProfileInfoButton:" destination="EjJ-0e-CKS" eventType="touchUpInside" id="UE2-3M-P4I"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ORq-2H-EOv">
@@ -1424,6 +1424,13 @@
                                     <action selector="deleteAccountButtonPressed:" destination="EjJ-0e-CKS" eventType="touchUpInside" id="Xt7-bv-5fq"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfz-Wv-XEK">
+                                <rect key="frame" x="16" y="632" width="361" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="y5e-db-Xo3"/>
                         <color key="backgroundColor" red="0.99607843159999998" green="0.97254902119999997" blue="0.97254902119999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -1462,9 +1469,6 @@
             <point key="canvasLocation" x="-1723" y="144"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="4Z1-mL-nSM"/>
-    </inferredMetricsTieBreakers>
     <resources>
         <image name="Screenshot 2024-11-12 at 11.23.11 PM.png" width="75" height="75"/>
         <image name="Screenshot 2024-11-13 at 10.31.00 PM.png" width="378" height="186"/>

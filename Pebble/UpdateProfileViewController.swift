@@ -20,6 +20,25 @@ class UpdateProfileViewController:  UIViewController, UIImagePickerControllerDel
     override func viewDidLoad() {
         super.viewDidLoad()
         loadExistingProfileData()
+        let backButton = UIButton(type: .system)
+        let attributedTitle = NSAttributedString(
+            string: "Back To Profile Page",
+            attributes: [
+                .underlineStyle: NSUnderlineStyle.single.rawValue, // Single underline
+                .foregroundColor: UIColor.blue                     // Text color
+            ]
+        )
+        backButton.setAttributedTitle(attributedTitle, for: .normal)
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        backButton.frame = CGRect(x: 15, y: 55, width: 200, height: 30)
+    }
+    
+    @objc func backButtonTapped() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "ProfilePage") as? ProfilePage {
+            updateProfileVC.modalPresentationStyle = .fullScreen
+            self.present(updateProfileVC, animated: true, completion: nil)
+        }
     }
     
     func loadExistingProfileData() {

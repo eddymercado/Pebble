@@ -40,7 +40,9 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupProfileInfo() // Ensure profile data is updated
-//        fetchInterestsFromFirestore()
+        fetchInterestsFromFirestore()
+
+        
 
     }
     
