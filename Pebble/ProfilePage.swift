@@ -45,7 +45,8 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     var hosting: [String] = []
     var attending: [String] = []
     var currEventToDisplay = 0
-    
+    var attedningorhosting = ""
+    var selectedEvent = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         currEventToDisplay = 0
@@ -61,12 +62,21 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             }
             backButton.setImage(scaledImage, for: .normal)
         }
+        
+        // add button
+        let hiddenButton = UIButton(type: .system)
+        hiddenButton.frame = imageView.frame
+        hiddenButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        view.insertSubview(hiddenButton, belowSubview: imageView)
+        
+        attedningorhosting = "eventsThatUserIsAttending"
         setUp()
         fetchInterestsFromFirestore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        attedningorhosting = "eventsThatUserIsAttending"
         currEventToDisplay = 0
         setUp()
         setupProfileInfo() // Ensure profile data is updated
@@ -81,15 +91,26 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
                 return
             }
 
+
             if let document = document, document.exists {
-                self.attending = document.get("eventsThatUserIsAttending") as? [String] ?? []
+                if(self.attedningorhosting == "eventsThatUserIsAttending") {
+                    self.attending = document.get("eventsThatUserIsAttending") as? [String] ?? []
+                } else {
+                    self.attending = document.get("eventsThatUserIsHosting") as? [String] ?? []
+                }
                 if(self.attending.isEmpty) {
                     self.eventTitleLabel.isHidden = true
                     self.eventDateLabel.isHidden = true
                     self.eventUsernameLabel.isHidden = true
                     self.imageView.isHidden = true
+                    self.profilePicMini.isHidden = true
                     self.noEventsToDisplayLabel.isHidden = false
                 } else {
+                    self.eventTitleLabel.isHidden = false
+                    self.eventDateLabel.isHidden = false
+                    self.eventUsernameLabel.isHidden = false
+                    self.imageView.isHidden = false
+                    self.profilePicMini.isHidden = false
                     self.noEventsToDisplayLabel.isHidden = true
                     self.db.collection("events").document(self.attending[self.currEventToDisplay]).getDocument { (document, error) in
                         if let error = error {
@@ -97,13 +118,13 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
                             return
                         }
                         if let document = document, document.exists {
+                            self.selectedEvent = document.get("eventID") as? String ?? ""
                             if let base64String = document.get("eventPic") as? String {
                                 // Convert the Base64 string to UIImage
                                 
                                 if let image = self.decodeBase64ToImage(base64String) {
-                                    self.imageView.image = image // Set the decoded image in an UIImageView
+                                    self.imageView.image = image
                                     self.imageView.contentMode = .scaleAspectFill
-//                                    self.addGradientOverlay(to: self.imageView)
                                 }
                             }
                             
@@ -236,6 +257,17 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         }
     }
     
+    @objc func buttonTapped() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        if let segueVC = storyboard.instantiateViewController(withIdentifier: "SingleEventViewController") as? SingleEventViewController {
+            segueVC.currEventID = selectedEvent
+            segueVC.didIComeFromProfilePage = true
+            segueVC.modalPresentationStyle = .popover
+            self.present(segueVC, animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func nextButtonPushed(_ sender: Any) {
         if(attending.count != currEventToDisplay + 1){
             currEventToDisplay = currEventToDisplay + 1
@@ -332,27 +364,13 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             
         switch sender.selectedSegmentIndex {
             case 0:
-            db.collection("users").document(userId).getDocument(source: .default) { (document, error) in
-                if let error = error {
-                    print("Error retrieving document: \(error.localizedDescription)")
-                    return
-                }
-                if let document = document, document.exists {
-                    self.attending = document.get("eventsThatUserIsAttending") as? [String] ?? []
-                    
-                }
-            }
+            currEventToDisplay = 0
+            attedningorhosting = "eventsThatUserIsAttending"
+            setUp()
             case 1:
-            db.collection("users").document(userId).getDocument(source: .default) { (document, error) in
-                if let error = error {
-                    print("Error retrieving document: \(error.localizedDescription)")
-                    return
-                }
-                if let document = document, document.exists {
-                    self.hosting = document.get("eventsThatUserIsHosting") as? [String] ?? []
-                    
-                }
-            }
+            currEventToDisplay = 0
+            attedningorhosting = "eventsThatUserIsHosting"
+            setUp()
             default:
                 break
         }

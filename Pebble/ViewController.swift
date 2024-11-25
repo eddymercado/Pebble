@@ -20,7 +20,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
     let profilePageSegueIdentifier = "ProfilePageSegueIdentifier"
     let createEventsSegueIdentifier = "createEventsSegueIdentifier"
     let db = Firestore.firestore()
-
+    var eventsIamAttending: [String] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
@@ -29,12 +30,25 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
         Auth.auth().addStateDidChangeListener { [weak self] auth, user in
             guard let self = self else { return }
             
-            // Refresh `curruser` and fetch events when auth state changes
             if let curruser = user?.uid {
-//                print("Current user ID: \(curruser)")
                 self.fetchAllEvents()
             } else {
-//                print("No user logged in")
+                eventsList.removeAll()
+                self.collectionView.reloadData()
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+
+        Auth.auth().addStateDidChangeListener { [weak self] auth, user in
+            guard let self = self else { return }
+            if let curruser = user?.uid {
+                self.fetchAllEvents()
+            } else {
                 eventsList.removeAll()
                 self.collectionView.reloadData()
             }
@@ -42,38 +56,55 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
     }
     
     func fetchAllEvents() {
-        
-        db.collection("events").getDocuments { (querySnapshot, error) in
-            
-            guard let curruser = Auth.auth().currentUser?.uid else { return }
 
+        
+        guard let curruser = Auth.auth().currentUser?.uid else { return }
+        
+        db.collection("users").document(curruser).getDocument(source: .default) { (document, error) in
             if let error = error {
-                print("Error fetching documents: \(error)")
-            } else {
-                // Clear eventsList to avoid duplications
-                eventsList.removeAll()
+                print("Error retrieving document: \(error.localizedDescription)")
+                return
+            }
+            
+            if let document = document, document.exists {
+                self.eventsIamAttending = document.get("eventsThatUserIsAttending") as? [String] ?? []
+                print("here1")
+                print(self.eventsIamAttending)
                 
-                // Loop through each document in the collection
-                for document in querySnapshot!.documents {
-                    // Assuming each document has a field "name" or "title" of type String
-                    if let eventID = document.get("eventID") as? String {
-                        // maybe sort by sometihng !!
-                        if let userId = document.get("hostId") as? String, userId != curruser {
-                            print("hostId " + userId)
-                            print("curruserId " + curruser)
-                            eventsList.append(eventID) // Add event name to the array
+                self.db.collection("events").getDocuments { (querySnapshot, error) in
+                    if let error = error {
+                        print("Error fetching documents: \(error)")
+                    } else {
+                        // Clear eventsList to avoid duplications
+                        eventsList.removeAll()
+                        
+                        // Loop through each document in the collection
+                        for document in querySnapshot!.documents {
+                            // Assuming each document has a field "name" or "title" of type String
+                            if let eventID = document.get("eventID") as? String {
+                                print(self.eventsIamAttending)
+                                if(!self.eventsIamAttending.contains(eventID)) {
+                                    // maybe sort by sometihng !!
+                                    if let userId = document.get("hostId") as? String, userId != curruser {
+                                        eventsList.append(eventID) // Add event name to the array
+                                    }
+                                }
+                            }
+                        }
+                        // Print or use the array as needed
+                        print("All events: \(eventsList)")
+                        
+                        // Reload the collection view or table view if you need to display data
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
                         }
                     }
                 }
-                // Print or use the array as needed
-                print("All events: \(eventsList)")
                 
-                // Reload the collection view or table view if you need to display data
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
             }
         }
+        
+
     }
     
     func createdEvent(_ event: String) {

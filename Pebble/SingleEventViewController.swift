@@ -37,14 +37,16 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
     var currEventID = ""
     var hostName = ""
     var currNum = 0
+    var didIComeFromProfilePage = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         updateUI()
-        // assume this works
-        guard let currUser = Auth.auth().currentUser?.uid else { return }
-        if(currUser != eventHost.text) {
-            deleteEvent.isHidden = true
+        if(didIComeFromProfilePage) {
+            RSVPButtonPressedCheck = true
+            self.goingOrNotLabel.text = "You are now attending this event !"
+            self.rsvpbutton.setTitle("Leave", for: .normal)
         }
     }
     
