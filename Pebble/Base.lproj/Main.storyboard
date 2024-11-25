@@ -77,7 +77,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="eventDateLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lR8-N9-juB">
-                                                    <rect key="frame" x="8" y="155" width="162" height="15"/>
+                                                    <rect key="frame" x="8" y="155" width="165" height="15"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="165" id="2iV-Ar-Xuy"/>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="15" id="bq8-L7-sXd"/>
@@ -654,6 +654,7 @@
                         <outlet property="backupInterestsStackView" destination="nh9-kB-VPq" id="Xac-ra-ooi"/>
                         <outlet property="bioLabel" destination="Vm1-zH-ZyL" id="KrZ-Oo-bv8"/>
                         <outlet property="eventDateLabel" destination="wxk-BJ-UN4" id="uSd-Ep-iJ9"/>
+                        <outlet property="eventSegmentLabel" destination="YMb-b7-Z1D" id="O6q-yQ-ZFh"/>
                         <outlet property="eventTitleLabel" destination="ieV-RJ-sQE" id="zZF-Dg-L9h"/>
                         <outlet property="eventUsernameLabel" destination="8qo-6n-Xil" id="TYJ-Vm-kRu"/>
                         <outlet property="imageView" destination="Kms-lc-qQZ" id="Q8q-vN-rhK"/>

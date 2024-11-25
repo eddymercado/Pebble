@@ -13,7 +13,7 @@ import FirebaseFirestoreInternal
 // Ensure eventsList is properly initialized
 var eventsList: [String] = []
 
-class ViewController: UIViewController, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class ViewController: UIViewController, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIPopoverPresentationControllerDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -130,19 +130,45 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
         return cell
     }
     
+    func presentSingleEventVC(selectedEvent: String) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        if let segueVC = storyboard.instantiateViewController(withIdentifier: "SingleEventViewController") as? SingleEventViewController {
+            segueVC.currEventID = selectedEvent
+            segueVC.modalPresentationStyle = .popover
+            
+            // Set the popover's delegate to self
+            if let popoverController = segueVC.popoverPresentationController {
+                popoverController.delegate = self
+            }
+            
+            self.present(segueVC, animated: true, completion: nil)
+        }
+    }
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        
+        collectionView.dataSource = self
+        collectionView.delegate = self
+
+        Auth.auth().addStateDidChangeListener { [weak self] auth, user in
+            guard let self = self else { return }
+            if let curruser = user?.uid {
+                self.fetchAllEvents()
+            } else {
+                eventsList.removeAll()
+                self.collectionView.reloadData()
+            }
+        }
+    }
+    
     @objc func cellTapped(_ gesture: UITapGestureRecognizer) {
         if let cell = gesture.view as? UICollectionViewCell,
            let indexPath = collectionView.indexPath(for: cell) {
             print("Cell tapped at index: \(indexPath.item)")
             let selectedEvent = eventsList[indexPath.item]
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-            if let segueVC = storyboard.instantiateViewController(withIdentifier: "SingleEventViewController") as? SingleEventViewController {
-                segueVC.currEventID = selectedEvent
-                segueVC.modalPresentationStyle = .popover
-                self.present(segueVC, animated: true, completion: nil)
-            }
+            presentSingleEventVC(selectedEvent: selectedEvent)
         }
     }
 

@@ -10,7 +10,7 @@ import FirebaseAuth
 import FirebaseFirestoreInternal
 import FirebaseCore
 
-class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIPopoverPresentationControllerDelegate {
     
     var delegate: ViewController!
     let eventCellIdentifier = "EventCell"
@@ -32,6 +32,7 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var bioLabel: UILabel!
     
+    @IBOutlet weak var eventSegmentLabel: UISegmentedControl!
     @IBOutlet weak var eventUsernameLabel: UILabel!
     @IBOutlet weak var profilePicMini: UIImageView!
     @IBOutlet weak var eventDateLabel: UILabel!
@@ -76,6 +77,7 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        eventSegmentLabel.selectedSegmentIndex = 0
         attedningorhosting = "eventsThatUserIsAttending"
         currEventToDisplay = 0
         setUp()
@@ -160,7 +162,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
                             self.eventUsernameLabel.textColor = UIColor.white
                             self.eventTitleLabel.textColor = UIColor.white
                             self.eventDateLabel.textColor = UIColor.white
-                            
                             
                             
                         }
@@ -258,14 +259,15 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
     @objc func buttonTapped() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
-        if let segueVC = storyboard.instantiateViewController(withIdentifier: "SingleEventViewController") as? SingleEventViewController {
-            segueVC.currEventID = selectedEvent
-            segueVC.didIComeFromProfilePage = true
-            segueVC.modalPresentationStyle = .popover
-            self.present(segueVC, animated: true, completion: nil)
-        }
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//
+//        if let segueVC = storyboard.instantiateViewController(withIdentifier: "SingleEventViewController") as? SingleEventViewController {
+//            segueVC.currEventID = selectedEvent
+//            segueVC.didIComeFromProfilePage = true
+//            segueVC.modalPresentationStyle = .popover
+//            self.present(segueVC, animated: true, completion: nil)
+//        }
+        presentSingleEventVC(selectedEvent: selectedEvent)
     }
     
     @IBAction func nextButtonPushed(_ sender: Any) {
@@ -447,6 +449,30 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         stackView.distribution = .fillProportionally
         return stackView
     }
+    
+    func presentSingleEventVC(selectedEvent: String) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        if let segueVC = storyboard.instantiateViewController(withIdentifier: "SingleEventViewController") as? SingleEventViewController {
+            segueVC.currEventID = selectedEvent
+            segueVC.didIComeFromProfilePage = true
+            currEventToDisplay = currEventToDisplay - 1
+            segueVC.modalPresentationStyle = .popover
+            
+            // Set the popover's delegate to self
+            if let popoverController = segueVC.popoverPresentationController {
+                popoverController.delegate = self
+            }
+            
+            self.present(segueVC, animated: true, completion: nil)
+        }
+    }
+    
+    // here
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        setUp()
+    }
+    
     
     func fetchInterestsFromFirestore() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
