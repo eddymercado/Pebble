@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import FirebaseFirestoreInternal
+import FirebaseCore
 
 class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
@@ -17,33 +18,163 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     let db = Firestore.firestore()
 
     // Sample data for events
+    var eventsToBeDisplayed: [String] = []
     var events = [
-//        ["date": "Oct 26", "name": "Halloween Party", "host": "John Doe", "location": "1234 Point North Avenue, Austin, TX"],
         ["image": "cultural_gathering_image"]
-        // Add more events here
     ]
-
+    @IBOutlet weak var noEventsToDisplayLabel: UILabel!
+    
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var profilePic: UIImageView!
-    @IBOutlet weak var eventSegmentView: UIView!
-    @IBOutlet weak var myEventSegmentView: UIView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var interestsStackView: UIStackView!
     @IBOutlet weak var backupInterestsStackView: UIStackView!
     @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var bioLabel: UILabel!
     
+    @IBOutlet weak var eventUsernameLabel: UILabel!
+    @IBOutlet weak var profilePicMini: UIImageView!
+    @IBOutlet weak var eventDateLabel: UILabel!
+    
+    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var eventTitleLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
+    var hosting: [String] = []
+    var attending: [String] = []
+    var currEventToDisplay = 0
     override func viewDidLoad() {
         super.viewDidLoad()
+        currEventToDisplay = 0
+        if let image = UIImage(named: "rightarrow") {
+            let scaledImage = UIGraphicsImageRenderer(size: CGSize(width: 30, height: 30)).image { _ in
+                image.draw(in: CGRect(origin: .zero, size: CGSize(width: 30, height: 30)))
+            }
+            nextButton.setImage(scaledImage, for: .normal)
+        }
+        if let image = UIImage(named: "leftarrow") {
+            let scaledImage = UIGraphicsImageRenderer(size: CGSize(width: 30, height: 30)).image { _ in
+                image.draw(in: CGRect(origin: .zero, size: CGSize(width: 30, height: 30)))
+            }
+            backButton.setImage(scaledImage, for: .normal)
+        }
+        setUp()
         fetchInterestsFromFirestore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        currEventToDisplay = 0
+        setUp()
         setupProfileInfo() // Ensure profile data is updated
         fetchInterestsFromFirestore()
+    }
+    
+    func setUp() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        db.collection("users").document(userId).getDocument(source: .default) { (document, error) in
+            if let error = error {
+                print("Error retrieving document: \(error.localizedDescription)")
+                return
+            }
 
+            if let document = document, document.exists {
+                self.attending = document.get("eventsThatUserIsAttending") as? [String] ?? []
+                if(self.attending.isEmpty) {
+                    self.eventTitleLabel.isHidden = true
+                    self.eventDateLabel.isHidden = true
+                    self.eventUsernameLabel.isHidden = true
+                    self.imageView.isHidden = true
+                    self.noEventsToDisplayLabel.isHidden = false
+                } else {
+                    self.noEventsToDisplayLabel.isHidden = true
+                    self.db.collection("events").document(self.attending[self.currEventToDisplay]).getDocument { (document, error) in
+                        if let error = error {
+                            print("Error retrieving document: \(error.localizedDescription)")
+                            return
+                        }
+                        if let document = document, document.exists {
+                            if let base64String = document.get("eventPic") as? String {
+                                // Convert the Base64 string to UIImage
+                                
+                                if let image = self.decodeBase64ToImage(base64String) {
+                                    self.imageView.image = image // Set the decoded image in an UIImageView
+                                    self.imageView.contentMode = .scaleAspectFill
+//                                    self.addGradientOverlay(to: self.imageView)
+                                }
+                            }
+                            
+                            if let eventTitle = document.get("title") as? String {
+                                self.eventTitleLabel.text = eventTitle
+                            }
+                            if let timestamp = document.get("date") as? Timestamp {
+                                let eventDate = timestamp.dateValue()
+                                self.eventDateLabel.text = DateFormatter.localizedString(from: eventDate, dateStyle: .medium, timeStyle: .none)
+                            }
+                            if let eventUsername = document.get("hostUsername") as? String {
+                                self.eventUsernameLabel.text = eventUsername
+                            }
+                            
+                            if let image = document.get("hostPfp") as? String {
+                                if let profilePic = self.decodeBase64ToImage(image) {
+                                    self.profilePicMini.image = profilePic
+                                }
+                            }
+                            // Set profile image styling
+                            self.profilePicMini.layer.cornerRadius = self.profilePicMini.frame.height / 2
+                            self.profilePicMini.clipsToBounds = true
+                            self.profilePicMini.contentMode = .scaleAspectFill
+
+                            // Set event image styling
+                            self.imageView.contentMode = .scaleAspectFill
+                            self.imageView.layer.cornerRadius = 12
+                            self.imageView.clipsToBounds = true
+
+                            // Add gradient overlay for readability
+                            self.addGradientOverlay(to: self.imageView)
+                            
+                            self.eventUsernameLabel.textColor = UIColor.white
+                            self.eventTitleLabel.textColor = UIColor.white
+                            self.eventDateLabel.textColor = UIColor.white
+                            
+                            
+                            
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
+
+    func addGradientOverlay(to imageView: UIImageView) {
+        // Remove any existing gradient layers to prevent duplicates
+        imageView.layer.sublayers?.removeAll(where: { $0 is CAGradientLayer })
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = imageView.bounds
+        gradientLayer.colors = [
+            UIColor.black.withAlphaComponent(0.7).cgColor,
+            UIColor.clear.cgColor
+        ]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 1.0) // Starts at the bottom
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)   // Fades up halfway
+        gradientLayer.cornerRadius = imageView.layer.cornerRadius
         
-
+        imageView.layer.addSublayer(gradientLayer)
+        
+        let gradientLayer2 = CAGradientLayer()
+        gradientLayer2.frame = imageView.bounds
+        gradientLayer2.colors = [
+            UIColor.black.withAlphaComponent(0.7).cgColor,
+            UIColor.clear.cgColor
+        ]
+        gradientLayer2.locations = [0.0, 1.0]
+        gradientLayer2.startPoint = CGPoint(x: 0.5, y: 0) // Starts at the top
+        gradientLayer2.endPoint = CGPoint(x: 0.5, y: 0.5)   // Fades down halfway
+        gradientLayer2.cornerRadius = imageView.layer.cornerRadius
+        
+        imageView.layer.addSublayer(gradientLayer2)
     }
     
     func setupProfileInfo() {
@@ -91,6 +222,20 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
                 print("Document does not exist")
             }
             
+        }
+    }
+    
+    @IBAction func nextButtonPushed(_ sender: Any) {
+        if(attending.count != currEventToDisplay + 1){
+            currEventToDisplay = currEventToDisplay + 1
+            setUp()
+        }
+        
+    }
+    @IBAction func backButtonPushed(_ sender: Any) {
+        if(currEventToDisplay != 0){
+            currEventToDisplay = currEventToDisplay - 1
+            setUp()
         }
     }
     
@@ -169,14 +314,41 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     // Event Segment Changer
     @IBAction func eventSegment(_ sender: UISegmentedControl) {
+  
+        
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+            
         switch sender.selectedSegmentIndex {
             case 0:
-            self.view.bringSubviewToFront(eventSegmentView)
+            db.collection("users").document(userId).getDocument(source: .default) { (document, error) in
+                if let error = error {
+                    print("Error retrieving document: \(error.localizedDescription)")
+                    return
+                }
+                if let document = document, document.exists {
+                    self.attending = document.get("eventsThatUserIsAttending") as? [String] ?? []
+                    
+                }
+            }
             case 1:
-            self.view.bringSubviewToFront(myEventSegmentView)
+            db.collection("users").document(userId).getDocument(source: .default) { (document, error) in
+                if let error = error {
+                    print("Error retrieving document: \(error.localizedDescription)")
+                    return
+                }
+                if let document = document, document.exists {
+                    self.hosting = document.get("eventsThatUserIsHosting") as? [String] ?? []
+                    
+                }
+            }
             default:
                 break
         }
+    }
+    
+    func putTheRightEventToBeDisplyed() {
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
