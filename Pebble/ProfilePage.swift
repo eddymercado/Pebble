@@ -39,9 +39,13 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var eventTitleLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var backgroundPic: UIImageView!
+    
+    
     var hosting: [String] = []
     var attending: [String] = []
     var currEventToDisplay = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         currEventToDisplay = 0
@@ -193,6 +197,13 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             
             // Maintain aspect fill for the image
             self.profilePic.contentMode = .scaleAspectFill
+            
+            // Load background picture
+            if let backgroundBase64String = document?.get("backgroundPic") as? String,
+               let backgroundImage = self.decodeBase64ToImage(backgroundBase64String) {
+                self.backgroundPic.image = backgroundImage
+                self.backgroundPic.contentMode = .scaleAspectFill
+            }
             
             if let document = document, document.exists {
 
@@ -373,7 +384,7 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             let label = UILabel()
             label.text = " \(interest) "
             label.textAlignment = .center
-            label.backgroundColor = UIColor.systemGreen
+            label.backgroundColor = UIColor(red: 42/255, green: 102/255, blue: 54/255, alpha: 1)
             label.textColor = .white
             label.font = UIFont.systemFont(ofSize: 12)
             label.layer.cornerRadius = 6

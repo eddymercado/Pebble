@@ -19,7 +19,7 @@ class eventsImAttendingViewController: UIViewController {
     @IBOutlet weak var eventUsernameLabel: UILabel!
     @IBOutlet weak var profilePicMini: UIImageView!
     
-    var eventsNeedToBePopluated: [String] = []
+    var eventsNeedToBePopulated: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,14 +33,13 @@ class eventsImAttendingViewController: UIViewController {
 
         // populate for inital view
 
-        print("here2")
-        print(self.eventsNeedToBePopluated)
-        db.collection("events").document(self.eventsNeedToBePopluated[0]).getDocument { (document, error) in
+        print(self.eventsNeedToBePopulated)
+        db.collection("events").document(self.eventsNeedToBePopulated[0]).getDocument { (document, error) in
             if let error = error {
                 print("Error retrieving document: \(error.localizedDescription)")
                 return
             }
-                    print(self.eventsNeedToBePopluated)
+                    print(self.eventsNeedToBePopulated)
             if let document = document, document.exists {
                 
                 if let base64String = document.get("eventPic") as? String {
@@ -79,19 +78,19 @@ class eventsImAttendingViewController: UIViewController {
             }
 
             if let document = document, document.exists {
-                self.eventsNeedToBePopluated = document.get("eventsThatUserIsAttending") as? [String] ?? []
+                self.eventsNeedToBePopulated = document.get("eventsThatUserIsAttending") as? [String] ?? []
                 print("here4")
-                print(self.eventsNeedToBePopluated)
+                print(self.eventsNeedToBePopulated)
             }
         }
         
-        db.collection("events").document(self.eventsNeedToBePopluated[0]).getDocument { (document, error) in
+        db.collection("events").document(self.eventsNeedToBePopulated[0]).getDocument { (document, error) in
             if let error = error {
                 print("Error retrieving document: \(error.localizedDescription)")
                 return
             }
             print("here9")
-            print(self.eventsNeedToBePopluated)
+            print(self.eventsNeedToBePopulated)
         }
     }
     func decodeBase64ToImage(_ base64String: String) -> UIImage? {
