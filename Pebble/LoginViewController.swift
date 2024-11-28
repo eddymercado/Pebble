@@ -76,10 +76,10 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
     
     @IBAction func signUpButton(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil) // Assuming SignUpViewController is in Main storyboard
-        if let signUpVC = storyboard.instantiateViewController(withIdentifier: "SignUpInfoVC") as? SignUpInfoVC {
-            // This ensures that the navigation is pushed and remains full screen
-            self.navigationController?.pushViewController(signUpVC, animated: true)
-        }
+//        if let signUpVC = storyboard.instantiateViewController(withIdentifier: "SignUpInfoVC") as? SignUpInfoVC {
+//            // This ensures that the navigation is pushed and remains full screen
+//            self.navigationController?.pushViewController(signUpVC, animated: true)
+//        }
     }
     
 

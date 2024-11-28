@@ -137,7 +137,8 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                 "hostId": userId,
                 "eventPic": "",
                 "eventID": "",
-                "currentnumberofattendees": 0
+                "currentnumberofattendees": 1,
+                "peopleAttending": [userId]   // Add the host to the peopleAttending list
             ]
             
             if let coordinate = self.selectedLocation {

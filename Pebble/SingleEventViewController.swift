@@ -33,7 +33,6 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
 //    var currUser = ""
     //var numberOfGuests, increase when someone RSVPs, decrease when leave
 
-    @IBOutlet weak var goingOrNotLabel: UILabel!
     var currEventID = ""
     var hostName = ""
     var currNum = 0
@@ -45,7 +44,6 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
         updateUI()
         if(didIComeFromProfilePage) {
             RSVPButtonPressedCheck = true
-            self.goingOrNotLabel.text = "You are now attending this event !"
             self.rsvpbutton.setTitle("Leave", for: .normal)
         }
     }
@@ -151,11 +149,14 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
             
             // IS RSVP
             if(self.RSVPButtonPressedCheck) {
-                self.goingOrNotLabel.text = "You are now attending this event !"
                 self.rsvpbutton.setTitle("Leave", for: .normal)
                 self.eventsThatUserIsAttending.append(self.currEventID)
                 self.db.collection("users").document(userId).updateData(["eventsThatUserIsAttending": self.eventsThatUserIsAttending])
                 self.db.collection("events").document(self.currEventID).updateData(["currentnumberofattendees": self.checkNumOfAttendees() + 1])
+                // Add user ID to the list of RSVPed users
+                self.db.collection("events").document(self.currEventID).updateData([
+                    "peopleAttending": FieldValue.arrayUnion([userId])
+                ])
             }
             
             // UN RSVP
@@ -167,10 +168,13 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
                     if let index = self.eventsThatUserIsAttending.firstIndex(of: self.currEventID) {
                         self.eventsThatUserIsAttending.remove(at: index)
                     }
-                    self.goingOrNotLabel.text = ""
                     self.rsvpbutton.setTitle("RSVP", for: .normal)
                     self.db.collection("users").document(userId).updateData(["eventsThatUserIsAttending": self.eventsThatUserIsAttending])
                     self.db.collection("events").document(self.currEventID).updateData(["currentnumberofattendees": self.checkNumOfAttendees() - 1])
+                    // Remove user ID from the list of RSVPed users
+                    self.db.collection("events").document(self.currEventID).updateData([
+                        "rsvpUsers": FieldValue.arrayRemove([userId])
+                    ])
                 }
                 
                 let noAction = UIAlertAction(title: "No", style: .cancel)
@@ -199,5 +203,13 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
         return currNum
     }
     
-
+    // Shows list of people attending event
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "SegueToRSVPList" {
+            if let destinationVC = segue.destination as? RSVPTableViewController {
+                destinationVC.eventID = currEventID // Pass the event ID
+            }
+        }
+    }
+    
 }
