@@ -19,14 +19,21 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var eventTitle: UILabel!
     @IBOutlet weak var eventHost: UILabel!
-    @IBOutlet weak var eventDate: UILabel!
-    @IBOutlet weak var eventTime: UILabel!
+    @IBOutlet weak var eventMonth: UILabel!
+    @IBOutlet weak var eventDay: UILabel!
+    @IBOutlet weak var eventDayName: UILabel!
+    @IBOutlet weak var eventStartTime: UILabel!
+    @IBOutlet weak var eventEndTime: UILabel!
+    @IBOutlet weak var activityType: UILabel!
     @IBOutlet weak var eventDescription: UILabel!
     @IBOutlet weak var eventLocation: UILabel!
     @IBOutlet weak var rsvpbutton: UIButton!
     @IBOutlet weak var eventPic: UIImageView!
-    @IBOutlet weak var activityType: UIButton!
     @IBOutlet weak var deleteEvent: UIButton!
+    
+    @IBOutlet weak var firstRectangle: UIView!
+    @IBOutlet weak var secondRectangle: UIView!
+    
     var RSVPButtonPressedCheck  = false
     var eventsThatUserIsAttending: [String] = []
     let db = Firestore.firestore()
@@ -93,12 +100,47 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
                 if let eventHost = document.get("hostUsername") as? String {
                     self.eventHost.text = eventHost
                 }
-                if let eventDate = document.get("date") as? String {
-                    self.eventDate.text = eventDate
+                
+                if let timestamp = document.get("date") as? Timestamp {
+                    let date = timestamp.dateValue()
+                    let calendar = Calendar.current
+
+                    // Extract individual components
+                    let month = calendar.component(.month, from: date) // Numeric month (e.g., 11 for November)
+                    let dayInt = calendar.component(.day, from: date)     // Day of the month (e.g., 27)
+                    let day = String(dayInt)
+                    let year = calendar.component(.year, from: date)   // Full year (e.g., 2024)
+                    
+                    // Get abbreviated month name
+                    let monthAbbreviation = calendar.shortMonthSymbols[month - 1] // "Nov" for 11
+                    
+                    // Get the day name (e.g., "Saturday", "Friday")
+                    let dayFormatter = DateFormatter()
+                    dayFormatter.dateFormat = "EEEE" // Full day name
+                    let dayName = dayFormatter.string(from: date)
+                    
+                    // set date labels
+                    self.eventMonth.text = monthAbbreviation
+                    self.eventDay.text = day
+                    self.eventDayName.text = dayName
                 }
-                if let eventTime = document.get("startTime") as? String {
-                    self.eventTime.text = eventTime
+                
+                // convert event start time from timestamp to string
+                if let timestamp = document.get("startTime") as? Timestamp {
+                    let time = timestamp.dateValue()
+                    let formatter = DateFormatter()
+                    formatter.timeStyle = .short // Customize the format
+                    self.eventStartTime.text = formatter.string(from: time)
                 }
+                
+                // convert event end time from timestamp to string
+                if let timestamp = document.get("endTime") as? Timestamp {
+                    let time = timestamp.dateValue()
+                    let formatter = DateFormatter()
+                    formatter.timeStyle = .short // Customize the format
+                    self.eventEndTime.text = formatter.string(from: time)
+                }
+                
                 if let eventDescription = document.get("description") as? String {
                     self.eventDescription.text = eventDescription
                 }
@@ -114,9 +156,18 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
                     self.currNum = currNum
                 }
                 if let currAct = document.get("activities") as? String {
-                    self.activityType.setTitle(currAct, for: .normal)
+                    self.activityType.text = currAct
                 }
                 
+                // round out edges of UI
+                self.activityType.layer.cornerRadius = 10
+                self.activityType.layer.masksToBounds = true
+                self.firstRectangle.layer.cornerRadius = 10
+                self.firstRectangle.layer.masksToBounds = true
+                self.secondRectangle.layer.cornerRadius = 10
+                self.secondRectangle.layer.masksToBounds = true
+                self.mapView.layer.cornerRadius = 10
+                self.mapView.layer.masksToBounds = true
             } else {
                 print("Document does not exist")
             }

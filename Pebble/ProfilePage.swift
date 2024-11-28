@@ -259,14 +259,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
     @objc func buttonTapped() {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//
-//        if let segueVC = storyboard.instantiateViewController(withIdentifier: "SingleEventViewController") as? SingleEventViewController {
-//            segueVC.currEventID = selectedEvent
-//            segueVC.didIComeFromProfilePage = true
-//            segueVC.modalPresentationStyle = .popover
-//            self.present(segueVC, animated: true, completion: nil)
-//        }
         presentSingleEventVC(selectedEvent: selectedEvent)
     }
     
@@ -404,8 +396,8 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             let label = UILabel()
             label.text = " \(interest) "
             label.textAlignment = .center
-            label.backgroundColor = UIColor(red: 42/255, green: 102/255, blue: 54/255, alpha: 1)
-            label.textColor = .white
+            label.backgroundColor = UIColor(red: 195/255, green: 228/255, blue: 214/255, alpha: 1)
+            label.textColor = UIColor(red: 42/255, green: 102/255, blue: 54/255, alpha: 1)
             label.font = UIFont.systemFont(ofSize: 12)
             label.layer.cornerRadius = 6
             label.clipsToBounds = true
@@ -457,13 +449,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             segueVC.currEventID = selectedEvent
             segueVC.didIComeFromProfilePage = true
             currEventToDisplay = currEventToDisplay - 1
-            segueVC.modalPresentationStyle = .popover
-            
-            // Set the popover's delegate to self
-            if let popoverController = segueVC.popoverPresentationController {
-                popoverController.delegate = self
-            }
-            
             self.present(segueVC, animated: true, completion: nil)
         }
     }

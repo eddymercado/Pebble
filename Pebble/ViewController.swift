@@ -16,6 +16,7 @@ var eventsList: [String] = []
 class ViewController: UIViewController, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIPopoverPresentationControllerDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var logoImage: UIImageView!
     
     let profilePageSegueIdentifier = "ProfilePageSegueIdentifier"
     let createEventsSegueIdentifier = "createEventsSegueIdentifier"
@@ -37,6 +38,9 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
                 self.collectionView.reloadData()
             }
         }
+        
+        self.logoImage.layer.cornerRadius = 5
+        self.logoImage.layer.masksToBounds = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -135,12 +139,12 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
         
         if let segueVC = storyboard.instantiateViewController(withIdentifier: "SingleEventViewController") as? SingleEventViewController {
             segueVC.currEventID = selectedEvent
-            segueVC.modalPresentationStyle = .popover
-            
-            // Set the popover's delegate to self
-            if let popoverController = segueVC.popoverPresentationController {
-                popoverController.delegate = self
-            }
+//            segueVC.modalPresentationStyle = .popover
+//            
+//            // Set the popover's delegate to self
+//            if let popoverController = segueVC.popoverPresentationController {
+//                popoverController.delegate = self
+//            }
             
             self.present(segueVC, animated: true, completion: nil)
         }
