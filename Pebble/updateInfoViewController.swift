@@ -109,7 +109,6 @@ class updateInfoViewController: UIViewController, UINavigationControllerDelegate
     
     
     @IBAction func saveUpdatedProfileInfoButton(_ sender: Any) {
-        
         guard let userId = Auth.auth().currentUser?.uid else { return }
         db.collection("users").document(userId).updateData([
             "email": updateEmailAddressTextField.text ?? "",
@@ -123,7 +122,6 @@ class updateInfoViewController: UIViewController, UINavigationControllerDelegate
                 self.successfulOrNot.text = "Profile updated successfully!"
             }
         }
-        
     }
     
     @IBAction func deleteAccountButtonPressed(_ sender: Any) {

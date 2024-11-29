@@ -73,12 +73,6 @@ class SignUpInfoVC: UIViewController {
                     if let error = error {
                         self.showAlert(title: "Error", message: "\(error.localizedDescription)")
                     } else {
-//                        Analytics.setUserProperty(zipCode, forName: "Zip Code")
-//                        Analytics.setUserProperty(phoneNumber, forName: "Phone Number")
-//                        Analytics.setUserProperty(dateOfBirth, forName: "Date of Birth")
-//                        Analytics.setUserProperty(username, forName: "Username")
-//                        Analytics.setUserProperty(firstName, forName: "First Name")
-//                        Analytics.setUserProperty(lastName, forName: "Last Name")
                         self.performSegue(withIdentifier: "signUpPageToProfilePic", sender: self)
                     }
                 }

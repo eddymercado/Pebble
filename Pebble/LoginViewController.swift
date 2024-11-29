@@ -12,9 +12,6 @@ import FirebaseFirestore
 
 let db = Firestore.firestore()
 
-    
-
-    
 class LoginViewController: UIViewController, UINavigationControllerDelegate {
 
     @IBOutlet weak var usernameField: UITextField!
@@ -35,11 +32,7 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
         usernameField.text = ""
         passwordField.text = ""
     }
-    
-    
 
-    
-    
     @IBAction func loginButton(_ sender: Any) {
         // if username is valid login/ segue to browse events
         guard let email = usernameField.text, !email.isEmpty,
@@ -76,14 +69,7 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
     
     @IBAction func signUpButton(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil) // Assuming SignUpViewController is in Main storyboard
-//        if let signUpVC = storyboard.instantiateViewController(withIdentifier: "SignUpInfoVC") as? SignUpInfoVC {
-//            // This ensures that the navigation is pushed and remains full screen
-//            self.navigationController?.pushViewController(signUpVC, animated: true)
-//        }
     }
-    
-
-
 }
 
 extension UITextField {
@@ -92,11 +78,8 @@ extension UITextField {
             button.setImage(UIImage(named: "eye"), for: .normal)
         } else {
             button.setImage(UIImage(named: "hidden"), for: .normal)
-            
         }
     }
-    
-
     
     func enablePasswordToggle(){
         let button = UIButton(type: .custom)
@@ -105,15 +88,13 @@ extension UITextField {
         button.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(button)
         NSLayoutConstraint.activate([
-            button.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8),
+            button.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12),
             button.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             button.widthAnchor.constraint(equalToConstant: 25),
             button.heightAnchor.constraint(equalToConstant: 25)
         ])
         
         button.addTarget(self, action: #selector(self.togglePasswordView), for: .touchUpInside)
-        self.rightView = button
-        self.rightViewMode = .always
     }
     
     @IBAction func togglePasswordView(_ sender: Any) {

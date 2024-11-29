@@ -23,7 +23,8 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     @IBOutlet weak var eventNumPeople: UITextField!
     @IBOutlet weak var eventImageView: UIImageView!
     @IBOutlet weak var mapView: MKMapView!
-
+    @IBOutlet weak var logoPic: UIImageView!
+    
     let db = Firestore.firestore()
     let geocoder = CLGeocoder()
     
@@ -43,6 +44,19 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
         super.viewDidLoad()
         eventLocation.delegate = self
         mapView.delegate = self
+        roundOutViews() // rounds out UI
+    }
+    
+    // rounds out elements in UI
+    func roundOutViews() {
+        eventActivityTypeButton.layer.cornerRadius = 5
+        eventActivityTypeButton.layer.masksToBounds = true
+        mapView.layer.cornerRadius = 5
+        mapView.layer.masksToBounds = true
+        eventImageView.layer.cornerRadius = 5
+        eventImageView.layer.masksToBounds = true
+        logoPic.layer.cornerRadius = 5
+        logoPic.layer.masksToBounds = true;
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

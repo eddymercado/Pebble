@@ -283,13 +283,11 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     
     @IBAction func settingsButtonClicked(_ sender: Any) {
-        print("Button tapped")
         // Create the action sheet
         let actionSheet = UIAlertController(title: "Settings", message: "Select an option to update", preferredStyle: .actionSheet)
         
         // Add actions for each setting option
         actionSheet.addAction(UIAlertAction(title: "Update Profile", style: .default, handler: { _ in
-            print("Update Profile selected")
             // Navigate to UpdateProfileVC
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "UpdateProfileViewController") as? UpdateProfileViewController {
@@ -299,7 +297,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Interests", style: .default, handler: { _ in
-//            print("Update Interests selected")
             // Perform actions for updating interests
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -311,20 +308,12 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Update Info", style: .default, handler: { _ in
-//            print("Update Info selected")
-            // Perform actions for updating info
-            // Navigate to UpdateProfileVC
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             if let updateProfileVC = storyboard.instantiateViewController(withIdentifier: "updateInfoViewController") as? updateInfoViewController {
                 updateProfileVC.modalPresentationStyle = .fullScreen
                 self.present(updateProfileVC, animated: true, completion: nil)
             }
 
-        }))
-        
-        actionSheet.addAction(UIAlertAction(title: "Update Location", style: .default, handler: { _ in
-            print("Update Location selected")
-            // Perform actions for updating location
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { _ in
@@ -339,7 +328,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
                 print("Sign out error")
             }
         }))
-
         
         // Add a cancel action
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -347,7 +335,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
         // Present the action sheet
         present(actionSheet, animated: true, completion: nil)
     }
-
     
     // Event Segment Changer
     @IBAction func eventSegment(_ sender: UISegmentedControl) {
@@ -368,10 +355,6 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             default:
                 break
         }
-    }
-    
-    func putTheRightEventToBeDisplyed() {
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

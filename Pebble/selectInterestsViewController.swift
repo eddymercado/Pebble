@@ -33,7 +33,8 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
         // set all buttons to grey
         for subview in view.subviews {
             if let button = subview as? UIButton {
-                button.backgroundColor = UIColor.systemGray2
+                button.layer.cornerRadius = 10
+                button.layer.masksToBounds = true
             }
         }
         
@@ -51,7 +52,7 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
                 self.count = interests.count
                 for title in interests {
                     if let button = self.findButton(withTitle: title, in: self.view) {
-                        button.backgroundColor = UIColor.systemGreen
+                        button.backgroundColor = UIColor(red: 195/255, green: 228/255, blue: 214/255, alpha: 1)
                         button.isSelected = true
                     } else {
                         print("Button with title \(title) not found")
@@ -106,7 +107,7 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
         if sender.isSelected {
             // If the button is already selected, deselect it
             sender.isSelected = false
-            sender.backgroundColor = UIColor.systemGray2
+            sender.backgroundColor = UIColor.white
             // Remove the last added interest since this button is being deselected
             if let index = arrayOfInterests.firstIndex(of: buttonTitle!) {
                 arrayOfInterests.remove(at: index)
@@ -116,7 +117,7 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
             // If the button is not selected, check if we can select it
             if count < 5 {
                 sender.isSelected = true
-                sender.backgroundColor = UIColor.systemGreen
+                sender.backgroundColor = UIColor(red: 195/255, green: 228/255, blue: 214/255, alpha: 1)
                 arrayOfInterests.append(buttonTitle!)
                 count += 1
             } else {
@@ -177,7 +178,6 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
         }
         
     }
-
     
     func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -185,13 +185,5 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "selectInterestToBrowseEvents" {
-//            if let destinationVC = segue.destination as? ProfilePage {
-//                destinationVC.selectedInterests = self.arrayOfInterests
-//            }
-//        }
-//    }
 
 }

@@ -71,10 +71,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
             }
             
             if let document = document, document.exists {
-                self.eventsIamAttending = document.get("eventsThatUserIsAttending") as? [String] ?? []
-                print("here1")
-                print(self.eventsIamAttending)
-                
+                self.eventsIamAttending = document.get("eventsThatUserIsAttending") as? [String] ?? []                
                 self.db.collection("events").getDocuments { (querySnapshot, error) in
                     if let error = error {
                         print("Error fetching documents: \(error)")
@@ -86,7 +83,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
                         for document in querySnapshot!.documents {
                             // Assuming each document has a field "name" or "title" of type String
                             if let eventID = document.get("eventID") as? String {
-                                print(self.eventsIamAttending)
                                 if(!self.eventsIamAttending.contains(eventID)) {
                                     // maybe sort by sometihng !!
                                     if let userId = document.get("hostId") as? String, userId != curruser {
@@ -95,8 +91,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
                                 }
                             }
                         }
-                        // Print or use the array as needed
-                        print("All events: \(eventsList)")
                         
                         // Reload the collection view or table view if you need to display data
                         DispatchQueue.main.async {
@@ -107,8 +101,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
                 
             }
         }
-        
-
     }
     
     func createdEvent(_ event: String) {
@@ -139,13 +131,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
         
         if let segueVC = storyboard.instantiateViewController(withIdentifier: "SingleEventViewController") as? SingleEventViewController {
             segueVC.currEventID = selectedEvent
-//            segueVC.modalPresentationStyle = .popover
-//            
-//            // Set the popover's delegate to self
-//            if let popoverController = segueVC.popoverPresentationController {
-//                popoverController.delegate = self
-//            }
-            
             self.present(segueVC, animated: true, completion: nil)
         }
     }
@@ -169,9 +154,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
     @objc func cellTapped(_ gesture: UITapGestureRecognizer) {
         if let cell = gesture.view as? UICollectionViewCell,
            let indexPath = collectionView.indexPath(for: cell) {
-            print("Cell tapped at index: \(indexPath.item)")
             let selectedEvent = eventsList[indexPath.item]
-
             presentSingleEventVC(selectedEvent: selectedEvent)
         }
     }
