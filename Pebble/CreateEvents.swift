@@ -12,6 +12,13 @@ import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseFirestoreInternal
 
+//used for formatDisplayAddress
+extension String {
+    func nilIfEmpty() -> String? {
+        return self.isEmpty ? nil : self
+    }
+}
+
 class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     @IBOutlet weak var eventTitle: UITextField!
     @IBOutlet weak var eventDesc: UITextField!
@@ -65,22 +72,64 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
         }
     }
     
+    // called when user taps return key
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == eventLocation {
+            // dismiss keyboard
+            textField.resignFirstResponder()
+            searchLocation()
+        }
+        return true
+    }
+    
     func searchLocation() {
-        guard let address = eventLocation.text, !address.isEmpty else { return }
+        guard let searchText = eventLocation.text, !searchText.isEmpty else { return }
         
-        geocoder.geocodeAddressString(address) { [weak self] (placemarks, error) in
-            guard let self = self else { return }
-            if let error = error {
-                print("Geocoding error: \(error.localizedDescription)")
-                return
-            }
-            guard let placemark = placemarks?.first, let location = placemark.location else {
+        // can search for landmarks, businesses, places, ex. empire state building -> gets address
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = searchText
+        request.region = mapView.region
+        
+        let search = MKLocalSearch(request: request)
+        search.start { [weak self] (response, error) in
+            guard let self = self, let mapItem = response?.mapItems.first else {
                 print("No location found")
                 return
             }
-            self.selectedLocation = location.coordinate
-            self.updateMap(with: location.coordinate)
+            self.selectedLocation = mapItem.placemark.coordinate
+            self.updateMap(with: mapItem.placemark.coordinate)
+            self.formatDisplayAddress(for: mapItem.placemark)
         }
+    }
+    
+    // make address pretty
+    func formatDisplayAddress(for placemark: MKPlacemark) {
+        let addressComponents: [String] = [
+            placemark.subThoroughfare,
+            placemark.thoroughfare,
+            placemark.locality,
+            placemark.administrativeArea,
+            placemark.postalCode,
+            placemark.country
+        ].compactMap { $0 }
+        
+        var formattedAddress = ""
+        if let streetAddress = [placemark.subThoroughfare, placemark.thoroughfare].compactMap({ $0 }).joined(separator: " ").nilIfEmpty() {
+            formattedAddress += streetAddress
+        }
+        if let city = placemark.locality {
+            formattedAddress += formattedAddress.isEmpty ? city: ", \(city)"
+        }
+        if let state = placemark.administrativeArea {
+            formattedAddress += formattedAddress.isEmpty ? state: ", \(state)"
+        }
+        if let postalCode = placemark.postalCode {
+            formattedAddress += " \(postalCode)"
+        }
+        if let country = placemark.country, country != "United States" {
+            formattedAddress += formattedAddress.isEmpty ? country: ", \(country)"
+        }
+        eventLocation.text = formattedAddress
     }
     
     func updateMap(with coordinate: CLLocationCoordinate2D) {
