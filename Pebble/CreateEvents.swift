@@ -11,6 +11,7 @@ import CoreLocation
 import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseFirestoreInternal
+import FirebaseCore
 
 //used for formatDisplayAddress
 extension String {
@@ -31,6 +32,7 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     @IBOutlet weak var eventImageView: UIImageView!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var logoPic: UIImageView!
+    @IBOutlet weak var createEventButton: UIButton!
     
     let db = Firestore.firestore()
     let geocoder = CLGeocoder()
@@ -39,6 +41,9 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     var eventsThatUserIsAttending: [String] = []
     var currNumOfAttendees = 0
     var selectedLocation: CLLocationCoordinate2D?
+    var isEditMode = false
+    var eventIDToEdit: String?
+    
     let activityTypes = [
         "⚽️ Soccer", "🏃‍♀️ Running", "📕 Reading", "🎾 Pickleball", "🥮 Celebrations",
         "🧑‍🍳 Cooking", "🎮 Gaming", "🐕 Animals", "🥾 Outdoors", "👒 Gardening",
@@ -52,7 +57,44 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
         eventLocation.delegate = self
         mapView.delegate = self
         roundOutViews() // rounds out UI
+        if isEditMode, let eventID = eventIDToEdit {
+            fetchEventData(eventID: eventID)
+            createEventButton.setTitle("Save changes", for: .normal)
+        }
     }
+    
+    //populate all text fields with existing event data from when you first created the event
+    func fetchEventData(eventID: String){
+        db.collection("events").document(eventID).getDocument {[weak self] (document, error) in guard let self = self, let document = document, document.exists else {
+            print("Error fetching event: \(error?.localizedDescription ?? "error fetching event")")
+                return
+            }
+            if let data = document.data() {
+                self.populateFields(with: data)
+            }
+        }
+    }
+    
+    // helper method to populate text fields for fetchEventData
+    func populateFields(with data: [String: Any]) {
+        eventTitle.text = data["title"] as? String
+        eventDesc.text = data["description"] as? String
+        eventDate.date = (data["date"] as? Timestamp)?.dateValue() ?? Date()
+        eventStartTime.date = (data["startTime"] as? Timestamp)?.dateValue() ?? Date()
+        eventEndTime.date = (data["endTime"] as? Timestamp)?.dateValue() ?? Date()
+        eventLocation.text = data["location"] as? String
+        eventActivityTypeButton.setTitle(data["activities"] as? String, for: .normal)
+            eventNumPeople.text = String(data["numPeople"] as? Int ?? 0)
+        if let geoPoint = data["coordinate"] as? GeoPoint {
+            selectedLocation = CLLocationCoordinate2D(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
+            updateMap(with: selectedLocation!)
+        }
+        if let eventPicString = data["eventPic"] as? String,
+           let image = decodeBase64ToImage(eventPicString) {
+            eventImageView.image = image
+        }
+    }
+    
     
     // rounds out elements in UI
     func roundOutViews() {
@@ -104,15 +146,6 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     
     // make address pretty
     func formatDisplayAddress(for placemark: MKPlacemark) {
-        let addressComponents: [String] = [
-            placemark.subThoroughfare,
-            placemark.thoroughfare,
-            placemark.locality,
-            placemark.administrativeArea,
-            placemark.postalCode,
-            placemark.country
-        ].compactMap { $0 }
-        
         var formattedAddress = ""
         if let streetAddress = [placemark.subThoroughfare, placemark.thoroughfare].compactMap({ $0 }).joined(separator: " ").nilIfEmpty() {
             formattedAddress += streetAddress
@@ -165,7 +198,44 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
         present(vc, animated: true)
     }
     
-    @IBAction func createEventBtnPressed(_ sender: UIButton) {
+    func decodeBase64ToImage(_ base64String: String) -> UIImage? {
+        guard let imageData = Data(base64Encoded: base64String) else { return nil }
+        return UIImage(data: imageData)
+    }
+    
+    func updateExistingEvent() {
+        guard let eventID = eventIDToEdit else { return }
+        
+        var updatedData: [String: Any] = [
+            "title": eventTitle.text ?? "",
+            "description": self.eventDesc.text ?? "",
+            "date": self.eventDate.date,
+            "startTime": self.eventStartTime.date,
+            "endTime": self.eventEndTime.date,
+            "location": self.eventLocation.text ?? "",
+            "activities": self.eventActivityTypeButton.currentTitle ?? "",
+            "numPeople": Int(self.eventNumPeople.text ?? "0") ?? 0,
+        ]
+        
+        if let coordinate = self.selectedLocation {
+            updatedData["coordinate"] = GeoPoint(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        }
+        
+        if let image = eventImageView.image, let imageData = image.jpegData(compressionQuality: 0.5) {
+            updatedData["eventPic"] = imageData.base64EncodedString()
+        }
+        db.collection("events").document(eventID).updateData(updatedData) {[weak self] error in
+            if let error = error {
+                print("Error updating event: \(error.localizedDescription)")
+            } else {
+                print("Event successfully updated!")
+                self?.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+     
+
+    func createNewEvent() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
         db.collection("users").document(userId).getDocument(source: .default) { (document, error) in
@@ -236,6 +306,14 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                     }
                 }
             }
+        }
+    }
+    
+    @IBAction func createEventBtnPressed(_ sender: Any) {
+        if isEditMode {
+            updateExistingEvent()
+        } else {
+            createNewEvent()
         }
     }
 }

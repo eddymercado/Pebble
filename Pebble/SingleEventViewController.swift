@@ -30,6 +30,7 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
     @IBOutlet weak var rsvpbutton: UIButton!
     @IBOutlet weak var eventPic: UIImageView!
     @IBOutlet weak var deleteEvent: UIButton!
+    @IBOutlet weak var editEventButton: UIButton!
     
     @IBOutlet weak var firstRectangle: UIView!
     @IBOutlet weak var secondRectangle: UIView!
@@ -53,8 +54,33 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
             RSVPButtonPressedCheck = true
             self.rsvpbutton.setTitle("Leave", for: .normal)
         }
+        checkIfUserIsHostForEdits()
     }
     
+    func checkIfUserIsHostForEdits() {
+        guard let currentUserID = Auth.auth().currentUser?.uid, !currEventID.isEmpty else {
+            editEventButton.isHidden = true
+            return
+        }
+        
+        db.collection("events").document(currEventID).getDocument { (document, error) in
+            if let error = error {
+                print("Error retrieving document: \(error.localizedDescription)")
+                self.editEventButton.isHidden = true
+                return
+            }
+            guard let document = document, document.exists, let hostID = document.data()?["hostId"] as? String else {
+                    self.editEventButton.isHidden = true
+                    return
+                }
+            
+            if currentUserID == hostID {
+                self.editEventButton.isHidden = false
+            } else {
+                self.editEventButton.isHidden = true
+            }
+        }
+    }
     
     func updateMap(with coordinate: CLLocationCoordinate2D) {
         //create region centered on location
@@ -173,12 +199,12 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
             }
             
         }
-        
     }
 
+    @IBAction func editEventButtonPressed(_ sender: Any) {
+        performSegue(withIdentifier: "HostEditEventSegue", sender: self)
+    }
     
-
-        
     @IBAction func RSVPButtonPressed(_ sender: Any) {
         RSVPButtonPressedCheck = !RSVPButtonPressedCheck
         
@@ -259,6 +285,11 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
         if segue.identifier == "SegueToRSVPList" {
             if let destinationVC = segue.destination as? RSVPTableViewController {
                 destinationVC.eventID = currEventID // Pass the event ID
+            }
+        } else if segue.identifier == "HostEditEventSegue" {
+            if let createEventsVC = segue.destination as? CreateEvents {
+                createEventsVC.isEditMode = true
+                createEventsVC.eventIDToEdit = currEventID
             }
         }
     }

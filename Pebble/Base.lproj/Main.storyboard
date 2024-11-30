@@ -218,15 +218,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rro-tw-MaY">
-                                <rect key="frame" x="159" y="692" width="75" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Create"/>
-                                <connections>
-                                    <action selector="createEventBtnPressed:" destination="ytu-j9-R5n" eventType="touchUpInside" id="OC0-8l-Bls"/>
-                                </connections>
-                            </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Screenshot 2024-11-28 at 10.27.48 PM.png" translatesAutoresizingMaskIntoConstraints="NO" id="axr-M3-ESi">
                                 <rect key="frame" x="16" y="532" width="360" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -244,6 +235,15 @@
                                 <rect key="frame" x="340" y="64" width="37" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rro-tw-MaY">
+                                <rect key="frame" x="113" y="693" width="166" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Create"/>
+                                <connections>
+                                    <action selector="createEventBtnPressed:" destination="ytu-j9-R5n" eventType="touchUpInside" id="QQc-Da-28m"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="3eD-m3-vKX"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -254,6 +254,7 @@
                     </tabBarItem>
                     <navigationItem key="navigationItem" id="Tqv-k3-4yk"/>
                     <connections>
+                        <outlet property="createEventButton" destination="rro-tw-MaY" id="V9M-hK-81b"/>
                         <outlet property="eventActivityTypeButton" destination="HAM-WZ-Tp0" id="zjM-OS-nTT"/>
                         <outlet property="eventDate" destination="Yvx-c0-DVT" id="cW9-e4-pgM"/>
                         <outlet property="eventDesc" destination="p5z-Dl-51Q" id="8ko-mZ-im7"/>
@@ -425,6 +426,16 @@
                                 <color key="textColor" red="0.1647058824" green="0.40000000000000002" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3pz-xQ-n4I">
+                                <rect key="frame" x="247" y="267" width="101" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Edit Event"/>
+                                <connections>
+                                    <action selector="editEventButtonPressed:" destination="rql-e6-J7q" eventType="touchUpInside" id="Dwt-IF-cox"/>
+                                    <segue destination="ytu-j9-R5n" kind="show" identifier="HostEditEventSegue" id="RUG-kG-UZi"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="h5y-pk-wan"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -439,6 +450,7 @@
                     <connections>
                         <outlet property="activityType" destination="wHZ-2i-uli" id="NHi-rG-c62"/>
                         <outlet property="deleteEvent" destination="cAl-ds-IsN" id="Auq-HT-Kc1"/>
+                        <outlet property="editEventButton" destination="3pz-xQ-n4I" id="08e-a3-Los"/>
                         <outlet property="eventDay" destination="sIx-US-1Vt" id="9td-bw-0a1"/>
                         <outlet property="eventDayName" destination="ife-1p-Z6X" id="574-1k-b4d"/>
                         <outlet property="eventDescription" destination="4C4-TH-prO" id="RxT-xp-6Ap"/>
@@ -1606,6 +1618,9 @@
             <point key="canvasLocation" x="2500" y="905.63380281690149"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="RUG-kG-UZi"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="Screenshot 2024-11-26 at 6.57.00 PM.png" width="59" height="72"/>
         <image name="Screenshot 2024-11-28 at 1.15.14 AM.png" width="190" height="83"/>
