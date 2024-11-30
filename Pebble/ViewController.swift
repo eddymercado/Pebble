@@ -17,6 +17,18 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var logoImage: UIImageView!
+    @IBOutlet weak var dropdownView: UIView!
+    @IBOutlet weak var dropdownTableView: UITableView!
+    @IBOutlet weak var dropdownHeightConstraint: NSLayoutConstraint!
+    
+    var selectedInterests: Set<String> = [] // Keep track of selected interests
+    let activityTypes = [
+        "⚽️ Soccer", "🏃‍♀️ Running", "📕 Reading", "🎾 Pickleball", "🥮 Celebrations",
+        "🧑‍🍳 Cooking", "🎮 Gaming", "🐕 Animals", "🥾 Outdoors", "👒 Gardening",
+        "🧘‍♂️ Yoga", "🍽️ Food", "🏀 Basketball", "🎨 Art", "🎓 College", "🎶 Music",
+        "📖 Writing", "📸 Photography", "🎥 Movies", "🌍 Traveling", "🏋️‍♀️ Fitness",
+        "🍩 Baking", "🎉 Parties", "🎲 Misc", "🏌️‍♀️ Golf", "🎊 Culture", "🌊 Swimming"
+    ]
     
     let profilePageSegueIdentifier = "ProfilePageSegueIdentifier"
     let createEventsSegueIdentifier = "createEventsSegueIdentifier"
@@ -41,6 +53,13 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
         
         self.logoImage.layer.cornerRadius = 5
         self.logoImage.layer.masksToBounds = true
+        
+        dropdownView.isHidden = true
+        dropdownTableView.dataSource = self
+        dropdownTableView.delegate = self
+        
+        // Register a basic UITableViewCell
+        dropdownTableView.register(UITableViewCell.self, forCellReuseIdentifier: "DropdownCell")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,6 +77,51 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
             }
         }
     }
+    
+    @IBAction func filterInterestsButtonPressed(_ sender: Any) {
+        dropdownView.isHidden.toggle() // Toggle visibility
+    }
+
+    @IBAction func applyButtonTapped(_ sender: Any) {
+        dropdownView.isHidden = true
+        filterEvents(by: Array(selectedInterests))
+    }
+    
+    func filterEvents(by interests: [String]) {
+        guard !interests.isEmpty else {
+            fetchAllEvents() // Reload all events if no interests are selected
+            return
+        }
+        
+        eventsList.removeAll() // Clear previous results
+        
+        let group = DispatchGroup()
+        
+        // Query for each selected interest individually
+        for interest in interests {
+            group.enter()
+            db.collection("events")
+                .whereField("activities", isEqualTo: interest) // Match single interest field
+                .getDocuments { (querySnapshot, error) in
+                    if let error = error {
+                        print("Error filtering events: \(error.localizedDescription)")
+                    } else {
+                        for document in querySnapshot!.documents {
+                            if let eventID = document.get("eventID") as? String {
+                                eventsList.append(eventID)
+                            }
+                        }
+                    }
+                    group.leave()
+                }
+        }
+        
+        // Reload collection view after all queries complete
+        group.notify(queue: .main) {
+            self.collectionView.reloadData()
+        }
+    }
+
     
     func fetchAllEvents() {
 
@@ -160,3 +224,32 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
     }
 
 }
+
+extension ViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return activityTypes.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DropdownCell", for: indexPath)
+        let interest = activityTypes[indexPath.row]
+        
+        cell.textLabel?.text = interest
+        cell.accessoryType = selectedInterests.contains(interest) ? .checkmark : .none
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let interest = activityTypes[indexPath.row]
+        
+        if selectedInterests.contains(interest) {
+            selectedInterests.remove(interest)
+        } else {
+            selectedInterests.insert(interest)
+        }
+        
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+    }
+}
+
