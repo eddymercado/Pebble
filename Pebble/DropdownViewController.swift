@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DropdownViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class DropdownViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     var activityTypes: [String] = []
     var onActivitySelected: ((String) -> Void)?
     
@@ -36,7 +36,16 @@ class DropdownViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return activityTypes[row]
     }
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
+    // Called when the user clicks on the view outside of the UITextField
+
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         onActivitySelected?(activityTypes[row])
         dismiss(animated: true, completion: nil)

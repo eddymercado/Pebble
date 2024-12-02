@@ -11,7 +11,7 @@ import FirebaseAnalytics
 import FirebaseFirestore
 import FirebaseStorage
 
-class profilePicViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class profilePicViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     let db = Firestore.firestore()
 
     @IBOutlet weak var imageView: UIImageView!
@@ -29,7 +29,16 @@ class profilePicViewController: UIViewController, UIImagePickerControllerDelegat
         vc.allowsEditing = true
         present(vc, animated: true)
     }
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
+    // Called when the user clicks on the view outside of the UITextField
+
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     @IBAction func profilePicSaveButton(_ sender: Any) {
         if let image = imageView.image,
            let imageData = image.jpegData(compressionQuality: 0.5) {

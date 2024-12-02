@@ -13,7 +13,7 @@ import FirebaseAnalytics
 import FirebaseFirestore
 import FirebaseStorage
 
-class SingleEventViewController: UIViewController, UINavigationControllerDelegate, MKMapViewDelegate {
+class SingleEventViewController: UIViewController, UINavigationControllerDelegate, MKMapViewDelegate, UITextFieldDelegate {
     
     let geocoder = CLGeocoder()
     @IBOutlet weak var mapView: MKMapView!
@@ -263,7 +263,16 @@ class SingleEventViewController: UIViewController, UINavigationControllerDelegat
             }
         }
     }
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
+    // Called when the user clicks on the view outside of the UITextField
+
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     func checkNumOfAttendees() -> Int {
         db.collection("events").document(currEventID).getDocument { (document, error) in
             if let error = error {

@@ -1,7 +1,7 @@
 import UIKit
 import FirebaseFirestore
 
-class RSVPTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class RSVPTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -17,7 +17,16 @@ class RSVPTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         fetchRSVPUsers()
     }
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
+    // Called when the user clicks on the view outside of the UITextField
+
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     // Fetch user IDs from Firestore and then fetch usernames and profile pictures
     func fetchRSVPUsers() {
         db.collection("events").document(eventID).getDocument { (document, error) in

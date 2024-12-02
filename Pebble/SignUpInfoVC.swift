@@ -11,7 +11,7 @@ import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseFirestoreInternal
 
-class SignUpInfoVC: UIViewController {
+class SignUpInfoVC: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var usernameField: UITextField!
     
@@ -79,7 +79,16 @@ class SignUpInfoVC: UIViewController {
             }
         }
     }
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
+    // Called when the user clicks on the view outside of the UITextField
+
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)

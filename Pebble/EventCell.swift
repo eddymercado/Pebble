@@ -76,7 +76,7 @@ class EventCell: UICollectionViewCell {
         eventDateLabel.textColor = UIColor.white
         
     }
-    
+
     // Adds a gradient overlay to the bottom of eventImageView
     func addGradientOverlay(to imageView: UIImageView) {
         // Remove any existing gradient layers to prevent duplicates
