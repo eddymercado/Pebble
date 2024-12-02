@@ -294,9 +294,9 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
                     
                     self.db.collection("events").document(currEventID).updateData(["eventID": currEventID])
                     self.eventsThatUserCreated.append(currEventID)
-                    self.eventsThatUserIsAttending.append(currEventID)
+//                    self.eventsThatUserIsAttending.append(currEventID)
                     self.db.collection("users").document(userId).updateData(["eventsThatUserIsHosting": self.eventsThatUserCreated])
-                    self.db.collection("users").document(userId).updateData(["eventsThatUserIsAttending": self.eventsThatUserIsAttending])
+//                    self.db.collection("users").document(userId).updateData(["eventsThatUserIsAttending": self.eventsThatUserIsAttending])
                     self.db.collection("events").document(currEventID).updateData(["currentnumberofattendees": 1])
                 
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)

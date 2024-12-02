@@ -12,13 +12,14 @@ import FirebaseFirestore
 
 let db = Firestore.firestore()
 
-class LoginViewController: UIViewController, UINavigationControllerDelegate {
+class LoginViewController: UIViewController, UINavigationControllerDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        nameField.delegate = self
         passwordField.isSecureTextEntry = true
         passwordField.enablePasswordToggle()
     }
@@ -70,6 +71,17 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
     @IBAction func signUpButton(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil) // Assuming SignUpViewController is in Main storyboard
     }
+    
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    // Called when the user clicks on the view outside of the UITextField
+
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
 }
 
 extension UITextField {
@@ -96,6 +108,8 @@ extension UITextField {
         
         button.addTarget(self, action: #selector(self.togglePasswordView), for: .touchUpInside)
     }
+    
+
     
     @IBAction func togglePasswordView(_ sender: Any) {
         self.isSecureTextEntry = !self.isSecureTextEntry
