@@ -11,7 +11,7 @@ import FirebaseAuth
 import FirebaseFirestoreInternal
 
 
-class updateInfoViewController: UIViewController, UINavigationControllerDelegate {
+class updateInfoViewController: UIViewController, UINavigationControllerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var updateEmailAddressTextField: UITextField!
     
@@ -160,7 +160,16 @@ class updateInfoViewController: UIViewController, UINavigationControllerDelegate
         alertController.addAction(noAction)
         present(alertController, animated: true, completion: nil)
     }
- 
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    // Called when the user clicks on the view outside of the UITextField
+
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     
     func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)

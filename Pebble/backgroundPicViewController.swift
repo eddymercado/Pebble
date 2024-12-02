@@ -10,7 +10,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 
-class backgroundPicViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+class backgroundPicViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate, UITextFieldDelegate {
     let db = Firestore.firestore()
 
     @IBOutlet weak var backgroundImageView: UIImageView!
@@ -28,7 +28,16 @@ class backgroundPicViewController: UIViewController, UIImagePickerControllerDele
         vc.allowsEditing = true
         present(vc, animated: true)
     }
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
+    // Called when the user clicks on the view outside of the UITextField
+
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     // Save background picture to Firestore
     @IBAction func backgroundPicSaveButtonTapped(_ sender: Any) {
         guard let backgroundImage = backgroundImageView.image,

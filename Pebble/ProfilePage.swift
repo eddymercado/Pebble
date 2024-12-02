@@ -10,7 +10,7 @@ import FirebaseAuth
 import FirebaseFirestoreInternal
 import FirebaseCore
 
-class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIPopoverPresentationControllerDelegate {
+class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate {
     
     var delegate: ViewController!
     let eventCellIdentifier = "EventCell"
@@ -171,7 +171,16 @@ class ProfilePage: UIViewController, UICollectionViewDataSource, UICollectionVie
             }
         }
     }
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    // Called when the user clicks on the view outside of the UITextField
 
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     func addGradientOverlay(to imageView: UIImageView) {
         // Remove any existing gradient layers to prevent duplicates
         imageView.layer.sublayers?.removeAll(where: { $0 is CAGradientLayer })

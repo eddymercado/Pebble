@@ -9,7 +9,7 @@ import UIKit
 import FirebaseFirestore
 import FirebaseAuth
 
-class UpdateProfileViewController:  UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class UpdateProfileViewController:  UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var usernameTextField: UITextField!
@@ -108,7 +108,16 @@ class UpdateProfileViewController:  UIViewController, UIImagePickerControllerDel
         imagePicker.allowsEditing = true
         present(imagePicker, animated: true)
     }
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
+    // Called when the user clicks on the view outside of the UITextField
+
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     @IBAction func saveProfileChanges(_ sender: UIButton) {
         if let image = profileImageView.image,
            let imageData = image.jpegData(compressionQuality: 0.5) {

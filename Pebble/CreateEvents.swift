@@ -74,7 +74,16 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
             }
         }
     }
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
+    // Called when the user clicks on the view outside of the UITextField
+
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     // helper method to populate text fields for fetchEventData
     func populateFields(with data: [String: Any]) {
         eventTitle.text = data["title"] as? String
@@ -114,15 +123,7 @@ class CreateEvents: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
         }
     }
     
-    // called when user taps return key
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == eventLocation {
-            // dismiss keyboard
-            textField.resignFirstResponder()
-            searchLocation()
-        }
-        return true
-    }
+
     
     func searchLocation() {
         guard let searchText = eventLocation.text, !searchText.isEmpty else { return }

@@ -13,7 +13,7 @@ import FirebaseFirestoreInternal
 // Ensure eventsList is properly initialized
 var eventsList: [String] = []
 
-class ViewController: UIViewController, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIPopoverPresentationControllerDelegate {
+class ViewController: UIViewController, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIPopoverPresentationControllerDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var logoImage: UIImageView!
@@ -166,7 +166,16 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UICollec
             }
         }
     }
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
+    // Called when the user clicks on the view outside of the UITextField
+
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     func createdEvent(_ event: String) {
         eventsList.append(event)
         DispatchQueue.main.async {
