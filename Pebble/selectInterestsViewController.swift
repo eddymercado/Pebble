@@ -52,7 +52,8 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
                 self.count = interests.count
                 for title in interests {
                     if let button = self.findButton(withTitle: title, in: self.view) {
-                        button.backgroundColor = UIColor(red: 195/255, green: 228/255, blue: 214/255, alpha: 1)
+//                        button.backgroundColor = UIColor(red: 195/255, green: 228/255, blue: 214/255, alpha: 1)
+                        button.backgroundColor = UIColor.systemGreen
                         button.isSelected = true
                     } else {
                         print("Button with title \(title) not found")
@@ -107,7 +108,8 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
         if sender.isSelected {
             // If the button is already selected, deselect it
             sender.isSelected = false
-            sender.backgroundColor = UIColor.white
+//            sender.backgroundColor = UIColor.white
+            sender.backgroundColor = UIColor.secondarySystemBackground
             // Remove the last added interest since this button is being deselected
             if let index = arrayOfInterests.firstIndex(of: buttonTitle!) {
                 arrayOfInterests.remove(at: index)
@@ -117,7 +119,8 @@ class selectInterestsViewController: UIViewController, UINavigationControllerDel
             // If the button is not selected, check if we can select it
             if count < 5 {
                 sender.isSelected = true
-                sender.backgroundColor = UIColor(red: 195/255, green: 228/255, blue: 214/255, alpha: 1)
+//                sender.backgroundColor = UIColor(red: 195/255, green: 228/255, blue: 214/255, alpha: 1)
+                sender.backgroundColor = UIColor.systemGreen
                 arrayOfInterests.append(buttonTitle!)
                 count += 1
             } else {
