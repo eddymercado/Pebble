@@ -1,57 +1,163 @@
-Contributions:
+Group Number: 13
+Team members: Tesna Thomas, Eduardo Mercado, Denise Ramos, Katherine Chao
+Name of project: pebble
+Dependencies: XCode 16.1, Swift 5
 
-Eduardo Mercado (Release 25%, Overall 23%)
-• Majority of the browse events page functionality (collection view, cards)
-• Added a gradient to the browse event cards to make the text more readable
-• Populated the “events” collection in firestore from CreateEvents
-• Formatted the SingleEventViewController
-• Fixed how the date for the events was saving to firestore incorrectly and also how it displayed incorrectly on the cards after switching from a delegate to pass the events to pulling from firestore
+Special Instructions:
+- Run on iPhone 16 Pro (18.0)
+- If you want to see an event you created yourself, visit ‘Events I’m Hosting’ on the profile page, or to see it on the browse events page you may login with a test account (email: 1@gmail.com, password: 123456)
 
-Denise (Release 25%, Overall 31%)
-• stored all necessary information in firestore and firebase and the cloud retrieval for create events, singular events view, and profile page, updating profile page, and other UI buttons and labels
-•  finished profile page (including profile picture, profile info, interests buttons, delete account (from firestore and firebase, user information) segues
-•  next steps
-    • final update user settings implementation
-    • block out password letters when logging in
-    • alerts for things such as “are you sure you want to delete your account” “are you sure you want to unrsvp”
-    • delete event (from browse events page and firestore)
-    • limit number of rsvps with max amount of attendees
-    • guest list (in firestore) to populate the event icon on browse events page
+Feature: Login page
+Description: Login with authentication
+Release planned: Alpha
+Release actual: Alpha
+Deviations (if any):
+Who/Percentage worked on: Tesna (33%), Denise (33%), Eduardo (33%)
 
 
-Tesna (Release 25%, Overall 23%)
-•  Majority of profile page VC (included bio, interests, username, pfp, event attending vs events hosting segmented view)
-    •  Also populated data from sign up VC to the Profile VC
-•  Settings Action Sheet: Created and did ‘Update Profile Button
-•  Navigation bar setup
-•  Entire tab bar setup to each of the different pages
-•  Updated UI throughout the app (color scheme, partial layout)
-•  Did login page UI and created app icon/logo using Figma
+Feature: Sign up page
+Description: The page to enter all profile info and create an account
+Release planned: Alpha
+Release actual: Alpha
+Deviations (if any):
+Who/Percentage worked on: Tesna (25%), Denise (50%), Eduardo (25%)
 
 
-Katherine (Release 25%, Overall 23%)
-• Single Event View Controller: transfer event info in an event cell from mainVC
-• MapView on CreateEvents and SingleEventVC
-    • Implement map view and core location functionality: when the user is creating an event, once they finish typing an address in the Location text field and click out of it, the location shows on map
-    • Store GeoPoint in firestore
-    • searchLocation to find address coordinates, updateMap to annotate map
+Feature: Browse/Discover Events VC
+Description: Display all events
+Release planned: Alpha
+Release actual: Alpha
+Deviations (if any):
+Who/Percentage worked on: Eduardo (100%)
 
-Deviations:
 
-Eduardo:
-    • I was not able to figure out how to filter the events on the browse events page by interests before the deadline. But Denise figured out how to filter out the event if a user posted it themself, so she said it wouldn’t take long to complete next week.
-    • I was not able to fix the hard coded “Soccer” label on the single event page as it was low on my priority list, but that would be an easy fix at the start of next week.
-    • I broke the the event date and time when we switched from delegate for the events to pulling from firestore, and did not realize until right before turn in.
+Feature: Create an event
+Description: Allow user to create event with all info and save it
+Release planned: Alpha
+Release actual: Alpha
+Deviations (if any): Did not have dropdown to select interest when creating an event yet, no map view yet
+Who/Percentage worked on: Katherine (100%)
 
-Katherine:
-    • I did not have time to complete populating the guest list for an event but started the tableView for it and will get to it in the next release.
-    • MapView was not part of our proposal but we added it as a beta feature to make the app more complex. A stretch goal for the final release is to have a full-screened mapView with the events as pins on a scrollable map.
-    • Need to implement scrolling for the event description on SingleEvent page.
 
-Denise:
-    • A couple things broke last minute such as the segue back to profile page when the user info is updated as well as the segue to the login page when an account is deleted.
-    • A user can rsvp for multiple events because it is repopulated on the browse events page instead of transferring to the users attending events on their profile
+Feature: User Profile Page
+Description: User profile page with interests and events attending/hosting
+Release planned: Alpha
+Release actual: Alpha
+Deviations (if any): Removed follower/following feature, not able to display events attending/hosting yet
+Who/Percentage worked on: Tesna (50%), Denise (50%)
 
-Tesna:
-    • Did not implement the horizontal scroll on the profile page for My Events vs Others Events. Mainly because it was a lower priority and we needed to get event card done first. Will be implemented by next release.
-    • Did not change color of interests buttons on pfp as we are still refining color scheme!
+
+Feature: User interface
+Description: Match our UI to our figma (colors, buttons, background shapes, etc)
+Release planned: Alpha
+Release actual: Beta
+Deviations (if any): Focused on function rather than aesthetics for alpha release, and inserting a new font broke Tesna’s XCode for a week. Matched app to our Figma for Beta release instead!
+Who/Percentage worked on: Tesna (100%)
+
+
+Feature: Discover/Browse all events as cards
+Description: Collection view of events with cards
+Release planned: Beta
+Release actual: Beta
+Deviations (if any):
+Who/Percentage worked on: Eduardo (80%), Denise (20%)
+
+Feature: Browse only events you are not hosting
+Description: Exclude all events you hosting (added attendee lists in firestore)
+Release planned: Beta
+Release actual: Beta
+Deviations (if any): There is some lag as firestore has to be refreshed when rsvp or unrsvp which we attempted to fix with an event listener
+Who/Percentage worked on: Denise (100%)
+
+Feature: Tab navigation bar at bottom
+Description: Segue between different pages of app
+Release planned: Beta
+Release actual: Beta
+Deviations (if any):
+Who/Percentage worked on: Tesna (100%)
+
+Feature: Edit user profile functionality
+Description: Store all user info as a collection in firestore, retrieve and show updates
+Release planned: Beta
+Release actual: Beta
+Deviations (if any): Need to fix the UI for the back buttons
+Who/Percentage worked on: Denise (100%)
+
+Feature: Save and display event and profile photo
+Description: Could upload photos by alpha, but didn’t store them in firebase yet
+Release planned: Beta
+Release actual: Beta
+Deviations (if any):
+Who/Percentage worked on: Denise (80%), Eduardo (20%)
+
+Feature: RSVP for events/guest list
+Description: When a user RSVPs for an event, display user on guest list VC. Maintain and be able to add/remove guests to array in each event
+Release planned: Beta
+Release actual: Final
+Deviations (if any): Did not have time to get complete guest list during Beta release, and did not have time to put alert to cap the number of attendees
+Who/Percentage worked on: Tesna (50%), Denise (50%)
+
+Feature: Tap on event from discover -> show single event
+Description: Transfer all event info from a collection view cell into the single event
+Release planned: Beta
+Release actual: Beta
+Deviations (if any):
+Who/Percentage worked on: Katherine (100%)
+
+Feature: Basic map view
+Description: Map view and core location for CreateEvents and single event, see where events are hosted
+Release planned: Beta
+Release actual: Beta
+Deviations (if any): Was not part of our original proposal but implemented it to enhance app, added natural language search query for final release
+Who/Percentage worked on: Katherine (100%)
+
+Feature: Filter events
+Description: One can filter by interests on discover events page
+Release planned: Beta
+Release actual: Final
+Deviations (if any): Decided not to distinguish between public, private, and mutual intended posts. Instead, allow user to filter events by interest
+Who/Percentage worked on: Eduardo (100%)
+
+Feature: Settings Page
+Description: The settings page to update user info
+Release planned: Final
+Release actual: Beta
+Deviations (if any):
+Who/Percentage worked on: Tesna (50%), Denise (50%)
+
+Feature: Display events on profile page
+Description: View 'Events I'm Attending' and 'Events I'm Hosting'
+Release planned: Final
+Release actual: Beta
+Deviations (if any): Needed to implement listener for smooth functionality but it still functional with updating firestore
+Who/Percentage worked on: Denise (100%)
+
+Feature: Better map view and search
+Description: added natural language search query (landmarks, businesses become an address), auto format address
+Release planned: Final
+Release actual: Final
+Deviations (if any):
+Who/Percentage worked on: Katherine (100%)
+
+Feature: Edit Event
+Description: Allow only the host of an event to edit an event, save and show changes
+Release planned: Final
+Release actual: Final
+Deviations (if any):
+Who/Percentage worked on: Katherine (100%)
+
+Feature: Delete Event
+Description:
+Release planned: Final
+Release actual:
+Deviations (if any): Did not get around to completing this in time
+Who/Percentage worked on:
+
+
+Feature: Dark Mode / Light Mode
+Description: Fixed UI to accomodate for both dark and light mode on iPhones
+Release planned: Final
+Release actual: Final
+Who/Percentage worked on: Eduardo (100%)
+
+
